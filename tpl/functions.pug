@@ -1,0 +1,6 @@
+mixin render(value)
+  if typeof value == 'string'
+    | #{value}
+
+mixin field(name)
+  +render(field[name])
