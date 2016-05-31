@@ -1,3 +1,5 @@
+'use strict';
+
 global.sys = require('./sys.js');
 sys.base = __dirname + '/';
 

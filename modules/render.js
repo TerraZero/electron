@@ -1,3 +1,5 @@
+'use strict';
+
 var pug = sys.node('pug');
 var fs = sys.node('fs');
 
