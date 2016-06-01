@@ -4,7 +4,7 @@
   "description": "An electron app",
   "main": "main.js",
   "scripts": {
-    "start": "electron main.js",
+    "start": "gulp build && electron main.js",
     "build": "gulp build && electron-packager . tz-electron --platform=linux --arch=x64 --out=ignore/releases --ignore='(ignore|gulpfile.js)' --overwrite --prune --asar",
     "index": "gulp index",
     "release": "./ignore/releases/tz-electron-linux-x64/tz-electron"
@@ -22,6 +22,7 @@
     "gulp-concat": "^2.6.0",
     "gulp-insert": "^0.5.0",
     "gulp-pug": "^3.0.3",
-    "gulp-sass": "^2.3.1"
+    "gulp-sass": "^2.3.1",
+    "gulp-sourcemaps": "^1.6.0"
   }
 }
