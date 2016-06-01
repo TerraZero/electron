@@ -1,23 +1,24 @@
 {
-  "name": "electron-quick-start",
-  "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "name": "electron",
+  "version": "0.0.1",
+  "description": "An electron app",
   "main": "main.js",
   "scripts": {
     "start": "electron main.js",
-    "build": "electron-packager . tz-electron --platform=linux --arch=x64 --out=releases --ignore=releases --overwrite",
-    "release": "./releases/tz-electron-linux-x64/tz-electron"
+    "build": "electron-packager . tz-electron --platform=linux --arch=x64 --out=ignore/releases --ignore=ignore --overwrite",
+    "index": "pug --out=./ ignore/index.pug",
+    "release": "./ignore/releases/tz-electron-linux-x64/tz-electron"
   },
-  "repository": {
-    "type": "git",
-    "url": ""
-  },
-  "author": "GitHub",
+  "author": "TerraZero",
   "license": "CC0-1.0",
   "dependencies": {
     "electron-prebuilt": "^1.2.0",
     "fs": "0.0.2",
     "node-mysql": "^0.4.2",
     "pug": "^2.0.0-alpha8"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "pug-cli": "^1.0.0-alpha5"
   }
 }
