@@ -15,7 +15,8 @@
     "electron-prebuilt": "^1.2.0",
     "fs": "0.0.2",
     "node-mysql": "^0.4.2",
-    "pug": "^2.0.0-alpha8"
+    "pug": "^2.0.0-alpha8",
+    "squel": "^5.2.1"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
