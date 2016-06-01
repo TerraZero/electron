@@ -19,6 +19,8 @@
   },
   "devDependencies": {
     "gulp": "^3.9.1",
+    "gulp-insert": "^0.5.0",
+    "gulp-sass": "^2.3.1",
     "pug-cli": "^1.0.0-alpha5"
   }
 }
