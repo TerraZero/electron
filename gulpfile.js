@@ -1,7 +1,3 @@
-// classes
-var Table = require('cli-table2');
-
-
 // dependencies
 var gulp = require('gulp');
 
@@ -14,30 +10,24 @@ var concat = require('gulp-concat');
 
 // Path variables
 var paths = {
-
+  index: 'ignore/index.pug',
+  indexDest: './',
+  sass: 'ignore/sass/**/*.sass',
+  sassDest: 'src/css',
 };
 
+
+gulp.task('index', function() {
+  return gulp.src(paths.index)
+    .pipe(pug())
+    .pipe(gulp.dest(paths.indexDest));
+});
+
 gulp.task('sass', function() {
-  return gulp.src(paths.sass_gulp)
-    .pipe(insert.prepend('@import ./mixins \n\n'))
+  return gulp.src(paths.sass)
     .pipe(sass())
-    .pipe(autoprefixer())
-    .pipe(gulp.dest(paths.sass_dest))
-    .pipe(browserSync.stream());
+    .pipe(concat('styles.css'))
+    .pipe(gulp.dest(paths.sassDest));
 });
 
-gulp.task('pug', function() {
-  return gulp.src(paths.pug_gulp)
-    .pipe(insert.prepend('include /drupal.pug \n\n'))
-    .pipe(pug({
-      basedir: 'pug',
-    }))
-    .pipe(rename(function(path) {
-      path.extname = '.tpl.php';
-    }))
-    .pipe(gulp.dest(paths.pug_dest));
-});
-
-gulp.task('build', function() {
-
-});
+gulp.task('build', ['index', 'sass']);

@@ -5,8 +5,8 @@
   "main": "main.js",
   "scripts": {
     "start": "electron main.js",
-    "build": "electron-packager . tz-electron --platform=linux --arch=x64 --out=ignore/releases --ignore=ignore --overwrite",
-    "index": "pug --out=./ ignore/index.pug",
+    "build": "gulp build && electron-packager . tz-electron --platform=linux --arch=x64 --out=ignore/releases --ignore='(ignore|gulpfile.js)' --overwrite --prune --asar",
+    "index": "gulp index",
     "release": "./ignore/releases/tz-electron-linux-x64/tz-electron"
   },
   "author": "TerraZero",
@@ -22,7 +22,6 @@
     "gulp-concat": "^2.6.0",
     "gulp-insert": "^0.5.0",
     "gulp-pug": "^3.0.3",
-    "gulp-sass": "^2.3.1",
-    "pug-cli": "^1.0.0-alpha5"
+    "gulp-sass": "^2.3.1"
   }
 }

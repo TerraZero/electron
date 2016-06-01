@@ -1,3 +1,5 @@
+include ../tpl/functions.pug
+
 doctype html
 html
   head
@@ -5,5 +7,5 @@ html
     title Hello World!
   body
     #content.content
-  script.
-    require('./renderer.js')
+  script
+    | require('./renderer.js')
