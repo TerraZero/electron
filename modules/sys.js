@@ -1,6 +1,8 @@
 'use strict';
 
 var fs = require('fs');
+var remote = require('electron').remote;
+var app = remote.require('electron').app;
 
 module.exports = {
 
@@ -33,6 +35,10 @@ module.exports = {
 
   use: function(name) {
     return require(this.base + 'classes/' + name + '.class.js');
+  },
+
+  exit: function() {
+    app.quit();
   },
 
 };
