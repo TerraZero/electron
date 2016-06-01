@@ -11,6 +11,11 @@ html
     script
       | sys.src('js', 'scripts.js')
   body
-    #content.content
+    #page
+      #header
+      #main
+        #content
+        #sidebar
+      #footer
   script
     | require('./renderer.js')
