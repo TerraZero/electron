@@ -15,3 +15,12 @@ var item = {
 };
 
 $('#content').append(render.view(item, 'full'));
+
+var test = {
+  type: 'node',
+  fields: {
+    loader: sys.read('img', 'loader/def.svg'),
+  },
+};
+
+$('#content').append(render.view(test, 'test'));

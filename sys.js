@@ -1,5 +1,7 @@
 'use strict';
 
+var fs = require('fs');
+
 module.exports = {
 
   node: function(name) {
@@ -18,7 +20,15 @@ module.exports = {
   },
 
   src: function(type, name) {
-    return require('./src/' + type + '/' + name + '.js');
+    return require(this.path(type, name));
+  },
+
+  path: function(type, name) {
+    return sys.base + 'src/' + type + '/' + name;
+  },
+
+  read: function(type, name) {
+    return fs.readFileSync(this.path(type, name));
   },
 
   use: function(name) {
