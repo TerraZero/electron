@@ -2,9 +2,10 @@
 
 var fs = require('fs');
 var remote = require('electron').remote;
-var app = remote.require('electron').app;
 
 module.exports = {
+
+  vars: {},
 
   node: function(name) {
     return require(name);
@@ -34,11 +35,30 @@ module.exports = {
   },
 
   use: function(name) {
-    return require(this.base + 'classes/' + name + '.class.js');
+    var clas = require(this.base + 'classes/' + name + '.class.js');
+
+    if (clas.isStatic) return clas;
+
+    if (clas.static) clas.static();
+
+    clas.isStatic = true;
+    return clas;
+  },
+
+  remote: function(name) {
+    return remote.require(name);
   },
 
   exit: function() {
-    app.quit();
+    this.remote('electron').app.quit();
+  },
+
+  get: function(name) {
+    return this.vars[name];
+  },
+
+  set: function(name, value) {
+    this.vars[name] = value;
   },
 
 };

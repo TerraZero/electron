@@ -1,6 +1,14 @@
 'use strict';
 
-var $ = sys.src('js', 'jquery-2.2.4.min.js');
+var i = sys.module('interface');
 var Node = sys.use('Node');
+var $ = sys.get('jquery');
 
-sys.module('db');
+var n = new Node();
+
+n.fields.title = 'Test';
+n.fields.body = 'Body';
+
+$('#main').click(function() {
+  i.replace('#main', n.view('full'));
+});
