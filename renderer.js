@@ -1,26 +1,12 @@
 'use strict';
 
-global.sys = require('./sys.js');
-sys.base = __dirname + '/';
-
 var render = sys.module('render');
-var $ = sys.src('js', 'jquery-2.2.4.min');
+var $ = sys.src('js', 'jquery-2.2.4.min.js');
+var Node = sys.use('Node');
 
-var item = {
-  type: 'node',
-  field: {
-    title: 'Test',
-    body: 'jhdjsahd sdfhsdfhsd fhsdfsf sd fsdf',
-  },
-};
+var item = new Node();
 
-$('#content').append(render.view(item, 'full'));
+item.fields.title = 'Test';
+item.fields.body = 'Test Body';
 
-var test = {
-  type: 'node',
-  fields: {
-    loader: sys.read('img', 'loader/def.svg'),
-  },
-};
-
-$('#content').append(render.view(test, 'test'));
+$('#content').append(item.view('full'));

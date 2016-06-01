@@ -9,8 +9,8 @@ var insert = require('gulp-insert');
 var concat = require('gulp-concat');
 
 
-// Path variables
-var paths = {
+// Options variables
+var options = {
   index: 'ignore/index.pug',
   indexDest: './',
   sass: 'ignore/sass/**/*.sass',
@@ -18,30 +18,37 @@ var paths = {
   sassOptions: {
     outputStyle: 'compressed',
   },
+  js: 'ignore/js/**/*.js',
+  jsDest: 'src/js',
 };
 
 
 gulp.task('index', function() {
-  return gulp.src(paths.index)
+  return gulp.src(options.index)
     .pipe(pug())
-    .pipe(gulp.dest(paths.indexDest));
+    .pipe(gulp.dest(options.indexDest));
 });
 
 gulp.task('sass', function() {
-  return gulp.src(paths.sass)
+  return gulp.src(options.sass)
     .pipe(sourcemaps.init())
-    .pipe(sass().on('error', sass.logError))
+    .pipe(sass(options.sassOptions).on('error', sass.logError))
     .pipe(sourcemaps.write())
     .pipe(concat('styles.css'))
-    .pipe(gulp.dest(paths.sassDest));
+    .pipe(gulp.dest(options.sassDest));
 });
 
-gulp.task('build', ['index', 'sass']);
+gulp.task('js', function() {
+  return gulp.src(options.js)
+    .pipe(concat('scripts.js'))
+    .pipe(gulp.dest(options.jsDest));
+});
 
+gulp.task('build', ['index', 'sass', 'js']);
 
-
-gulp.task('watch', ['sass'], function() {
-  gulp.watch(paths.sass, ['sass']);
+gulp.task('watch', ['sass', 'js'], function() {
+  gulp.watch(options.sass, ['sass']);
+  gulp.watch(options.js, ['js']);
 });
 
 gulp.task('default', ['watch']);

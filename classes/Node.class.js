@@ -1,9 +1,12 @@
 'use strict';
 
-module.exports = class Node {
+var Entity = sys.use('Entity');
+
+module.exports = class Node extends Entity {
 
   constructor() {
-    this.type = 'Test';
+    super();
+    this.type = 'Node';
   }
 
 }

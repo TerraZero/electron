@@ -4,8 +4,12 @@ doctype html
 html
   head
     meta(charset='UTF-8')
-    title Hello World!
+    title TerraZero
     link(type="text/css", href="./src/css/styles.css", rel="stylesheet")
+    script
+      | require('./head.js')
+    script
+      | sys.src('js', 'scripts.js')
   body
     #content.content
   script
