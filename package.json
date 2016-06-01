@@ -4,7 +4,9 @@
   "description": "A minimal Electron application",
   "main": "main.js",
   "scripts": {
-    "start": "electron main.js"
+    "start": "electron main.js",
+    "build": "electron-packager . tz-electron --platform=linux --arch=x64 --out=releases --ignore=releases --overwrite",
+    "release": "./releases/tz-electron-linux-x64/tz-electron"
   },
   "repository": {
     "type": "git",

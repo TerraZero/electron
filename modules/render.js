@@ -15,7 +15,7 @@ module.exports = {
   },
 
   file: function(item) {
-    return 'tpl/' + item.type + '/' + item.mode + '.pug';
+    return sys.base + 'tpl/' + item.type + '/' + item.mode + '.pug';
   },
 
   content: function(item, include) {
