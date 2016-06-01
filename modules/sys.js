@@ -9,7 +9,7 @@ module.exports = {
   },
 
   module: function(name) {
-    var module = require('./modules/' + name + '.js');
+    var module = require(this.base + 'modules/' + name + '.js');
 
     if (module.isInit) return module;
 
@@ -32,7 +32,7 @@ module.exports = {
   },
 
   use: function(name) {
-    return require('./classes/' + name + '.class.js');
+    return require(this.base + 'classes/' + name + '.class.js');
   },
 
 };
