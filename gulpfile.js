@@ -31,3 +31,11 @@ gulp.task('sass', function() {
 });
 
 gulp.task('build', ['index', 'sass']);
+
+
+
+gulp.task('watch', ['sass'], function() {
+  gulp.watch(paths.sass, ['sass']);
+});
+
+gulp.task('default', ['watch']);
