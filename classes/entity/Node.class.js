@@ -5,12 +5,12 @@ const nc = SYS.use('entity/controller/NodeController').instance();
 
 module.exports = class Node extends Entity {
 
-  constructor() {
-    super('node');
+  static controller() {
+    return nc;
   }
 
-  controller() {
-    return nc;
+  constructor() {
+    super('node');
   }
 
 }

@@ -4,18 +4,30 @@ const render = SYS.module('render');
 
 module.exports = class Entity {
 
-  constructor(type) {
-    this.type = type;
-    this.id = null;
-    this.fields = {};
-  }
-
-  controller() {
+  static controller() {
     return null;
   }
 
+  constructor(type) {
+    this._type = type;
+    this._id = null;
+    this._fields = {};
+  }
+
+  type() {
+    return this._type;
+  }
+
+  id() {
+    return this._id;
+  }
+
+  fields() {
+    return this._fields;
+  }
+
   isSave() {
-    return this.id != null;
+    return this._id != null;
   }
 
   view(mode) {

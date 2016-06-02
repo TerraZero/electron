@@ -12,21 +12,30 @@ module.exports = class Controller {
   }
 
   constructor() {
-    this.fields = {};
-    this.table = null;
+    this._table = null;
+    this._fields = {};
+
     this.instanceInfo();
   }
 
+  fields() {
+    return this._fields;
+  }
+
+  table() {
+    return this._table;
+  }
+
   instanceInfo() {
-    SYS.abstract(this, 'instanceInfo');
+    SYS.context(this, 'instanceInfo').abstract();
   }
 
   info() {
-    SYS.abstract(this, 'info');
+    SYS.context(this, 'info').abstract();
   }
 
   save(entity) {
-    SYS.abstract(this, 'save');
+    SYS.context(this, 'save').abstract();
   }
 
 }

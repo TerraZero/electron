@@ -1,32 +1,33 @@
 'use strict';
 
+const Module = SYS.use('!Module');
 const pug = SYS.node('pug');
 const fs = SYS.node('fs');
 
-module.exports = {
+module.exports = class Render extends Module {
 
-  view: function(item, mode) {
-    item.mode = mode;
-    item.filename = this.file(item);
+  view(item, mode) {
+    item._mode = mode;
+    item._filename = this.file(item);
 
     var content = this.content(item);
 
     return pug.render(content, item);
-  },
+  }
 
-  file: function(item) {
-    return (SYS.base + 'tpl/' + item.type + '/' + item.mode + '.pug').toLowerCase();
-  },
+  file(item) {
+    return (SYS.base + 'tpl/' + item.type() + '/' + item._mode + '.pug').toLowerCase();
+  }
 
-  content: function(item, include) {
+  content(item, include) {
     include = include || true;
-    var content = fs.readFileSync(item.filename).toString();
+    var content = fs.readFileSync(item._filename).toString();
 
     if (include) {
       content = 'include ../functions.pug \n' + content;
     }
 
     return content;
-  },
+  }
 
 };

@@ -1,14 +1,15 @@
 'use strict';
 
+const Module = SYS.use('!Module');
 const $ = SYS.get('jquery');
 
-module.exports = {
+module.exports = class Interface extends Module {
 
-  replace: function(selector, content) {
+  replace(selector, content) {
     var container = $(selector).addClass('loading');
 
     container.html(content);
     container.removeClass('loading');
-  },
+  }
 
 };

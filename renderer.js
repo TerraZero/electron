@@ -1,7 +1,8 @@
 'use strict';
 
-var User = SYS.use('entity/User');
+const User = SYS.use('entity/User');
+const db = SYS.module('db');
 
-var u = new User();
-var uc = u.controller();
-console.log(uc.info());
+db.createTable(User.controller());
+
+db.createTable(User);

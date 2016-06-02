@@ -5,12 +5,12 @@ const uc = SYS.use('entity/controller/UserController').instance();
 
 module.exports = class User extends Entity {
 
-  constructor() {
-    super('user');
+  static controller() {
+    return uc;
   }
 
-  controller() {
-    return uc;
+  constructor() {
+    super('user');
   }
 
 }

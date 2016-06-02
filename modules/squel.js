@@ -57,4 +57,6 @@ squel.create = function(options) {
   return new CreateTableQuery(options);
 };
 
-module.exports = squel;
+module.exports = {
+  _instance: squel,
+};

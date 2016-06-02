@@ -15,7 +15,7 @@ module.exports = class NodeController extends Controller {
 
   constructor() {
     super();
-    this.table = 'node';
+    this._table = 'node';
   }
 
   info() {
