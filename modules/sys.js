@@ -1,7 +1,7 @@
 'use strict';
 
-var fs = require('fs');
-var remote = require('electron').remote;
+const fs = require('fs');
+const remote = require('electron').remote;
 
 module.exports = {
 

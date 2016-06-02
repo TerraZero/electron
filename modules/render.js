@@ -1,7 +1,7 @@
 'use strict';
 
-var pug = SYS.node('pug');
-var fs = SYS.node('fs');
+const pug = SYS.node('pug');
+const fs = SYS.node('fs');
 
 module.exports = {
 

@@ -1,20 +1,18 @@
 'use strict';
 
+let inner = null;
+
 module.exports = class Controller {
 
-  static subject() {
-    this.inner = null;
-  }
-
   static instance() {
-    if (this.inner == null) {
-      this.inner = new this();
+    if (inner == null) {
+      inner = new Controller();
     }
-    return this.inner;
+    return inner;
   }
 
   constructor() {
-    this.table = 'node';
+    this.table = 'entity';
   }
 
   info() {

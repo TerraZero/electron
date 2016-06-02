@@ -1,7 +1,7 @@
 'use strict';
 
-var mysql      = require('mysql');
-var squel = SYS.module('squel');
+const mysql      = SYS.node('mysql');
+const squel = SYS.module('squel');
 
 var connection = mysql.createConnection({
   host     : 'localhost',

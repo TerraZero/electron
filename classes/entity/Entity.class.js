@@ -1,6 +1,6 @@
 'use strict';
 
-var render = SYS.module('render');
+const render = SYS.module('render');
 
 module.exports = class Entity {
 

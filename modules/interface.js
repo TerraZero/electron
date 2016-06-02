@@ -1,6 +1,6 @@
 'use strict';
 
-var $ = SYS.get('jquery');
+const $ = SYS.get('jquery');
 
 module.exports = {
 
