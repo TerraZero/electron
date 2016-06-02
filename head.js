@@ -1,6 +1,6 @@
 'use strict';
 
-global.sys = require('./modules/sys.js');
-sys.base = __dirname + '/';
+global.SYS = require('./modules/sys.js');
+SYS.base = __dirname + '/';
 
-sys.set('jquery', sys.src('js', 'jquery-2.2.4.min.js'));
+SYS.set('jquery', SYS.src('js', 'jquery-2.2.4.min.js'));

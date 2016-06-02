@@ -1,6 +1,6 @@
 'use strict';
 
-var Entity = sys.use('Entity');
+var Entity = SYS.use('entity/Entity');
 
 module.exports = class Node extends Entity {
 

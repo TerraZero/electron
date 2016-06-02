@@ -1,7 +1,7 @@
 'use strict';
 
-var pug = sys.node('pug');
-var fs = sys.node('fs');
+var pug = SYS.node('pug');
+var fs = SYS.node('fs');
 
 module.exports = {
 
@@ -15,7 +15,7 @@ module.exports = {
   },
 
   file: function(item) {
-    return (sys.base + 'tpl/' + item.type + '/' + item.mode + '.pug').toLowerCase();
+    return (SYS.base + 'tpl/' + item.type + '/' + item.mode + '.pug').toLowerCase();
   },
 
   content: function(item, include) {

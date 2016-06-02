@@ -6,6 +6,15 @@ var remote = require('electron').remote;
 module.exports = {
 
   vars: {},
+  paths: {},
+
+  exists: function(path) {
+    try {
+      return fs.statSync(path);
+    } catch (e) {
+      return false;
+    }
+  },
 
   node: function(name) {
     return require(name);
@@ -27,22 +36,34 @@ module.exports = {
   },
 
   path: function(type, name) {
-    return sys.base + 'src/' + type + '/' + name;
+    return this.base + 'src/' + type + '/' + name;
   },
 
   read: function(type, name) {
     return fs.readFileSync(this.path(type, name));
   },
 
+  register: function(name, path) {
+    this.paths[name] = path;
+  },
+
+  className: function(name) {
+    for (var field in this.paths) {
+      name = name.replace(field, this.paths[field]);
+    }
+    return name;
+  },
+
   use: function(name) {
-    var clas = require(this.base + 'classes/' + name + '.class.js');
+    var subject = require(this.base + 'classes/' + this.className(name) + '.class.js');
 
-    if (clas.isStatic) return clas;
+    // start init function for static class
+    if (!subject.isSubject && typeof subject.subject == 'function') {
+      subject.subject();
+    }
+    subject.isSubject = true;
 
-    if (clas.static) clas.static();
-
-    clas.isStatic = true;
-    return clas;
+    return subject;
   },
 
   remote: function(name) {

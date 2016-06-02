@@ -1,6 +1,6 @@
 'use strict';
 
-var render = sys.module('render');
+var render = SYS.module('render');
 
 module.exports = class Entity {
 
@@ -8,6 +8,10 @@ module.exports = class Entity {
     this.type = 'Entity';
     this.id = null;
     this.fields = {};
+  }
+
+  controller() {
+    return null;
   }
 
   isSave() {
