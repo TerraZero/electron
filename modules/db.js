@@ -2,15 +2,15 @@
 
 const Module = SYS.use('!Module');
 const Controller = SYS.use('entity/controller/Controller');
-// const mysql      = SYS.node('mysql');
-// const squel = SYS.module('squel');
 
-// var connection = mysql.createConnection({
-//   host     : 'localhost',
-//   user     : 'root',
-//   password : '',
-//   database : 'electron',
-// });
+const mysql      = SYS.node('mysql');
+
+var connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  password : '',
+  database : 'electron',
+});
 
 // connection.connect();
 
@@ -54,6 +54,21 @@ module.exports = class DB extends Module {
     }
 
     query += ');';
+
+    this.execute(query);
+  }
+
+  execute(query) {
+    connection.connect();
+
+    connection.query(query, function(err, rows) {
+      if (err) throw err;
+
+      console.log(rows);
+      console.log(arguments);
+    });
+
+    connection.end();
   }
 
 };

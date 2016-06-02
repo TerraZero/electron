@@ -6,6 +6,7 @@ module.exports = class FieldInstance {
     this._name = name;
     this._type = type;
     this._primary = false;
+    this._increment = false;
   }
 
   primary(bool) {
@@ -17,6 +18,12 @@ module.exports = class FieldInstance {
   notNull(bool) {
     if (bool == undefined) bool = true;
     this._notNull = bool;
+    return this;
+  }
+
+  increment(bool) {
+    if (bool == undefined) bool = true;
+    this._increment = bool;
     return this;
   }
 
@@ -34,6 +41,9 @@ module.exports = class FieldInstance {
   buildOptions(parts) {
     if (this._notNull) {
       parts.push('NOT NULL');
+    }
+    if (this._increment) {
+      parts.push('AUTO_INCREMENT');
     }
   }
 

@@ -30,12 +30,28 @@ module.exports = class Controller {
     SYS.context(this, 'instanceInfo').abstract();
   }
 
-  info() {
-    SYS.context(this, 'info').abstract();
+  create(entity) {
+    var fields = this.fields();
+
+    for (var field in fields) {
+      entity._fields[field] = null;
+    }
   }
 
   save(entity) {
-    SYS.context(this, 'save').abstract();
+    if (entity.id() == null) {
+      this.insert(entity);
+    } else {
+      this.update(entity);
+    }
+  }
+
+  insert(entity) {
+    SYS.context(this, 'insert').abstract();
+  }
+
+  update(entity) {
+    SYS.context(this, 'update').abstract();
   }
 
 }

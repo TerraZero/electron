@@ -119,7 +119,7 @@ module.exports = {
     this._context.object = null;
     this._context.type = null;
 
-    if (subject && subject.constructor && subject.constructor.name) {
+    if (subject && subject.constructor && subject.constructor.name && typeof subject != 'string') {
       this._context.object = subject;
     } else if (subject) {
       this._context.subject = subject;

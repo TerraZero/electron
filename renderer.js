@@ -1,8 +1,10 @@
 'use strict';
 
+const DB = SYS.module('db');
 const User = SYS.use('entity/User');
-const db = SYS.module('db');
 
-db.createTable(User.controller());
+var u = new User();
+u.field('name', 'TerraZero');
+u.save();
 
-db.createTable(User);
+// http://stackoverflow.com/questions/7891937/is-it-possible-to-implement-dynamic-getters-setters-in-javascript

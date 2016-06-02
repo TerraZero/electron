@@ -13,4 +13,8 @@ module.exports = class User extends Entity {
     super('user');
   }
 
+  id() {
+    return this._fields.id;
+  }
+
 }

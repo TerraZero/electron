@@ -5,13 +5,18 @@ const render = SYS.module('render');
 module.exports = class Entity {
 
   static controller() {
-    return null;
+    SYS.context('Entity', 'controller').abstract();
   }
 
   constructor(type) {
     this._type = type;
     this._id = null;
     this._fields = {};
+    this.constructor.controller().create(this);
+  }
+
+  controller() {
+    return this.constructor.controller();
   }
 
   type() {
@@ -26,8 +31,16 @@ module.exports = class Entity {
     return this._fields;
   }
 
-  isSave() {
-    return this._id != null;
+  field(name, value) {
+    if (value != undefined) {
+      this._fields[name] = value;
+    }
+    return this._fields[name];
+  }
+
+  save() {
+    this.controller().save(this);
+    return this;
   }
 
   view(mode) {

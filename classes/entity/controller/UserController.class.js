@@ -3,15 +3,15 @@
 const Controller = SYS.use('entity/controller/Controller');
 const Field = SYS.use('entity/controller/FieldInstance');
 
-let inner = null;
+let _instance = null;
 
 module.exports = class UserController extends Controller {
 
   static instance() {
-    if (inner == null) {
-      inner = new UserController();
+    if (_instance == null) {
+      _instance = new UserController();
     }
-    return inner;
+    return _instance;
   }
 
   constructor() {
@@ -21,8 +21,12 @@ module.exports = class UserController extends Controller {
   instanceInfo() {
     this._table = 'user';
 
-    this._fields.id = new Field('id', 'INT').primary();
+    this._fields.id = new Field('id', 'INT').primary().increment();
     this._fields.name = new Field('name', 'VARCHAR(255)').notNull();
+  }
+
+  insert(user) {
+    console.log(user);
   }
 
 }
