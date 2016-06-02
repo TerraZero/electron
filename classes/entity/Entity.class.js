@@ -4,8 +4,8 @@ const render = SYS.module('render');
 
 module.exports = class Entity {
 
-  constructor() {
-    this.type = 'Entity';
+  constructor(type) {
+    this.type = type;
     this.id = null;
     this.fields = {};
   }

@@ -82,4 +82,18 @@ module.exports = {
     this.vars[name] = value;
   },
 
+  secure: function() {
+    var args = arguments;
+
+    for (var i = 0; i < args.length; i += 2) {
+      if (!(args[i] instanceof args[i + 1])) {
+        throw new TypeError('The argument type did not match!');
+      }
+    }
+  },
+
+  abstract: function(subject, method) {
+    throw new TypeError('The method "' + method + '" of class "' + subject.constructor.name + '" is not implement!');
+  },
+
 };

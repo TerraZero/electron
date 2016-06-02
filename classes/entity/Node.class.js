@@ -1,17 +1,16 @@
 'use strict';
 
 const Entity = SYS.use('entity/Entity');
-const NodeController = SYS.use('entity/controller/NodeController');
+const nc = SYS.use('entity/controller/NodeController').instance();
 
 module.exports = class Node extends Entity {
 
   constructor() {
-    super();
-    this.type = 'Node';
+    super('node');
   }
 
   controller() {
-    return NodeController.instance();
+    return nc;
   }
 
 }
