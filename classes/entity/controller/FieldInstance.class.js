@@ -2,12 +2,28 @@
 
 module.exports = class FieldInstance {
 
+  static defaultHandler(entity, name) {
+    return {
+      get: function() {
+        return entity._fields[name];
+      },
+      set: function(value) {
+        entity.flush()._fields[name] = value;
+      },
+    };
+  }
+
+  static defaultValue(entity) {
+    return null;
+  }
+
   constructor(name, type) {
     this._name = name;
     this._type = type;
     this._primary = false;
     this._increment = false;
-    this._private = false;
+    this._handler = FieldInstance.defaultHandler;
+    this._value = FieldInstance.defaultValue;
   }
 
   primary(bool = true) {
@@ -25,8 +41,13 @@ module.exports = class FieldInstance {
     return this;
   }
 
-  private(bool = true) {
-    this._private = bool;
+  handler(handler = null) {
+    this._handler = handler;
+    return this;
+  }
+
+  value(f = null) {
+    this._value = f;
     return this;
   }
 

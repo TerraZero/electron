@@ -14,6 +14,7 @@ module.exports = class Render extends Module {
       if (!viewed || flush) {
         this.view(entity, mode, flush);
       }
+      console.log('render:' + mode + ':' + entity.type());
       entity._view[mode]._render = pug.render(entity._view[mode]._content, {entity: entity, mode: mode, flush: flush, filename: entity._view[mode]._filename});
     }
     return entity._view[mode]._render;
@@ -21,6 +22,7 @@ module.exports = class Render extends Module {
 
   view(entity, mode, flush = false) {
     if (entity._view[mode] != undefined && !flush) return;
+    console.log('view:' + mode + ':' + entity.type());
     entity._view[mode] = {};
 
     entity._view[mode]._filename = this.file(entity, mode);

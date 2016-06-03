@@ -12,6 +12,7 @@ module.exports = class Entity {
     this._type = type;
     this._fields = {};
     this._view = {};
+    this._flush = false;
 
     this.controller().create(this);
   }
@@ -37,12 +38,21 @@ module.exports = class Entity {
     return this;
   }
 
-  view(mode) {
-    return render.view(this, mode);
+  view(mode, flush = false) {
+    render.view(this, mode, flush || this._flush);
+    this._flush = false;
+    return this;
   }
 
-  render(mode) {
-    return render.render(this, mode);
+  render(mode, flush = false) {
+    var output = render.render(this, mode, flush || this._flush);
+    this._flush = false;
+    return output;
+  }
+
+  flush() {
+    this._flush = true;
+    return this;
   }
 
 }

@@ -51,16 +51,21 @@ module.exports = class Controller {
     var fields = this.fields();
 
     for (var field in fields) {
-      entity._fields[field] = null;
+      // create default value for the field
+      if (typeof fields[field]._value == 'function') {
+        entity._fields[field] = fields[field]._value(entity);
+      } else {
+        entity._fields[field] = fields[field]._value;
+      }
 
-      if (!fields[field]._private) {
-        Object.defineProperty(entity, field, {
-          set: Controller.fieldSetter(entity, field),
-          get: Controller.fieldGetter(entity, field),
-        });
+      // create public properties for the field
+      var handler = fields[field]._handler;
+      if (handler) {
+        Object.defineProperty(entity, field, handler(entity, field));
       }
     }
 
+    // make the object not writable
     if (!this.isExtensible()) {
       Object.preventExtensions(entity);
     }
