@@ -5,7 +5,7 @@ const Controller = SYS.use('entity/controller/Controller');
 
 const mysql      = SYS.node('mysql');
 
-var connection = mysql.createConnection({
+var _connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
   password : '',
@@ -58,17 +58,12 @@ module.exports = class DB extends Module {
     this.execute(query);
   }
 
-  execute(query) {
-    connection.connect();
+  execute(query, callback) {
+    _connection.connect();
 
-    connection.query(query, function(err, rows) {
-      if (err) throw err;
+    _connection.query(query, callback);
 
-      console.log(rows);
-      console.log(arguments);
-    });
-
-    connection.end();
+    _connection.end();
   }
 
 };

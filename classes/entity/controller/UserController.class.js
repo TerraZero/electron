@@ -25,8 +25,4 @@ module.exports = class UserController extends Controller {
     this._fields.name = new Field('name', 'VARCHAR(255)').notNull();
   }
 
-  insert(user) {
-    console.log(user);
-  }
-
 }

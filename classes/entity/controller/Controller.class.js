@@ -1,5 +1,8 @@
 'use strict';
 
+const squel = SYS.module('squel');
+const db = SYS.module('db');
+
 let _instance = null;
 
 module.exports = class Controller {
@@ -47,6 +50,16 @@ module.exports = class Controller {
     SYS.context(this, 'instanceInfo').abstract();
   }
 
+  idCondition(entity, query) {
+    var fields = this.fields();
+
+    for (var field in fields) {
+      if (fields[field]._primary) {
+        query.where(fields[field].name() + ' = ' + entity[field]);
+      }
+    }
+  }
+
   create(entity) {
     var fields = this.fields();
 
@@ -71,8 +84,23 @@ module.exports = class Controller {
     }
   }
 
+  load(entity, id) {
+    var fields = this.fields();
+    var query = squel.select()
+      .from(this.table())
+      .where('id = ' + id);
+
+    this.execute('load', entity, query, function(err, rows) {
+      if (err) throw err;
+
+      for (var field in fields) {
+        entity._fields[field] = rows[0][fields[field].name()];
+      }
+    });
+  }
+
   save(entity) {
-    if (entity.id() == null) {
+    if (entity.isNew()) {
       this.insert(entity);
     } else {
       this.update(entity);
@@ -80,11 +108,51 @@ module.exports = class Controller {
   }
 
   insert(entity) {
-    SYS.context(this, 'insert').abstract();
+    var query = squel.insert()
+      .into(this.table());
+
+    this.insertFields(entity, query);
+
+    this.execute('insert', entity, query, function(err, rows) {
+      if (err) throw err;
+
+      // to prevent flushing
+      entity._fields.id = rows.insertId;
+    });
+  }
+
+  insertFields(entity, query) {
+    var fields = this.fields();
+
+    for (var field in fields) {
+      query.set(fields[field].name(), entity[field]);
+    }
   }
 
   update(entity) {
-    SYS.context(this, 'update').abstract();
+    var query = squel.update()
+      .table(this.table());
+
+    this.idCondition(entity, query);
+    this.updateFields(entity, query);
+
+    this.execute('update', entity, query, function(err) {
+      if (err) throw err;
+    });
+  }
+
+  updateFields(entity, query) {
+    var fields = this.fields();
+
+    for (var field in fields) {
+      if (!fields[field]._primary) {
+        query.set(fields[field].name(), entity[field]);
+      }
+    }
+  }
+
+  execute(type, entity, query, callback) {
+    db.execute(query.toString(), callback);
   }
 
 }

@@ -9,8 +9,11 @@ module.exports = class User extends Entity {
     return uc;
   }
 
-  constructor() {
+  constructor(id = null) {
     super('user');
+    if (id) {
+      this.controller().load(this, id);
+    }
   }
 
 }

@@ -26,6 +26,14 @@ module.exports = class FieldInstance {
     this._value = FieldInstance.defaultValue;
   }
 
+  name() {
+    return this._name;
+  }
+
+  type() {
+    return this._type;
+  }
+
   primary(bool = true) {
     this._primary = bool;
     return this;
@@ -53,8 +61,8 @@ module.exports = class FieldInstance {
 
   build() {
     var parts = [
-      this._name,
-      this._type,
+      this.name(),
+      this.type(),
     ];
 
     this.buildOptions(parts);
