@@ -31,7 +31,7 @@ var connection = mysql.createConnection({
 module.exports = class DB extends Module {
 
   createTable(controller) {
-    SYS.context(this, 'createTable').secure(controller, Controller);
+    SYS.context(this, 'createTable').checkTypes(controller, Controller);
 
     var query = 'CREATE TABLE ';
     var primary = [];

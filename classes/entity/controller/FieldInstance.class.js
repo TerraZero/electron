@@ -7,23 +7,26 @@ module.exports = class FieldInstance {
     this._type = type;
     this._primary = false;
     this._increment = false;
+    this._private = false;
   }
 
-  primary(bool) {
-    if (bool == undefined) bool = true;
+  primary(bool = true) {
     this._primary = bool;
     return this;
   }
 
-  notNull(bool) {
-    if (bool == undefined) bool = true;
+  notNull(bool = true) {
     this._notNull = bool;
     return this;
   }
 
-  increment(bool) {
-    if (bool == undefined) bool = true;
+  increment(bool = true) {
     this._increment = bool;
+    return this;
+  }
+
+  private(bool = true) {
+    this._private = bool;
     return this;
   }
 

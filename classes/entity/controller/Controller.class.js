@@ -1,21 +1,38 @@
 'use strict';
 
-let inner = null;
+let _instance = null;
 
 module.exports = class Controller {
 
   static instance() {
-    if (inner == null) {
-      inner = new Controller();
+    if (_instance == null) {
+      _instance = new Controller();
     }
-    return inner;
+    return _instance;
+  }
+
+  static fieldGetter(entity, name) {
+    return function() {
+      return entity._fields[name];
+    };
+  }
+
+  static fieldSetter(entity, name) {
+    return function(value) {
+      entity._fields[name] = value;
+    };
   }
 
   constructor() {
     this._table = null;
     this._fields = {};
+    this._extensible = false;
 
     this.instanceInfo();
+  }
+
+  isExtensible() {
+    return this._extensible;
   }
 
   fields() {
@@ -35,6 +52,17 @@ module.exports = class Controller {
 
     for (var field in fields) {
       entity._fields[field] = null;
+
+      if (!fields[field]._private) {
+        Object.defineProperty(entity, field, {
+          set: Controller.fieldSetter(entity, field),
+          get: Controller.fieldGetter(entity, field),
+        });
+      }
+    }
+
+    if (!this.isExtensible()) {
+      Object.preventExtensions(entity);
     }
   }
 

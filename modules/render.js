@@ -6,22 +6,33 @@ const fs = SYS.node('fs');
 
 module.exports = class Render extends Module {
 
-  view(item, mode) {
-    item._mode = mode;
-    item._filename = this.file(item);
+  render(entity, mode, flush = false) {
+    var viewed = entity._view[mode] != undefined;
+    var rendered = viewed && entity._view[mode]._render != undefined;
 
-    var content = this.content(item);
-
-    return pug.render(content, item);
+    if (!viewed || !rendered || flush) {
+      if (!viewed || flush) {
+        this.view(entity, mode, flush);
+      }
+      entity._view[mode]._render = pug.render(entity._view[mode]._content, {entity: entity, mode: mode, flush: flush, filename: entity._view[mode]._filename});
+    }
+    return entity._view[mode]._render;
   }
 
-  file(item) {
-    return (SYS.base + 'tpl/' + item.type() + '/' + item._mode + '.pug').toLowerCase();
+  view(entity, mode, flush = false) {
+    if (entity._view[mode] != undefined && !flush) return;
+    entity._view[mode] = {};
+
+    entity._view[mode]._filename = this.file(entity, mode);
+    entity._view[mode]._content = this.content(entity, mode);
   }
 
-  content(item, include) {
-    include = include || true;
-    var content = fs.readFileSync(item._filename).toString();
+  file(entity, mode) {
+    return (SYS.base + 'tpl/' + entity.type() + '/' + mode + '.pug').toLowerCase();
+  }
+
+  content(entity, mode, include = true) {
+    var content = fs.readFileSync(entity._view[mode]._filename).toString();
 
     if (include) {
       content = 'include ../functions.pug \n' + content;

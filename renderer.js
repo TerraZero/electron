@@ -2,9 +2,10 @@
 
 const DB = SYS.module('db');
 const User = SYS.use('entity/User');
+const Entity = SYS.use('entity/Entity');
 
 var u = new User();
-u.field('name', 'TerraZero');
-u.save();
 
-// http://stackoverflow.com/questions/7891937/is-it-possible-to-implement-dynamic-getters-setters-in-javascript
+u.view('full');
+console.log(u);
+console.log(u.render('full'));

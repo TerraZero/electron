@@ -1,6 +1,8 @@
 'use strict';
 
 const Module = require('./../classes/sys/Module.class.js');
+const SysError = require('./../classes/sys/SysError.class.js');
+
 const fs = require('fs');
 const remote = require('electron').remote;
 
@@ -8,13 +10,6 @@ module.exports = {
 
   _vars: {},
   _paths: {},
-  _context: {
-    subject: null,
-    method: null,
-    message: null,
-    object: null,
-    type: null,
-  },
 
   exists: function(path) {
     try {
@@ -89,58 +84,25 @@ module.exports = {
     this._vars[name] = value;
   },
 
-  msg: function(message, placeholders) {
-    for (var placeholder in placeholders) {
-      message = message.replace(':' + placeholder, '"' + placeholders[placeholder] + '"');
+  context: function(subject, method = null, message = null) {
+    var context = {
+      subject: null,
+      object: null,
+      type: null,
+      method: method,
+      message: message,
+    };
+
+    if (subject === true) {
+      return new SysError(method);
     }
-    for (var placeholder in placeholders) {
-      message = message.replace('!' + placeholder, placeholders[placeholder]);
-    }
-    return message;
-  },
-
-  errorMSG: function(message) {
-    message = this._context.message || message;
-
-    if (this._context.object) {
-      if (this._context.object instanceof Module) {
-        this._context.type = 'module';
-      } else {
-        this._context.type = 'class';
-      }
-      this._context.subject = this._context.object.constructor.name;
-    }
-
-    return this.msg(message, this._context);
-  },
-
-  context: function(subject, method, message) {
-    this._context.subject = null;
-    this._context.object = null;
-    this._context.type = null;
 
     if (subject && subject.constructor && subject.constructor.name && typeof subject != 'string') {
-      this._context.object = subject;
+      context.object = subject;
     } else if (subject) {
-      this._context.subject = subject;
+      context.subject = subject;
     }
-    this._context.method = method || null;
-    this._context.message = message || null;
-    return this;
-  },
-
-  secure: function() {
-    var args = arguments;
-
-    for (var i = 0; i < args.length; i += 2) {
-      if (!(args[i] instanceof args[i + 1])) {
-        throw new TypeError(this.errorMSG('The argument type did not match in !type :subject by method :method!'));
-      }
-    }
-  },
-
-  abstract: function() {
-    throw new TypeError(this.errorMSG('The method :method of :type :subject is not implement and abstract!'));
+    return new SysError(context);
   },
 
 };
