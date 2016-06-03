@@ -5,6 +5,8 @@ const db = SYS.module('db');
 
 let _instance = null;
 
+// get primary keys as function
+
 module.exports = class Controller {
 
   static instance() {
@@ -85,6 +87,7 @@ module.exports = class Controller {
   }
 
   load(entity, id) {
+    // id muss ein object aus primary schlüsseln sein
     var fields = this.fields();
     var query = squel.select()
       .from(this.table())
