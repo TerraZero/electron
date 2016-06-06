@@ -1,11 +1,21 @@
 'use strict';
 
 const render = SYS.module('render');
+const DB = SYS.module('db');
+const EntitySource = SYS.use('stream/source/EntitySource');
 
 module.exports = class Entity {
 
   static controller() {
     SYS.context('Entity', 'static:controller').abstract();
+  }
+
+  static multi(ids, callback) {
+    DB.execute('SELECT * FROM ' + this.controller().table() + ' t WHERE t.id in (' + ids.join(',') + ')', callback);
+  }
+
+  static source(ids) {
+    return new EntitySource(this, ids);
   }
 
   constructor(type) {

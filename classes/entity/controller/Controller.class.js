@@ -16,18 +16,6 @@ module.exports = class Controller {
     return _instance;
   }
 
-  static fieldGetter(entity, name) {
-    return function() {
-      return entity._fields[name];
-    };
-  }
-
-  static fieldSetter(entity, name) {
-    return function(value) {
-      entity._fields[name] = value;
-    };
-  }
-
   constructor() {
     this._table = null;
     this._fields = {};

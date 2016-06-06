@@ -4,8 +4,8 @@ const Pipe = SYS.use('stream/Pipe');
 
 module.exports = class Stream {
 
-  constructor() {
-    this._source = null;
+  constructor(source = null) {
+    this._source = source;
     this._pipe = [];
 
     this._index = 0;

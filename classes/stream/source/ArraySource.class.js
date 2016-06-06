@@ -10,8 +10,9 @@ module.exports = class ArraySource extends Source {
     this._index = 0;
   }
 
-  start() {
+  start(stream) {
     this._index = 0;
+    stream.runNext();
   }
 
   next() {
