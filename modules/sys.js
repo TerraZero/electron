@@ -105,6 +105,15 @@ module.exports = {
     return new SysError(context);
   },
 
+  args: function(args, offset = 0) {
+    var _args = [];
+
+    for (var i = offset; i < args.length; i++) {
+      _args.push(args[i]);
+    }
+    return _args;
+  },
+
   passOn: function(object, callback, args) {
     var _args = [];
 

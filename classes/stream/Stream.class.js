@@ -1,12 +1,14 @@
 'use strict';
 
 const Pipe = SYS.use('stream/Pipe');
+const Handler = SYS.use('handler/Handler');
 
 module.exports = class Stream {
 
   constructor(source = null) {
     this._source = source;
     this._pipe = [];
+    this._handler = new Handler(this);
 
     this._index = 0;
   }
@@ -21,14 +23,21 @@ module.exports = class Stream {
     return this;
   }
 
+  handler() {
+    return this._handler;
+  }
+
   run() {
-    this._source.start(this);
+    this._handler.trigger('start')._source.start(this);
   }
 
   runNext() {
     this._current = this._source.next();
     this._index = 0;
-    if (this._source.done()) return;
+    if (this._source.done()) {
+      this._handler.trigger('end');
+      return;
+    }
     this.next();
   }
 

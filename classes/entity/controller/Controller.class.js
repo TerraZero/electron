@@ -121,8 +121,7 @@ module.exports = class Controller {
     this.execute('insert', entity, query, function(err, rows) {
       if (err) throw err;
 
-      // to prevent flushing
-      entity._fields.id = rows.insertId;
+      entity.id = rows.insertId;
     });
   }
 
