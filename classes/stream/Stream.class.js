@@ -22,8 +22,7 @@ module.exports = class Stream {
   }
 
   run() {
-    this._source.start();
-    this.runNext();
+    this._source.start(this);
   }
 
   runNext() {
