@@ -1,10 +1,10 @@
 'use strict';
 
 const Module = SYS.use('!Module');
-const Controller = SYS.use('entity/controller/Controller');
+// const Controller = SYS.use('entity/controller/Controller');
 
 const mysql      = SYS.node('mysql');
-
+//
 var _connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
@@ -12,7 +12,7 @@ var _connection = mysql.createConnection({
   database : 'electron',
 });
 
-// connection.connect();
+_connection.connect();
 
 // var q = squel.insert()
 //   .into('user')
@@ -59,10 +59,14 @@ module.exports = class DB extends Module {
   }
 
   execute(query, callback) {
-    _connection.connect();
+    // _connection.connect();
 
     _connection.query(query, callback);
 
+    // _connection.end();
+  }
+
+  end() {
     _connection.end();
   }
 

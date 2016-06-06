@@ -105,4 +105,13 @@ module.exports = {
     return new SysError(context);
   },
 
+  passOn: function(object, callback, args) {
+    var _args = [];
+
+    for (var index in args) {
+      _args.push(args[index]);
+    }
+    callback.apply(object, _args);
+  },
+
 };

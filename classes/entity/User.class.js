@@ -12,7 +12,7 @@ module.exports = class User extends Entity {
   constructor(id = null) {
     super('user');
     if (id) {
-      this.controller().load(this, id);
+      this.load(id);
     }
   }
 

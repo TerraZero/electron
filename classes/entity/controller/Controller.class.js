@@ -31,6 +31,7 @@ module.exports = class Controller {
   constructor() {
     this._table = null;
     this._fields = {};
+    this._primaries = {};
     this._extensible = false;
 
     this.instanceInfo();
@@ -44,22 +45,28 @@ module.exports = class Controller {
     return this._fields;
   }
 
+  primaries() {
+    return this._primaries();
+  }
+
   table() {
     return this._table;
+  }
+
+  idField() {
+    return 'id';
   }
 
   instanceInfo() {
     SYS.context(this, 'instanceInfo').abstract();
   }
 
-  idCondition(entity, query) {
+  idCondition(entity, query, id = null) {
     var fields = this.fields();
+    var field = this.idField();
+    id = id || entity[field];
 
-    for (var field in fields) {
-      if (fields[field]._primary) {
-        query.where(fields[field].name() + ' = ' + entity[field]);
-      }
-    }
+    query.where(fields[field].name() + ' = ' + id);
   }
 
   create(entity) {
@@ -87,12 +94,11 @@ module.exports = class Controller {
   }
 
   load(entity, id) {
-    // id muss ein object aus primary schlüsseln sein
     var fields = this.fields();
     var query = squel.select()
-      .from(this.table())
-      .where('id = ' + id);
+      .from(this.table());
 
+    this.idCondition(entity, query, id);
     this.execute('load', entity, query, function(err, rows) {
       if (err) throw err;
 
@@ -100,6 +106,14 @@ module.exports = class Controller {
         entity._fields[field] = rows[0][fields[field].name()];
       }
     });
+  }
+
+  data(entity, row) {
+    var fields = this.fields();
+
+    for (var field in fields) {
+      entity._fields[field] = row[fields[field].name()];
+    }
   }
 
   save(entity) {

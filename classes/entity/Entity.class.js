@@ -20,6 +20,10 @@ module.exports = class Entity {
     return this.constructor.controller();
   }
 
+  load(id) {
+    this.controller().load(this, id);
+  }
+
   type() {
     return this._type;
   }
@@ -53,6 +57,10 @@ module.exports = class Entity {
   flush() {
     this._view = {};
     return this;
+  }
+
+  data(row) {
+    this.controller().data(this, row);
   }
 
 }
