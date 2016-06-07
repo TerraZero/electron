@@ -6,6 +6,7 @@ const Handler = SYS.use('handler/Handler');
 module.exports = class StreamLine {
 
   constructor(stream) {
+    this._stream = stream;
     this._handler = new Handler(this, stream.handler());
     this._pipe = stream._pipe;
     this._vars = null;
@@ -18,7 +19,7 @@ module.exports = class StreamLine {
   }
 
   run() {
-    this._vars = SYS.args(arguments);
+    this._vars = this._stream.args(SYS.args(arguments));
     this.handler().trigger('run').next();
   }
 

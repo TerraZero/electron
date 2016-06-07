@@ -27,4 +27,18 @@ module.exports = class Stream {
     return new StreamLine(this.handler().trigger('create'));
   }
 
+  args(vars) {
+    return vars;
+  }
+
+  log(message = null) {
+    this.pipe(function() {
+      if (message) console.log('START --- ' + message + ' --- ');
+      console.log(this.vars());
+      if (message) console.log('END --- ' + message + ' --- ');
+      this.next();
+    });
+    return this;
+  }
+
 }

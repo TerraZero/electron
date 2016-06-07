@@ -45,12 +45,16 @@ module.exports = class Controller {
     return 'id';
   }
 
+  sqlField(name) {
+    return this.fields()[name].name();
+  }
+
   multi(ids, struct, callback) {
     var query = squel.select()
       .from(this.table());
 
     if (ids) {
-      query.where('id in (' + ids.join(',') + ')');
+      query.where(this.sqlField(this.idField()) + ' in (' + ids.join(',') + ')');
     }
 
     this.execute('multi', null, query, function(err, rows) {
@@ -60,7 +64,7 @@ module.exports = class Controller {
       for (var i in rows) {
         entities.push(new struct(rows[i]));
       }
-      SYS.passOn(null, callback, [entities, rows]);
+      SYS.passOn(this, callback, [entities, rows]);
     });
   }
 
@@ -117,7 +121,7 @@ module.exports = class Controller {
       for (var field in fields) {
         entity._fields[field] = rows[0][fields[field].name()];
       }
-      SYS.passOn(null, callback, [entity, rows[0]]);
+      SYS.passOn(this, callback, [entity, rows[0], query]);
     });
   }
 
@@ -147,7 +151,7 @@ module.exports = class Controller {
       if (err) throw err;
 
       entity.id = rows.insertId;
-      SYS.passOn(null, callback, [entity, rows]);
+      SYS.passOn(this, callback, [entity, rows, query]);
     });
   }
 
@@ -169,7 +173,7 @@ module.exports = class Controller {
     this.execute('update', entity, query, function(err, rows) {
       if (err) throw err;
 
-      SYS.passOn(null, callback, [entity, rows]);
+      SYS.passOn(this, callback, [entity, rows, query]);
     });
   }
 
