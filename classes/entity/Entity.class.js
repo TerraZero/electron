@@ -1,6 +1,5 @@
 'use strict';
 
-const render = SYS.module('render');
 const DB = SYS.module('db');
 const EntitySource = SYS.use('stream/source/EntitySource');
 
@@ -11,11 +10,15 @@ module.exports = class Entity {
   }
 
   static multi(ids, callback) {
-    DB.execute('SELECT * FROM ' + this.controller().table() + ' t WHERE t.id in (' + ids.join(',') + ')', callback);
+    this.controller().multi(ids, callback);
   }
 
   static source(ids) {
     return new EntitySource(this, ids);
+  }
+
+  static save(entity, callback) {
+    this.controller().save(entity, callback);
   }
 
   constructor(type) {
@@ -30,8 +33,8 @@ module.exports = class Entity {
     return this.constructor.controller();
   }
 
-  load(id) {
-    this.controller().load(this, id);
+  data(row) {
+    this.controller().data(this, row);
   }
 
   type() {
@@ -50,27 +53,9 @@ module.exports = class Entity {
     return this.id == null;
   }
 
-  save() {
-    this.controller().save(this);
-    return this;
-  }
-
-  view(mode, flush = false) {
-    render.view(this, mode, flush);
-    return this;
-  }
-
-  render(mode, flush = false) {
-    return render.render(this, mode, flush);
-  }
-
   flush() {
     this._view = {};
     return this;
-  }
-
-  data(row) {
-    this.controller().data(this, row);
   }
 
 }

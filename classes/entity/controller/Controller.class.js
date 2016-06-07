@@ -49,6 +49,14 @@ module.exports = class Controller {
     SYS.context(this, 'instanceInfo').abstract();
   }
 
+  multi(ids, callback) {
+    var query = squel.select()
+      .from(this.table(), 't')
+      .where('t.' + this.fields()[this.idField()].name() + ' IN (' + ids.join(',') + ')');
+
+    this.execute('multi', null, query, callback);
+  }
+
   idCondition(entity, query, id = null) {
     var fields = this.fields();
     var field = this.idField();
@@ -81,21 +89,6 @@ module.exports = class Controller {
     }
   }
 
-  load(entity, id) {
-    var fields = this.fields();
-    var query = squel.select()
-      .from(this.table());
-
-    this.idCondition(entity, query, id);
-    this.execute('load', entity, query, function(err, rows) {
-      if (err) throw err;
-
-      for (var field in fields) {
-        entity._fields[field] = rows[0][fields[field].name()];
-      }
-    });
-  }
-
   data(entity, row) {
     var fields = this.fields();
 
@@ -104,15 +97,15 @@ module.exports = class Controller {
     }
   }
 
-  save(entity) {
+  save(entity, callback) {
     if (entity.isNew()) {
-      this.insert(entity);
+      this.insert(entity, callback);
     } else {
-      this.update(entity);
+      this.update(entity, callback);
     }
   }
 
-  insert(entity) {
+  insert(entity, callback) {
     var query = squel.insert()
       .into(this.table());
 
@@ -122,6 +115,7 @@ module.exports = class Controller {
       if (err) throw err;
 
       entity.id = rows.insertId;
+      SYS.passOn(null, callback, arguments);
     });
   }
 
@@ -133,7 +127,7 @@ module.exports = class Controller {
     }
   }
 
-  update(entity) {
+  update(entity, callback) {
     var query = squel.update()
       .table(this.table());
 
@@ -142,6 +136,8 @@ module.exports = class Controller {
 
     this.execute('update', entity, query, function(err) {
       if (err) throw err;
+
+      SYS.passOn(null, callback, arguments);
     });
   }
 
