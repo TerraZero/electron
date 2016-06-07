@@ -2,7 +2,6 @@
 
 const render = SYS.module('render');
 const DB = SYS.module('db');
-const EntitySource = SYS.use('stream/source/EntitySource');
 
 module.exports = class Entity {
 

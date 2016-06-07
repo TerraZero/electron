@@ -34,10 +34,15 @@ module.exports = class StreamLine {
   call(index = null) {
     if (index == null) index = this._index;
 
-    var vars = this._vars.slice();
+    this._pipe[index].apply(this, this._vars);
+  }
 
-    vars.unshift(this);
-    this._pipe[index].apply(this, vars);
+  callback(callback) {
+    var pipe = this;
+
+    return function() {
+      return SYS.passOn(pipe, callback, arguments);
+    };
   }
 
 }
