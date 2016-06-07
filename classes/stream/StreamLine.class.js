@@ -12,6 +12,7 @@ module.exports = class StreamLine {
     this._vars = null;
 
     this._index = 0;
+    this._context = null;
   }
 
   handler() {
@@ -23,7 +24,12 @@ module.exports = class StreamLine {
     this.handler().trigger('run').next();
   }
 
+  context() {
+    return this._context;
+  }
+
   next() {
+    this._context = null;
     if (this._index < this._pipe.length) {
       this.call(this._index++);
     }
@@ -44,6 +50,7 @@ module.exports = class StreamLine {
     var pipe = this;
 
     return function() {
+      pipe._context = this;
       return SYS.passOn(pipe, callback, arguments);
     };
   }
