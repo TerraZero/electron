@@ -35,7 +35,7 @@ module.exports = class Event {
   }
 
   apply(listener) {
-    listener.apply(null, this._apply);
+    listener.apply(this.handler(), this._apply);
   }
 
 }

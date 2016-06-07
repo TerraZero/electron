@@ -4,9 +4,9 @@ const Event = SYS.use('handler/Event');
 
 module.exports = class Handler {
 
-  constructor(host) {
-    this._host = {};
-    this._listeners = {};
+  constructor(host, handler = null) {
+    this._host = host;
+    this._listeners = handler && handler.listeners() || {};
   }
 
   on(name, listener) {
@@ -20,7 +20,7 @@ module.exports = class Handler {
   }
 
   trigger(name) {
-    if (!this._listeners[name]) return this;
+    if (!this._listeners[name]) return this.host();
 
     var e = new Event(name, SYS.args(arguments, 1), this);
 
@@ -28,6 +28,10 @@ module.exports = class Handler {
       e.apply(this._listeners[name][i]);
     }
     return this.host();
+  }
+
+  listeners() {
+    return this._listeners;
   }
 
 }

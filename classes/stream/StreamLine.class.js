@@ -1,11 +1,12 @@
 'use strict';
 
 const Stream = SYS.use('stream/Stream');
+const Handler = SYS.use('handler/Handler');
 
 module.exports = class StreamLine {
 
   constructor(stream) {
-    this._handler = stream._handler;
+    this._handler = new Handler(this, stream.handler());
     this._pipe = stream._pipe;
     this._vars = null;
 
@@ -18,7 +19,7 @@ module.exports = class StreamLine {
 
   run() {
     this._vars = SYS.args(arguments);
-    this.next();
+    this.handler().trigger('run').next();
   }
 
   next() {
@@ -34,6 +35,7 @@ module.exports = class StreamLine {
   call(index = null) {
     if (index == null) index = this._index;
 
+    this.handler().trigger('call', index);
     this._pipe[index].apply(this, this._vars);
   }
 

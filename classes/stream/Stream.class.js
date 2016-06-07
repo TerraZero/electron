@@ -14,13 +14,17 @@ module.exports = class Stream {
     return this._handler;
   }
 
+  on(name, listener) {
+    return this.handler().on(name, listener);
+  }
+
   pipe(pipe) {
     this._pipe.push(pipe);
     return this;
   }
 
   create() {
-    return new StreamLine(this);
+    return new StreamLine(this.handler().trigger('create'));
   }
 
 }
