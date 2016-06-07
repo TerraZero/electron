@@ -45,6 +45,25 @@ module.exports = class Controller {
     return 'id';
   }
 
+  multi(ids, struct, callback) {
+    var query = squel.select()
+      .from(this.table());
+
+    if (ids) {
+      query.where('id in (' + ids.join(',') + ')');
+    }
+
+    this.execute('multi', null, query, function(err, rows) {
+      if (err) throw err;
+      var entities = [];
+
+      for (var i in rows) {
+        entities.push(new struct(rows[i]));
+      }
+      SYS.passOn(null, callback, [entities, rows]);
+    });
+  }
+
   instanceInfo() {
     SYS.context(this, 'instanceInfo').abstract();
   }
@@ -57,15 +76,20 @@ module.exports = class Controller {
     query.where(fields[field].name() + ' = ' + id);
   }
 
-  create(entity) {
+  create(entity, row = null) {
     var fields = this.fields();
 
+    if (row) {
+      this.data(entity, row);
+    }
     for (var field in fields) {
-      // create default value for the field
-      if (typeof fields[field]._value == 'function') {
-        entity._fields[field] = fields[field]._value(entity);
-      } else {
-        entity._fields[field] = fields[field]._value;
+      if (!row) {
+        // create default value for the field
+        if (typeof fields[field]._value == 'function') {
+          entity._fields[field] = fields[field]._value(entity);
+        } else {
+          entity._fields[field] = fields[field]._value;
+        }
       }
 
       // create public properties for the field
@@ -81,7 +105,7 @@ module.exports = class Controller {
     }
   }
 
-  load(entity, id) {
+  load(entity, id, callback) {
     var fields = this.fields();
     var query = squel.select()
       .from(this.table());
@@ -93,6 +117,7 @@ module.exports = class Controller {
       for (var field in fields) {
         entity._fields[field] = rows[0][fields[field].name()];
       }
+      SYS.passOn(null, callback, [entity, rows[0]]);
     });
   }
 
@@ -104,15 +129,15 @@ module.exports = class Controller {
     }
   }
 
-  save(entity) {
+  save(entity, callback = null) {
     if (entity.isNew()) {
-      this.insert(entity);
+      this.insert(entity, callback);
     } else {
-      this.update(entity);
+      this.update(entity, callback);
     }
   }
 
-  insert(entity) {
+  insert(entity, callback = null) {
     var query = squel.insert()
       .into(this.table());
 
@@ -122,6 +147,7 @@ module.exports = class Controller {
       if (err) throw err;
 
       entity.id = rows.insertId;
+      SYS.passOn(null, callback, [entity, rows]);
     });
   }
 
@@ -133,15 +159,17 @@ module.exports = class Controller {
     }
   }
 
-  update(entity) {
+  update(entity, callback = null) {
     var query = squel.update()
       .table(this.table());
 
     this.idCondition(entity, query);
     this.updateFields(entity, query);
 
-    this.execute('update', entity, query, function(err) {
+    this.execute('update', entity, query, function(err, rows) {
       if (err) throw err;
+
+      SYS.passOn(null, callback, [entity, rows]);
     });
   }
 

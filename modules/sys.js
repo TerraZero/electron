@@ -114,13 +114,24 @@ module.exports = {
     return _args;
   },
 
-  passOn: function(object, callback, args) {
+  passOn: function(object, callback = null, args = []) {
+    if (!callback) return;
+
     var _args = [];
 
-    for (var index in args) {
-      _args.push(args[index]);
+    if (this.isArray(args)) {
+      _args = args;
+    } else {
+      for (var index in args) {
+        _args.push(args[index]);
+      }
     }
+
     callback.apply(object, _args);
   },
+
+  isArray: function(object) {
+    return Object.prototype.toString.call(object) === '[object Array]';
+  }
 
 };

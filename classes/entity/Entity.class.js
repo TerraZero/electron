@@ -11,27 +11,23 @@ module.exports = class Entity {
   }
 
   static multi(ids, callback) {
-    DB.execute('SELECT * FROM ' + this.controller().table() + ' t WHERE t.id in (' + ids.join(',') + ')', callback);
+    this.controller().multi(ids, this, callback);
   }
 
-  static source(ids) {
-    return new EntitySource(this, ids);
-  }
-
-  constructor(type) {
+  constructor(type, row = null) {
     this._type = type;
     this._fields = {};
     this._view = {};
 
-    this.controller().create(this);
+    this.controller().create(this, row);
   }
 
   controller() {
     return this.constructor.controller();
   }
 
-  load(id) {
-    this.controller().load(this, id);
+  load(id, callback) {
+    this.controller().load(this, id, callback);
   }
 
   type() {
@@ -50,8 +46,8 @@ module.exports = class Entity {
     return this.id == null;
   }
 
-  save() {
-    this.controller().save(this);
+  save(callback) {
+    this.controller().save(this, callback);
     return this;
   }
 
