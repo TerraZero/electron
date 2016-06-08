@@ -132,6 +132,10 @@ module.exports = {
 
   isArray: function(object) {
     return Object.prototype.toString.call(object) === '[object Array]';
-  }
+  },
+
+  is: function(object, struct) {
+    return object instanceof struct;
+  },
 
 };

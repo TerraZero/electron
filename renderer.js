@@ -1,8 +1,12 @@
 'use strict';
 
-const EntityStream = SYS.use('stream/EntityStream');
+const Runner = SYS.use('interface/Runner');
 const User = SYS.use('entity/User');
 
-var es = new EntityStream().load().render('full').log('test');
+var u = new User();
+u.id = 5;
+u.name = 'Test';
 
-var line = es.create().run({ids: [1, 3, 4], struct: User});
+var root = Runner.root();
+
+root.setLayout('simple', 'start').region('content', u.render('full'));

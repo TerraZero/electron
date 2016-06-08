@@ -3,4 +3,10 @@ mixin render(value)
     | #{value}
 
 mixin field(name)
-  +render(fields[name])
+  +render(entity[name])
+
+mixin content
+  - var fields = entity.controller().fields();
+  - for (var field in fields)
+    .field(class='field-' + field)
+      | #{entity[field]}
