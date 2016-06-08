@@ -8,12 +8,27 @@ module.exports = class EntityStream extends Stream {
     super();
   }
 
-  load() {
+  load(ids = null, struct = null) {
     this.pipe(function(vars) {
-      vars.struct.multi(vars.ids, this.callback(function(entities) {
+      struct = struct || vars.struct;
+      ids = ids || vars.ids;
+
+      struct.multi(ids, this.callback(function(entities) {
         vars.entities = entities;
         this.next();
       }));
+    });
+    return this;
+  }
+
+  render(mode) {
+    this.pipe(function(vars) {
+      vars.output = '';
+
+      for (var entity in vars.entities) {
+        vars.output += vars.entities[entity].render(mode);
+      }
+      this.next();
     });
     return this;
   }

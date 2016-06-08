@@ -26,6 +26,7 @@ module.exports = class StreamLine {
   run() {
     this._vars = this._stream.args(SYS.args(arguments));
     this.handler().trigger('run').next();
+    return this;
   }
 
   context() {

@@ -2,6 +2,7 @@
 
 const render = SYS.module('render');
 const $ = SYS.get('jquery');
+const Stream = SYS.use('stream/Stream');
 
 module.exports = class Frame {
 
@@ -13,6 +14,10 @@ module.exports = class Frame {
 
   static renderFrame(name, id) {
     return render.execute(render.path('frame', name), {id: id, name: name});
+  }
+
+  static subject() {
+    Frame.root();
   }
 
   constructor(name) {
@@ -63,7 +68,13 @@ module.exports = class Frame {
   region(name, content) {
     if (this.isNew()) SYS.context(this, 'region', 'Frame is not attached! Change only region content of attached frames!').error();
 
-    $('> .frame-region.frame-' + name, this.element()).html(content);
+    if (SYS.is(content, Stream)) {
+      content.pipe(function(vars) {
+        $('> .frame-region.frame-' + name, this.element()).html(vars.output);
+      });
+    } else {
+      $('> .frame-region.frame-' + name, this.element()).html(content);
+    }
     return this;
   }
 
