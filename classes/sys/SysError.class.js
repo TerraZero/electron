@@ -18,7 +18,7 @@ module.exports = class SysError {
     return message;
   }
 
-  error(message) {
+  show(message) {
     message = this._context.message || message;
 
     if (this._context.object) {
@@ -33,8 +33,12 @@ module.exports = class SysError {
     return this.message(message, this._context);
   }
 
+  error() {
+    throw new Error(this.show(':method - :type - :subject'));
+  }
+
   abstract() {
-    throw new TypeError(this.error('The method :method of :type :subject is not implement and abstract!'));
+    throw new TypeError(this.show('The method :method of :type :subject is not implement and abstract!'));
   }
 
   checkTypes() {
@@ -42,7 +46,7 @@ module.exports = class SysError {
 
     for (var i = 0; i < args.length; i += 2) {
       if (!(args[i] instanceof args[i + 1])) {
-        throw new TypeError(this.error('The argument type did not match in !type :subject by method :method!'));
+        throw new TypeError(this.show('The argument type did not match in !type :subject by method :method!'));
       }
     }
   }
