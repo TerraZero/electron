@@ -18,6 +18,10 @@ module.exports = class StreamLine {
     return this._handler;
   }
 
+  on(name, listener) {
+    return this.handler().on(name, listener);
+  }
+
   run() {
     this._vars = this._stream.args(SYS.args(arguments));
     this.handler().trigger('run').next();

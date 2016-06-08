@@ -14,6 +14,7 @@ var options = {
   index: 'ignore/index.pug',
   indexDest: './',
   sass: 'ignore/sass/**/*.sass',
+  sassFile: 'ignore/sass/register.sass',
   sassDest: 'src/css',
   sassOptions: {
     outputStyle: 'compressed',
@@ -30,7 +31,7 @@ gulp.task('index', function() {
 });
 
 gulp.task('sass', function() {
-  return gulp.src(options.sass)
+  return gulp.src(options.sassFile)
     .pipe(sourcemaps.init())
     .pipe(sass(options.sassOptions).on('error', sass.logError))
     .pipe(sourcemaps.write())

@@ -41,4 +41,18 @@ module.exports = class Render extends Module {
     return content;
   }
 
+  layout(name, id, vars) {
+    return this.execute((SYS.base + 'tpl/layout/' + name + '.pug').toLowerCase(), {id: id, vars: vars});
+  }
+
+  execute(filename, vars, include = true) {
+    var content = fs.readFileSync(filename).toString();
+
+    if (include) {
+      content = 'include ../functions.pug \n' + content;
+    }
+    vars.filename = filename;
+    return pug.render(content, vars);
+  }
+
 };
