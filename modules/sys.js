@@ -1,6 +1,7 @@
 'use strict';
 
 const Module = require('./../classes/sys/Module.class.js');
+const Mod = require('./../classes/sys/Mod.class.js');
 const SysError = require('./../classes/sys/SysError.class.js');
 
 const fs = require('fs');
@@ -8,8 +9,63 @@ const remote = require('electron').remote;
 
 module.exports = {
 
+  _mods: {
+    files: null,
+    instances: null,
+    hooks: {},
+  },
   _vars: {},
   _paths: {},
+
+  boot: function() {
+    const File = SYS.module('file');
+
+    this._mods.files = File.listSync(this.base + 'mods', '.*\.mod\.js$');
+    this.hook('boot');
+  },
+
+  mods: function() {
+    if (this._mods.instances) return this._mods.instances;
+
+    this._mods.instances = [];
+    for (var file in this._mods.files) {
+      var mod = require(this._mods.files[file]);
+
+      mod = new mod();
+      this.context('SYS', 'mods', 'Mod "' + this._mods.files[file] + '" are not a Mod instance but has the "mod.js" extension!').checkTypes(mod, Mod);
+      this._mods.instances.push(mod);
+    }
+    return this._mods.instances;
+  },
+
+  hook: function(hook) {
+    if (!this._mods.hooks[hook]) {
+      this.generateHook(hook);
+    }
+    var mods = this._mods.hooks[hook];
+    var args = this.args(arguments, 1);
+    var results = [];
+
+    for (var mod in mods) {
+      var result = mods[mod][hook].apply(mods[mod], args);
+
+      if (result != undefined) {
+        results.push(result);
+      }
+    }
+    return results;
+  },
+
+  generateHook: function(hook) {
+    var mods = this.mods();
+    this._mods.hooks[hook] = [];
+
+    for (var mod in mods) {
+      if (mods[mod][hook] && typeof mods[mod][hook] == 'function') {
+        this._mods.hooks[hook].push(mods[mod]);
+      }
+    }
+  },
 
   exists: function(path) {
     try {
