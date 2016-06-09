@@ -14,7 +14,9 @@ module.exports = class EntityStream extends Stream {
       ids = ids || vars.ids;
 
       struct.multi(ids, this.callback(function(entities) {
-        vars.entities = entities;
+        vars.entities = SYS.mapping(ids, entities, function(id, entity) {
+          return id == entity.id;
+        });
         this.next();
       }));
     });
@@ -31,6 +33,13 @@ module.exports = class EntityStream extends Stream {
       this.next();
     });
     return this;
+  }
+
+  args(vars) {
+    if (!vars.length) {
+      return [{}];
+    }
+    return vars;
   }
 
 }

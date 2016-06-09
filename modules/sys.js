@@ -138,4 +138,18 @@ module.exports = {
     return object instanceof struct;
   },
 
+  mapping: function(order, objects, sorting) {
+    var ordered = [];
+
+    for (var index in order) {
+      for (var o in objects) {
+        if (sorting(order[index], objects[o], index, o)) {
+          ordered.push(objects[o]);
+          objects.splice(o, 1);
+        }
+      }
+    }
+    return ordered;
+  },
+
 };

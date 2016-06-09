@@ -69,8 +69,10 @@ module.exports = class Frame {
     if (this.isNew()) SYS.context(this, 'region', 'Frame is not attached! Change only region content of attached frames!').error();
 
     if (SYS.is(content, Stream)) {
+      var that = this;
+
       content.pipe(function(vars) {
-        $('> .frame-region.frame-' + name, this.element()).html(vars.output);
+        $('> .frame-region.frame-' + name, that.element()).html(vars.output);
       });
     } else {
       $('> .frame-region.frame-' + name, this.element()).html(content);

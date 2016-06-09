@@ -28,7 +28,9 @@ module.exports = class Stream {
   }
 
   run() {
-    return this.create().run();
+    var line = this.create();
+
+    return SYS.passOn(line, line.run, arguments);
   }
 
   args(vars) {
