@@ -68,7 +68,7 @@ module.exports = class Frame {
   region(name, content) {
     if (this.isNew()) SYS.context(this, 'region', 'Frame is not attached! Change only region content of attached frames!').error();
 
-    if (SYS.is(content, Stream)) {
+    if (SYS.isStream(content)) {
       var that = this;
 
       content.pipe(function(vars) {

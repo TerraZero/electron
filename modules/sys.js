@@ -17,11 +17,19 @@ module.exports = {
   _vars: {},
   _paths: {},
 
+  _struct: {},
+
   boot: function() {
     const File = SYS.module('file');
 
     this._mods.files = File.listSync(this.base + 'mods', '.*\.mod\.js$');
     this.hook('boot');
+  },
+
+  struct: function(name) {
+    if (this._struct[name]) return this._struct[name];
+    this._struct[name] = this.use(name);
+    return this._struct[name];
   },
 
   mods: function() {
@@ -192,6 +200,10 @@ module.exports = {
 
   is: function(object, struct) {
     return object instanceof struct;
+  },
+
+  isStream: function(object) {
+    return object instanceof this.struct('stream/Stream');
   },
 
   mapping: function(order, objects, sorting) {
