@@ -3,6 +3,7 @@
 const Module = require('./../classes/sys/Module.class.js');
 const Mod = require('./../classes/sys/Mod.class.js');
 const SysError = require('./../classes/sys/SysError.class.js');
+const Arrays = require('arrays.js');
 
 const fs = require('fs');
 const remote = require('electron').remote;
@@ -174,6 +175,19 @@ module.exports = {
 
     for (var i = offset; i < args.length; i++) {
       _args.push(args[i]);
+    }
+    return _args;
+  },
+
+  arrayArgs: function(args, offset = 0) {
+    var _args = [];
+
+    for (var i = offset; i < args.length; i++) {
+      if (this.isArray(args[i])) {
+        Arrays.merge(_args, args[i]);
+      } else {
+        _args.push(args[i]);
+      }
     }
     return _args;
   },

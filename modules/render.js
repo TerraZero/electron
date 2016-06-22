@@ -59,14 +59,4 @@ module.exports = class Render extends Module {
     return (SYS.base + 'tpl/' + dir + '/' + name + '.pug').toLowerCase();
   }
 
-  execute(filename, vars, include = true) {
-    var content = fs.readFileSync(filename).toString();
-
-    if (include) {
-      content = 'include ../functions.pug \n' + content;
-    }
-    vars.filename = filename;
-    return pug.render(content, vars);
-  }
-
 };

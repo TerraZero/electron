@@ -1,6 +1,6 @@
 'use strict';
 
-const FormItem = SYS.use('forms/FormItem');
+const FormComponent = SYS.use('forms/FormComponent');
 
 module.exports = class Form {
 
@@ -14,8 +14,9 @@ module.exports = class Form {
   }
 
   add(item) {
-    SYS.context(this, 'add').checkTypes(item, FormItem);
-
+    SYS.context(this, 'add').checkTypes(item, FormComponent);
+    this._items.push(item);
+    return this;
   }
 
 }
