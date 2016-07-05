@@ -6,17 +6,15 @@ module.exports = class FormComponent extends Element {
 
   constructor(name) {
     super();
-    this._name = name;
-    this._items = [];
-    this.tpl = 'form/component';
+    this.name(name).tag('input');
   }
 
-  name() {
-    return this._name;
+  type(type) {
+    return this.setgetAttr('type', type);
   }
 
-  type() {
-    SYS.context(this, 'type').abstract();
+  name(name) {
+    return this.setgetAttr('name', name);
   }
 
 }

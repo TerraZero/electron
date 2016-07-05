@@ -1,18 +1,15 @@
 'use strict';
 
-const Module = SYS.use('!Module');
+const Module = require('./../classes/sys/Module.class.js');
 
 module.exports = class Arrays extends Module {
 
   remove(array) {
     var args = SYS.arrayArgs(arguments, 1);
-    var index = -1;
 
-    for (var i in args) {
-      while ((index = array.indexOf(args[i])) !== -1) {
-        array.slice(index, 1);
-      }
-    }
+    array = array.filter(function(item) {
+      return args.indexOf(item) < 0;
+    });
     return array;
   }
 

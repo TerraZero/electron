@@ -1,13 +1,5 @@
 'use strict';
 
-const Reflecter = SYS.use('sys/Reflecter');
-
-var r = new Reflecter({cool: ['jo', 'sdfsdfsf'], hallo: 'huhu', test: function() {return function() {return [this.hallo, 'kj']};}});
-
-console.log(r.test.list());
-console.log(r.hallo.list());
-console.log(r.cool.list());
-
 // var results = {};
 // SYS.hook('config', results);
 // console.log(results);
@@ -29,3 +21,19 @@ console.log(r.cool.list());
 // File.list(SYS.base + 'classes', function(dir, results) {
 //   console.log(results);
 // }, 'Entity.class');
+
+const Form = SYS.use('forms/Form');
+const FormComponent = SYS.use('forms/FormComponent');
+
+var form = new Form('test-form');
+form.addClass('hey', 'cool', 'sadsadd').removeClass('cool');
+var test = new FormComponent('hallo');
+test.setAttr('type', 'checkbox');
+
+var t = new FormComponent('cool');
+t.setAttr('type', 'radio');
+t.content('hallo text');
+form.addChild(test);
+test.addChild(t);
+
+console.log(form.render());

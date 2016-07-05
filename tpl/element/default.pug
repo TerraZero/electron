@@ -1,0 +1,6 @@
+#{tag}&attributes(attr)
+  if content
+    | !{content}
+  else if childs
+    each child in childs
+      | !{child}
