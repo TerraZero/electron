@@ -2,6 +2,8 @@
 
 const Boot = require('./boot.js');
 
+
+
 const Module = require('./../classes/sys/Module.class.js');
 const Mod = require('./../classes/sys/Mod.class.js');
 const SysError = require('./../classes/sys/SysError.class.js');
@@ -14,6 +16,8 @@ const remote = require('electron').remote;
 module.exports = class Sys {
 
   static initialize() {
+    this._cache = {};
+
     this._mods = {
       files: null,
       instances: null,
@@ -23,6 +27,126 @@ module.exports = class Sys {
     this._paths = {};
     this._struct = {};
   }
+
+  /**
+    * Build a cache or get a cache build
+    * @param name - the name of the cache
+    * @param key - the name of the key in the cache
+    * @param set - the value to set for the defined cache
+    * @return the cache object or if set isset (not null) the value to set
+    */
+  static cache(name, key, set = null) {
+    this._cache[name] = this._cache[name] || {};
+
+    if (set == null) {
+      return this._cache[name][key];
+    } else {
+      this._cache[name][key] = set;
+      return set;
+    }
+  }
+
+  /**
+    * Clear the cache for a specific definition
+    * @param name - the name of the cache
+    * @param key - the key of the cache
+    */
+  static clear(name = null, key = null) {
+    if (name == null) {
+      this._cache = {};
+    } else if (this._cache[name]) {
+      if (key == null) {
+        this._cache[name] = {};
+      } else if (this._cache[name][key]) {
+        delete this._cache[name][key];
+      }
+    }
+  }
+
+  static usePath(path) {
+    return path;
+  }
+
+  /**
+    * Invokes a class or object of a specific type
+    * @param path - the path to look up
+    * @param type - the type of the object
+    *         options - class
+    *                 - module
+    *                 - mod
+    *                 - node (load the node module directly)
+    *                 - remote (load the node module directly over remote)
+    */
+  static use(path, type = null) {
+    // if type is a node or remote package than load it directly
+    if (type == 'node') {
+      return require(path);
+    }
+    if (type == 'remote') {
+      return remote.require(path);
+    }
+
+    var absolute = false;
+    // create the search path
+    // if the path starts with a '.' than the path is relative to package
+    if (path.startsWith('.')) {
+      var caller = Boot.getCaller();
+
+      path = caller + '/' + path.substring(1);
+      absolute = true;
+    }
+
+    // if path has a trailing slash then invoke the package
+    if (path.endsWith('/')) return Sys.usePackage(path, type, absolute);
+
+    var subject = require(path);
+
+    // call initialize for static function on classes
+    if (!subject.isInitialized && Sys.isFunction(subject.initialize)) {
+      subject.initialize();
+      subject.isInitialized = true;
+    }
+
+    return subject;
+  }
+
+  /**
+    * Creates an object for all objects of a type in the package
+    * @param path - the path to look
+    * @param type - the type of files to filter
+    * @param absolute - if the path is already absolute or not
+    * @return a package of classes and objects
+    */
+  static usePackage(path, type = null, absolute = false) {
+    // create the search path
+    if (!absolute) {
+      path = this.base + 'bin/' + Sys.usePath(path);
+    }
+    var cache = Sys.cache('package', path);
+    // load package from cache if exists
+    if (cache) return cache;
+
+    var files = [];
+    var package = {};
+
+    // if type is set load only the filtered files
+    if (type == null) {
+      files = Boot.list(path, '.*\..*\.js', 1);
+    } else {
+      files = Boot.list(path, '.*\.' + type + '\.js', 1);
+    }
+
+    for (var index in files) {
+      package[Boot.name(files[index])] = Sys.use(Boot.path(files[index]), Boot.type(files[index]));
+    }
+
+    // cache loaded packages
+    return Sys.cache('package', path, package);
+  }
+
+
+
+
 
   boot: function() {
     const File = SYS.module('file');
@@ -80,18 +204,6 @@ module.exports = class Sys {
     }
   },
 
-  exists: function(path) {
-    try {
-      return fs.statSync(path);
-    } catch (e) {
-      return false;
-    }
-  },
-
-  node: function(name) {
-    return require(name);
-  },
-
   module: function(name) {
     var module = require(this.base + 'modules/' + name + '.js');
 
@@ -124,46 +236,6 @@ module.exports = class Sys {
     }
     return name;
   },
-
-  static usePath(path) {
-    return path;
-  }
-
-  static use(path, type = null) {
-    // if path has a trailing slash then invoke the package
-    if (path.endsWith('/')) return Sys.usePackage(path, type);
-
-    // create the search path
-    path = this.base + 'bin/' + Sys.usePath(path) + '.' + type + '.js';
-
-    var subject = require(path);
-
-    // call initialize for static function on classes
-    if (!subject.isInitialized && Sys.isFunction(subject.initialize)) {
-      subject.initialize();
-      subject.isInitialized = true;
-    }
-
-    return subject;
-  }
-
-  static usePackage(path, type = null) {
-    // create the search path
-    path = this.base + 'bin/' + Sys.usePath(path);
-    var files = [];
-    var package = {};
-
-    if (type == null) {
-      files = Boot.list(path, '.*\..*\.js', 1);
-    } else {
-      files = Boot.list(path, '.*\.' + type + '\.js', 1);
-    }
-
-    for (var index in files) {
-      package[Boot.name(files[index])] = Sys.use(Boot.path(files[index]), Boot.type(files[index]));
-    }
-    return package;
-  }
 
   remote: function(name) {
     return remote.require(name);
