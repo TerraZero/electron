@@ -3,27 +3,13 @@
 const render = SYS.module('render');
 const $ = SYS.get('jquery');
 const Stream = SYS.use('stream/Stream');
+const Element = SYS.use('io/Element');
 
-module.exports = class Frame {
-
-  static root() {
-    var frame = new Frame('root');
-    if (frame.isNew()) frame.attach($('#root'));
-    return frame;
-  }
-
-  static renderFrame(name, id) {
-    return render.execute(render.path('frame', name), {id: id, name: name});
-  }
-
-  static subject() {
-    Frame.root();
-  }
+module.exports = class Frame extends Element {
 
   constructor(name) {
+    super();
     this._name = name;
-    this._element = null;
-    this._new = true;
 
     this.init();
   }
