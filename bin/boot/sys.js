@@ -1,5 +1,7 @@
 'use strict';
 
+const Boot = require('./boot.js');
+
 const Module = require('./../classes/sys/Module.class.js');
 const Mod = require('./../classes/sys/Mod.class.js');
 const SysError = require('./../classes/sys/SysError.class.js');
@@ -9,17 +11,18 @@ Arrays = new Arrays();
 const fs = require('fs');
 const remote = require('electron').remote;
 
-module.exports = {
+module.exports = class Sys {
 
-  _mods: {
-    files: null,
-    instances: null,
-    hooks: {},
-  },
-  _vars: {},
-  _paths: {},
-
-  _struct: {},
+  static initialize() {
+    this._mods = {
+      files: null,
+      instances: null,
+      hooks: {},
+    };
+    this._vars = {};
+    this._paths = {};
+    this._struct = {};
+  }
 
   boot: function() {
     const File = SYS.module('file');
@@ -122,17 +125,45 @@ module.exports = {
     return name;
   },
 
-  use: function(name) {
-    var subject = require(this.base + 'classes/' + this.className(name) + '.class.js');
+  static usePath(path) {
+    return path;
+  }
 
-    // start init function for static class
-    if (!subject.isSubject && typeof subject.subject == 'function') {
-      subject.subject();
+  static use(path, type = null) {
+    // if path has a trailing slash then invoke the package
+    if (path.endsWith('/')) return Sys.usePackage(path, type);
+
+    // create the search path
+    path = this.base + 'bin/' + Sys.usePath(path) + '.' + type + '.js';
+
+    var subject = require(path);
+
+    // call initialize for static function on classes
+    if (!subject.isInitialized && Sys.isFunction(subject.initialize)) {
+      subject.initialize();
+      subject.isInitialized = true;
     }
-    subject.isSubject = true;
 
     return subject;
-  },
+  }
+
+  static usePackage(path, type = null) {
+    // create the search path
+    path = this.base + 'bin/' + Sys.usePath(path);
+    var files = [];
+    var package = {};
+
+    if (type == null) {
+      files = Boot.list(path, '.*\..*\.js', 1);
+    } else {
+      files = Boot.list(path, '.*\.' + type + '\.js', 1);
+    }
+
+    for (var index in files) {
+      package[Boot.name(files[index])] = Sys.use(Boot.path(files[index]), Boot.type(files[index]));
+    }
+    return package;
+  }
 
   remote: function(name) {
     return remote.require(name);
@@ -212,6 +243,10 @@ module.exports = {
   isArray: function(object) {
     return Object.prototype.toString.call(object) === '[object Array]';
   },
+
+  static isFunction(object) {
+    return typeof object == 'function';
+  }
 
   is: function(object, struct) {
     return object instanceof struct;

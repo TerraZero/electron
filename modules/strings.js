@@ -22,4 +22,8 @@ module.exports = class Strings extends Module {
     return _array;
   }
 
+  matches(string, regex) {
+    return string.match(regex);
+  }
+
 };

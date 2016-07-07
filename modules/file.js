@@ -48,14 +48,14 @@ module.exports = class File extends Module {
     return Strings.filter(results, expression);
   }
 
-  listSync(dir, expression = null) {
+  listSync(dir, expression = null, recursive = null) {
     var results = [];
 
-    this.walkSync(dir, results);
+    this.walkSync(dir, results, recursive);
     return this.filter(results, expression);
   }
 
-  walkSync(dir, results) {
+  walkSync(dir, results, recursive = null, deep = 0) {
     var list = fs.readdirSync(dir);
 
     for (var i in list) {
@@ -63,7 +63,7 @@ module.exports = class File extends Module {
       var stat = fs.statSync(file);
 
       if (stat && stat.isDirectory()) {
-        this.walkSync(file, results);
+        if (recursive == null || recursive > deep) this.walkSync(file, results, recursive, deep + 1);
       } else {
         results.push(file);
       }
