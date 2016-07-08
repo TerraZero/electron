@@ -38,10 +38,10 @@
 
 // console.log(form.render());
 
-const Handler = SYS.use('handler/Handler');
+const Pack = SYS.use('handler/');
 
 var t = {};
-t.handler = new Handler(t);
+t.handler = new Pack.Handler(t);
 t.handler.on('test', function(e, name) {
   console.log(e);
   console.log(e.args());

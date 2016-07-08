@@ -64,16 +64,29 @@ module.exports = class Sys {
     }
   }
 
-  static usePath(path, type = 'class', file = false) {
+  /**
+    * Create the path for invoke
+    * @param path - the path to invoke
+    * @param type - the type of the object
+    * @param file - if the invoke path will be a file
+    * @param offset - the offset for caller
+    * @param absolute - flag if the path is already absolute
+    */
+  static usePath(path, type = 'class', file = false, offset = 0, absolute = false) {
+    if (path.startsWith('.')) {
+      path = Boot.getCaller(2 + offset).dir + path.substring(1);
+    } else if (!absolute) {
+      path = this.base + 'bin/' + path;
+    }
+
     if (file) {
       if (type) {
-        return this.base + 'bin/' + path + '.' + type + '.js';
+        return path + '.' + type + '.js';
       } else {
-        return this.base + 'bin/' + path + '.js';
+        return path + '.js';
       }
-    } else {
-      return this.base + 'bin/' + path;
     }
+    return path;
   }
 
   /**
@@ -86,8 +99,9 @@ module.exports = class Sys {
     *                 - mod
     *                 - node (load the node module directly)
     *                 - remote (load the node module directly over remote)
+    * @param absolute - flag if the path is already absolute
     */
-  static use(path, type = 'class') {
+  static use(path, type = 'class', absolute = false) {
     // if type is a node or remote package than load it directly
     if (type == 'node') {
       return require(path);
@@ -96,20 +110,10 @@ module.exports = class Sys {
       return remote.require(path);
     }
 
-    var absolute = false;
-    // create the search path
-    // if the path starts with a '.' than the path is relative to package
-    if (path.startsWith('.')) {
-      var caller = Boot.getCaller();
-
-      path = caller + '/' + path.substring(1);
-      absolute = true;
-    }
-
     // if path has a trailing slash then invoke the package
     if (path.endsWith('/')) return Sys.usePackage(path, type, absolute);
 
-    var subject = require(Sys.usePath(path, type, true));
+    var subject = require(Sys.usePath(path, type, true, 0, absolute));
 
     // call initialize for static function on classes
     if (!subject.isInitialized && Sys.isFunction(subject.initialize)) {
@@ -124,20 +128,19 @@ module.exports = class Sys {
     * Creates an object for all objects of a type in the package
     * @param path - the path to look
     * @param type - the type of files to filter
-    * @param absolute - if the path is already absolute or not
+    * @param absolute - flag if the path is already absolute
     * @return a package of classes and objects
     */
-  static usePackage(path, type = null, absolute = false) {
-    // create the search path
-    if (!absolute) {
-      path = Sys.usePath(path, type);
-    }
-    var cache = Sys.cache('package', path);
+  static usePackage(path, type = 'class', absolute = false) {
+    var key = path;
+    var cache = Sys.cache('package', key);
     // load package from cache if exists
     if (cache) return cache;
 
     var files = [];
     var pack = {};
+
+    path = Sys.usePath(path, type, false, 1, absolute);
 
     // if type is set load only the filtered files
     if (type == null) {
@@ -147,11 +150,11 @@ module.exports = class Sys {
     }
 
     for (var index in files) {
-      pack[Boot.name(files[index])] = Sys.use(Boot.path(files[index]), Boot.type(files[index]));
+      pack[Boot.name(files[index])] = Sys.use(Boot.path(files[index]), Boot.type(files[index]), true);
     }
 
     // cache loaded packages
-    return Sys.cache('package', path, pack);
+    return Sys.cache('package', key, pack);
   }
 
 

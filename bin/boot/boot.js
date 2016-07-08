@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const Path = require('path');
-var Stack = require('callsite');
+var Stack = require('stack-trace');
 
 module.exports = {
 
@@ -17,7 +17,7 @@ module.exports = {
     var list = fs.readdirSync(dir);
 
     for (var i in list) {
-      var file = path.resolve(dir, list[i]);
+      var file = Path.resolve(dir, list[i]);
       var stat = fs.statSync(file);
 
       if (stat && stat.isDirectory()) {
@@ -68,31 +68,24 @@ module.exports = {
   type: function(path) {
     var parse = Path.parse(path);
 
-    return this.match(parse.name, '\.([^.]*)\.', 0);
+    return this.match(parse.name, '[^\.]*$', 0);
   },
 
-  // private
+  parse: function(path) {
+    var parse = Path.parse(path);
 
-  getCaller: function() {
+    parse.type = this.type(path);
+    return parse;
+  },
+
+  getCaller: function(offset = 0) {
     var stack = this.getStack();
-    // stack.forEach(function(site) {
-    //   console.log(site);
-    // });
 
-    // Remove superfluous function calls on stack
-    stack.shift(); // getCaller --> getStack
-    stack.shift(); // [caller] --> getCaller
-
-    // Return caller's caller
-    return stack[1].receiver.filename;
+    return this.parse(stack[offset + 2].getFileName());
   },
 
   getStack: function() {
-    const myObject = {};
-    Error.captureStackTrace(myObject);
-    console.log(myObject.stack);
-
-    // return stack;
+    return Stack.get();
   },
 
 };
