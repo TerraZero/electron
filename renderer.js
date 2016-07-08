@@ -22,18 +22,29 @@
 //   console.log(results);
 // }, 'Entity.class');
 
-const Form = SYS.use('forms/Form');
-const FormComponent = SYS.use('forms/FormComponent');
+// const Form = SYS.use('forms/Form');
+// const FormComponent = SYS.use('forms/FormComponent');
 
-var form = new Form('test-form');
-form.addClass('hey', 'cool', 'sadsadd').removeClass('cool');
-var test = new FormComponent('hallo');
-test.setAttr('type', 'checkbox');
+// var form = new Form('test-form');
+// form.addClass('hey', 'cool', 'sadsadd').removeClass('cool');
+// var test = new FormComponent('hallo');
+// test.setAttr('type', 'checkbox');
 
-var t = new FormComponent('cool');
-t.setAttr('type', 'radio');
-t.content('hallo text');
-form.addChild(test);
-test.addChild(t);
+// var t = new FormComponent('cool');
+// t.setAttr('type', 'radio');
+// t.content('hallo text');
+// form.addChild(test);
+// test.addChild(t);
 
-console.log(form.render());
+// console.log(form.render());
+
+const Handler = SYS.use('handler/Handler');
+
+var t = {};
+t.handler = new Handler(t);
+t.handler.on('test', function(e, name) {
+  console.log(e);
+  console.log(e.args());
+  console.log(name);
+});
+t.handler.trigger('test', 'cool');

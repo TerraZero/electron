@@ -1,14 +1,14 @@
 'use strict';
 
-global.SYS = require('./modules/sys.js');
+global.SYS = require('./bin/boot/sys.js');
 SYS.base = __dirname + '/';
 
-SYS.register('!Module', 'sys/Module');
-SYS.register('!Mod', 'sys/Mod');
+// SYS.register('!Module', 'sys/Module');
+// SYS.register('!Mod', 'sys/Mod');
 
 SYS.initialize();
 
-SYS.set('jquery', SYS.src('js', 'jquery-2.2.4.min.js'));
+// SYS.set('jquery', SYS.src('js', 'jquery-2.2.4.min.js'));
 
-global.ISDEF = SYS.isDef;
-global.SETGET = SYS.setget;
+// global.ISDEF = SYS.isDef;
+// global.SETGET = SYS.setget;

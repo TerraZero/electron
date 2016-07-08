@@ -12,6 +12,7 @@
   "author": "TerraZero",
   "license": "CC0-1.0",
   "dependencies": {
+    "callsite": "^1.0.0",
     "electron-prebuilt": "^1.2.0",
     "fs": "0.0.2",
     "node-mysql": "^0.4.2",

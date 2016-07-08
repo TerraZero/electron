@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const Path = require('path');
+var Stack = require('callsite');
 
 module.exports = {
 
@@ -25,9 +26,9 @@ module.exports = {
         results.push(file);
       }
     }
-  }
+  },
 
-  filter(array, expression = null, value = null) {
+  filter: function(array, expression = null, value = null) {
     if (!expression) return array;
     value = value || function(value) { return value; };
     var pattern = new RegExp(expression);
@@ -39,7 +40,7 @@ module.exports = {
       }
     }
     return _array;
-  }
+  },
 
   match: function(string, expression, value = null) {
     if (value == null) {
@@ -73,38 +74,25 @@ module.exports = {
   // private
 
   getCaller: function() {
-    var stack = this.getStack()
+    var stack = this.getStack();
+    // stack.forEach(function(site) {
+    //   console.log(site);
+    // });
 
     // Remove superfluous function calls on stack
-    stack.shift() // getCaller --> getStack
-    stack.shift() // [caller] --> getCaller
+    stack.shift(); // getCaller --> getStack
+    stack.shift(); // [caller] --> getCaller
 
     // Return caller's caller
     return stack[1].receiver.filename;
   },
 
   getStack: function() {
-    // Save original Error.prepareStackTrace
-    var origPrepareStackTrace = Error.prepareStackTrace
+    const myObject = {};
+    Error.captureStackTrace(myObject);
+    console.log(myObject.stack);
 
-    // Override with function that just returns `stack`
-    Error.prepareStackTrace = function (_, stack) {
-      return stack
-    }
-
-    // Create a new `Error`, which automatically gets `stack`
-    var err = new Error()
-
-    // Evaluate `err.stack`, which calls our new `Error.prepareStackTrace`
-    var stack = err.stack
-
-    // Restore original `Error.prepareStackTrace`
-    Error.prepareStackTrace = origPrepareStackTrace
-
-    // Remove superfluous function call on stack
-    stack.shift() // getStack --> Error
-
-    return stack
+    // return stack;
   },
 
 };

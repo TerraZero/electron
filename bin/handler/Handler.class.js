@@ -1,6 +1,6 @@
 'use strict';
 
-const Event = SYS.use('handler/Event');
+const Event = SYS.use('./Event');
 
 module.exports = class Handler {
 
