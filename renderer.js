@@ -14,3 +14,5 @@ new Stream(User.source([1, 4])).pipe(function(value) {
 }).pipe(function(value) {
   console.log(value.entity.name);
 }).run();
+
+// test 1
