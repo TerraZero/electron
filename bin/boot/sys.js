@@ -159,6 +159,21 @@ module.exports = class Sys {
 
 
 
+  static exit() {
+    remote.require('electron').app.quit();
+  }
+
+
+
+  static args(args, offset = 0) {
+    var _args = [];
+
+    for (var i = offset; i < args.length; i++) {
+      _args.push(args[i]);
+    }
+    return _args;
+  }
+
 
 
   // boot: function() {
@@ -285,24 +300,6 @@ module.exports = class Sys {
   //     context.subject = subject;
   //   }
   //   return new SysError(context);
-  // },
-
-  static args(args, offset = 0) {
-    var _args = [];
-
-    for (var i = offset; i < args.length; i++) {
-      _args.push(args[i]);
-    }
-    return _args;
-  }
-
-  // args: function(args, offset = 0) {
-  //   var _args = [];
-
-  //   for (var i = offset; i < args.length; i++) {
-  //     _args.push(args[i]);
-  //   }
-  //   return _args;
   // },
 
   // arrayArgs: function(args, offset = 0) {
