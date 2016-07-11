@@ -22,7 +22,7 @@ module.exports = class Handler {
   trigger(name) {
     if (!this._listeners[name]) return this.host();
 
-    var e = new Event(name, SYS.args(arguments, 1), this);
+    var e = new Event(name, TOOLS.args(arguments, 1), this);
 
     for (var i in this._listeners[name]) {
       e.apply(this._listeners[name][i]);

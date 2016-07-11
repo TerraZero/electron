@@ -1,6 +1,6 @@
 'use strict';
 
-const Module = require('./Module.class.js');
+const Module = SYS.use('sys/Module');
 
 module.exports = class SysError {
 

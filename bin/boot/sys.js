@@ -19,6 +19,8 @@ module.exports = class Sys {
   static initialize() {
     this._cache = {};
 
+    this._SysError = SYS.use('sys/SysError');
+
     // this._mods = {
     //   files: null,
     //   instances: null,
@@ -31,6 +33,7 @@ module.exports = class Sys {
 
   /**
     * Build a cache or get a cache build
+    *
     * @param name - the name of the cache
     * @param key - the name of the key in the cache
     * @param set - the value to set for the defined cache
@@ -49,6 +52,7 @@ module.exports = class Sys {
 
   /**
     * Clear the cache for a specific definition
+    *
     * @param name - the name of the cache
     * @param key - the key of the cache
     */
@@ -66,6 +70,7 @@ module.exports = class Sys {
 
   /**
     * Create the path for invoke
+    *
     * @param path - the path to invoke
     * @param type - the type of the object
     * @param file - if the invoke path will be a file
@@ -91,6 +96,7 @@ module.exports = class Sys {
 
   /**
     * Invokes a class or object of a specific type
+    *
     * @param path - the path to look up
     * @param type - the type of the object
     *         options - class (default)
@@ -116,7 +122,7 @@ module.exports = class Sys {
     var subject = require(Sys.usePath(path, type, true, 0, absolute));
 
     // call initialize for static function on classes
-    if (!subject.isInitialized && Sys.isFunction(subject.initialize)) {
+    if (!subject.isInitialized && TOOLS.isFunction(subject.initialize)) {
       subject.initialize();
       subject.isInitialized = true;
     }
@@ -126,6 +132,7 @@ module.exports = class Sys {
 
   /**
     * Creates an object for all objects of a type in the package
+    *
     * @param path - the path to look
     * @param type - the type of files to filter
     * @param absolute - flag if the path is already absolute
@@ -157,21 +164,36 @@ module.exports = class Sys {
     return Sys.cache('package', key, pack);
   }
 
-
-
+  /**
+    * Close the application complete.
+    */
   static exit() {
     remote.require('electron').app.quit();
   }
 
+  /**
+    * Create an contextual error object
+    * TODO comment - and syserror rework
+    */
+  static context(subject, method = null, message = null) {
+    var context = {
+      subject: null,
+      object: null,
+      type: null,
+      method: method,
+      message: message,
+    };
 
-
-  static args(args, offset = 0) {
-    var _args = [];
-
-    for (var i = offset; i < args.length; i++) {
-      _args.push(args[i]);
+    if (subject === true) {
+      return new this._SysError(method);
     }
-    return _args;
+
+    if (subject && subject.constructor && subject.constructor.name && typeof subject != 'string') {
+      context.object = subject;
+    } else if (subject) {
+      context.subject = subject;
+    }
+    return new this._SysError(context);
   }
 
 
@@ -181,12 +203,6 @@ module.exports = class Sys {
 
   //   this._mods.files = File.listSync(this.base + 'mods', '.*\.mod\.js$');
   //   this.hook('boot');
-  // },
-
-  // struct: function(name) {
-  //   if (this._struct[name]) return this._struct[name];
-  //   this._struct[name] = this.use(name);
-  //   return this._struct[name];
   // },
 
   // mods: function() {
@@ -232,74 +248,8 @@ module.exports = class Sys {
   //   }
   // },
 
-  // module: function(name) {
-  //   var module = require(this.base + 'modules/' + name + '.js');
-
-  //   if (!module._instance) {
-  //     module._instance = new module();
-  //   }
-
-  //   return module._instance;
-  // },
-
-  // src: function(type, name) {
-  //   return require(this.path(type, name));
-  // },
-
-  // path: function(type, name) {
-  //   return this.base + 'src/' + type + '/' + name;
-  // },
-
   // read: function(type, name) {
   //   return fs.readFileSync(this.path(type, name));
-  // },
-
-  // register: function(name, path) {
-  //   this._paths[name] = path;
-  // },
-
-  // className: function(name) {
-  //   for (var field in this._paths) {
-  //     name = name.replace(field, this._paths[field]);
-  //   }
-  //   return name;
-  // },
-
-  // remote: function(name) {
-  //   return remote.require(name);
-  // },
-
-  // exit: function() {
-  //   this.remote('electron').app.quit();
-  // },
-
-  // get: function(name) {
-  //   return this._vars[name];
-  // },
-
-  // set: function(name, value) {
-  //   this._vars[name] = value;
-  // },
-
-  // context: function(subject, method = null, message = null) {
-  //   var context = {
-  //     subject: null,
-  //     object: null,
-  //     type: null,
-  //     method: method,
-  //     message: message,
-  //   };
-
-  //   if (subject === true) {
-  //     return new SysError(method);
-  //   }
-
-  //   if (subject && subject.constructor && subject.constructor.name && typeof subject != 'string') {
-  //     context.object = subject;
-  //   } else if (subject) {
-  //     context.subject = subject;
-  //   }
-  //   return new SysError(context);
   // },
 
   // arrayArgs: function(args, offset = 0) {
@@ -315,32 +265,7 @@ module.exports = class Sys {
   //   return _args;
   // },
 
-  // passOn: function(object, callback = null, args = []) {
-  //   if (!callback) return;
-
-  //   var _args = [];
-
-  //   if (this.isArray(args)) {
-  //     _args = args;
-  //   } else {
-  //     for (var index in args) {
-  //       _args.push(args[index]);
-  //     }
-  //   }
-
   //   callback.apply(object, _args);
-  // },
-
-  // isArray: function(object) {
-  //   return Object.prototype.toString.call(object) === '[object Array]';
-  // },
-
-  static isFunction(object) {
-    return typeof object == 'function';
-  }
-
-  // is: function(object, struct) {
-  //   return object instanceof struct;
   // },
 
   // isStream: function(object) {
@@ -359,19 +284,6 @@ module.exports = class Sys {
   //     }
   //   }
   //   return ordered;
-  // },
-
-  // isDef: function(defined) {
-  //   return defined !== undefined;
-  // },
-
-  // setget: function(object, variable, name) {
-  //   if (ISDEF(variable)) {
-  //     object[name] = variable;
-  //     return object;
-  //   } else {
-  //     return object[name];
-  //   }
   // },
 
 };
