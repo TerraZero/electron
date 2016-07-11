@@ -46,6 +46,17 @@ module.exports = class Tools {
   }
 
   /**
+    * Determine if the struct object is based on base
+    *
+    * @param (class) struct - the class object to test
+    * @param (class) base   - the class object to test if it based of
+    * @return boolen        - if struct is based on base
+    */
+  static isBased(struct, base) {
+    return struct.prototype instanceof base;
+  }
+
+  /**
     * Determine if the object is a function
     *
     * @param object   - the object to test

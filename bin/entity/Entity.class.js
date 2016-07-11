@@ -1,7 +1,7 @@
 'use strict';
 
-const render = SYS.module('render');
-const DB = SYS.module('db');
+const Render = SYS.use('./render/Render');
+const DB = SYS.use('db/DB');
 
 module.exports = class Entity {
 
@@ -51,12 +51,12 @@ module.exports = class Entity {
   }
 
   view(mode, flush = false) {
-    render.view(this, mode, flush);
+    Render.view(this, mode, flush);
     return this;
   }
 
   render(mode, flush = false) {
-    return render.render(this, mode, flush);
+    return Render.render(this, mode, flush);
   }
 
   flush() {

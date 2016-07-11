@@ -1,6 +1,6 @@
 'use strict';
 
-const squel = SYS.node('squel').useFlavour('mysql');
+const squel = SYS.use('squel', 'node').useFlavour('mysql');
 
 class CreateTableBlock extends squel.cls.Block {
   /** The method exposed by the query builder */
@@ -15,6 +15,7 @@ class CreateTableBlock extends squel.cls.Block {
         values: [],  /* values for paramterized queries */
     };
   }
+
 }
 
 class CreateFieldBlock extends squel.cls.Block {
@@ -57,6 +58,4 @@ squel.create = function(options) {
   return new CreateTableQuery(options);
 };
 
-module.exports = {
-  _instance: squel,
-};
+module.exports = squel;

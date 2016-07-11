@@ -38,13 +38,15 @@
 
 // console.log(form.render());
 
-const Pack = SYS.use('handler/');
+const DB = SYS.use('db/DB');
 
-var t = {};
-t.handler = new Pack.Handler(t);
-t.handler.on('test', function(e, name) {
-  console.log(e);
-  console.log(e.args());
-  console.log(name);
-});
-t.handler.trigger('test', 'cool');
+// const Pack = SYS.use('handler/');
+
+// var t = {};
+// t.handler = new Pack.Handler(t);
+// t.handler.on('test', function(e, name) {
+//   console.log(e);
+//   console.log(e.args());
+//   console.log(name);
+// });
+// t.handler.trigger('test', 'cool');

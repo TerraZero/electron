@@ -1,12 +1,12 @@
 'use strict';
 
-const Entity = SYS.use('entity/Entity');
-const nc = SYS.use('entity/controller/NodeController').instance();
+const Entity = SYS.use('./Entity');
+const NC = SYS.use('./controller/NodeController').instance();
 
 module.exports = class Node extends Entity {
 
   static controller() {
-    return nc;
+    return NC;
   }
 
   constructor() {

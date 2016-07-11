@@ -1,12 +1,12 @@
 'use strict';
 
-const Entity = SYS.use('entity/Entity');
-const uc = SYS.use('entity/controller/UserController').instance();
+const Entity = SYS.use('./Entity');
+const UC = SYS.use('./controller/UserController').instance();
 
 module.exports = class User extends Entity {
 
   static controller() {
-    return uc;
+    return UC;
   }
 
   constructor(row) {

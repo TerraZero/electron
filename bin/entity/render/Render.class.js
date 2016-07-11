@@ -1,8 +1,8 @@
 'use strict';
 
-const Module = SYS.use('!Module');
-const pug = SYS.node('pug');
-const fs = SYS.node('fs');
+const Module = SYS.use('sys/Module');
+const pug = SYS.use('pug', 'node');
+const fs = SYS.use('fs', 'node');
 
 module.exports = class Render extends Module {
 
@@ -28,7 +28,7 @@ module.exports = class Render extends Module {
   }
 
   file(entity, mode) {
-    return (SYS.base + 'tpl/' + entity.type() + '/' + mode + '.pug').toLowerCase();
+    return (SYS.base() + 'tpl/' + entity.type() + '/' + mode + '.pug').toLowerCase();
   }
 
   content(entity, mode, include = true) {
@@ -52,15 +52,15 @@ module.exports = class Render extends Module {
   }
 
   layout(name, id, vars) {
-    return this.execute((SYS.base + 'tpl/layout/' + name + '.pug').toLowerCase(), {id: id, vars: vars});
+    return this.execute((SYS.base() + 'tpl/layout/' + name + '.pug').toLowerCase(), {id: id, vars: vars});
   }
 
   path(dir, name) {
-    return (SYS.base + 'tpl/' + dir + '/' + name + '.pug').toLowerCase();
+    return (SYS.base() + 'tpl/' + dir + '/' + name + '.pug').toLowerCase();
   }
 
   renderTpl(file, vars, include = true) {
-    var filename = SYS.base + 'tpl/' + file + '.pug';
+    var filename = SYS.base() + 'tpl/' + file + '.pug';
     var content = fs.readFileSync(filename).toString();
 
     if (include) {

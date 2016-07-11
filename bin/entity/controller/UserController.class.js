@@ -1,18 +1,9 @@
 'use strict';
 
-const Controller = SYS.use('entity/controller/Controller');
-const Field = SYS.use('entity/controller/FieldInstance');
-
-let _instance = null;
+const Controller = SYS.use('./Controller');
+const Field = SYS.use('entity/fields/FieldInstance');
 
 module.exports = class UserController extends Controller {
-
-  static instance() {
-    if (_instance == null) {
-      _instance = new UserController();
-    }
-    return _instance;
-  }
 
   constructor() {
     super();

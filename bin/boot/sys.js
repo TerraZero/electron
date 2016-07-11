@@ -20,6 +20,7 @@ module.exports = class Sys {
     this._cache = {};
 
     this._SysError = SYS.use('sys/SysError');
+    this._Module = SYS.use('sys/Module');
 
     // this._mods = {
     //   files: null,
@@ -81,7 +82,7 @@ module.exports = class Sys {
     if (path.startsWith('.')) {
       path = Boot.getCaller(2 + offset).dir + path.substring(1);
     } else if (!absolute) {
-      path = this.base + 'bin/' + path;
+      path = this.base() + 'bin/' + path;
     }
 
     if (file) {
@@ -119,15 +120,14 @@ module.exports = class Sys {
     // if path has a trailing slash then invoke the package
     if (path.endsWith('/')) return Sys.usePackage(path, type, absolute);
 
-    var subject = require(Sys.usePath(path, type, true, 0, absolute));
+    var struct = require(Sys.usePath(path, type, true, 0, absolute));
 
-    // call initialize for static function on classes
-    if (!subject.isInitialized && TOOLS.isFunction(subject.initialize)) {
-      subject.initialize();
-      subject.isInitialized = true;
+    // if struct is an Module than call build function to create the module
+    if (TOOLS.isBased(struct, this._Module)) {
+      return struct.build.apply(struct, TOOLS.args(arguments, 3));
     }
 
-    return subject;
+    return struct;
   }
 
   /**
@@ -197,6 +197,14 @@ module.exports = class Sys {
   }
 
 
+  /**
+    * Get the base path of project
+    *
+    * @return string - path to root of project
+    */
+  static base() {
+    return this._base;
+  }
 
   // boot: function() {
   //   const File = SYS.module('file');
