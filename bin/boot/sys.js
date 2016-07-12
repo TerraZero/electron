@@ -13,7 +13,7 @@ const remote = require('electron').remote;
 // var Arrays = require('./arrays.js');
 // Arrays = new Arrays();
 
-// const fs = require('fs');
+// const fs = require('graceful-fs');
 
 module.exports = class Sys {
 

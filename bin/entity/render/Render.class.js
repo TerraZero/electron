@@ -2,7 +2,7 @@
 
 const Module = SYS.use('sys/Module');
 const pug = SYS.use('pug', 'node');
-const fs = SYS.use('fs', 'node');
+const fs = SYS.use('graceful-fs', 'node');
 
 module.exports = class Render extends Module {
 
