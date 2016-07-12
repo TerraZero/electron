@@ -1,5 +1,7 @@
 'use strict';
 
+const Boot = require('./boot.js');
+
 module.exports = class Tools {
 
   /**
@@ -112,6 +114,16 @@ module.exports = class Tools {
     } else {
       return object[name];
     }
+  }
+
+  static getStack(filter = null) {
+    var stack = Boot.getStack();
+    var files = [];
+
+    for (var i in stack) {
+      files.push(stack[i].getFileName());
+    }
+    return Boot.filter(files, filter);
   }
 
 };

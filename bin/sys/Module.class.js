@@ -3,7 +3,10 @@
 module.exports = class Module {
 
   static build() {
-    return new this();
+    if (!ISDEF(this._build)) {
+      this._build = new this();
+    }
+    return this._build;
   }
 
 }

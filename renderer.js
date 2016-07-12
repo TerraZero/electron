@@ -38,8 +38,6 @@
 
 // console.log(form.render());
 
-const DB = SYS.use('db/DB');
-
 // const Pack = SYS.use('handler/');
 
 // var t = {};
@@ -50,3 +48,10 @@ const DB = SYS.use('db/DB');
 //   console.log(name);
 // });
 // t.handler.trigger('test', 'cool');
+
+const User = SYS.use('entity/User');
+
+var u = new User();
+u.load(2, function(user) {
+  console.log(user);
+});

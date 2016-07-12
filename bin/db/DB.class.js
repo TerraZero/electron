@@ -5,18 +5,19 @@ const mysql = SYS.use('mysql', 'node');
 const Module = SYS.use('sys/Module');
 const Controller = SYS.use('entity/controller/Controller');
 
-const private = {};
+const cache = {};
 
 module.exports = class DB extends Module {
 
   static build(connection = 'default') {
-    if (!ISDEF(private[connection])) {
-      private[connection] = new DB(connection);
+    if (!ISDEF(cache[connection])) {
+      cache[connection] = new DB(connection);
     }
-    return private[connection];
+    return cache[connection];
   }
 
   constructor(connection) {
+    super();
     this._connection = mysql.createConnection({
       host     : 'localhost',
       user     : 'root',

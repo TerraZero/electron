@@ -1,7 +1,6 @@
 'use strict';
 
 const Render = SYS.use('./render/Render');
-const DB = SYS.use('db/DB');
 
 module.exports = class Entity {
 

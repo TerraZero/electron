@@ -1,6 +1,7 @@
 'use strict';
 
 const Boot = require('./boot.js');
+const Module = require('./../sys/Module.class.js');
 
 const remote = require('electron').remote;
 
@@ -20,7 +21,6 @@ module.exports = class Sys {
     this._cache = {};
 
     this._SysError = SYS.use('sys/SysError');
-    this._Module = SYS.use('sys/Module');
 
     // this._mods = {
     //   files: null,
@@ -123,7 +123,7 @@ module.exports = class Sys {
     var struct = require(Sys.usePath(path, type, true, 0, absolute));
 
     // if struct is an Module than call build function to create the module
-    if (TOOLS.isBased(struct, this._Module)) {
+    if (TOOLS.isBased(struct, Module)) {
       return struct.build.apply(struct, TOOLS.args(arguments, 3));
     }
 
