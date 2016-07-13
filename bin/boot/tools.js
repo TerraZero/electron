@@ -116,6 +116,12 @@ module.exports = class Tools {
     }
   }
 
+  /**
+    * Get filtered stacktree
+    *
+    * @param (string:regex) filter (optional) - the filter for stack
+    * @return array - array of stack tree paths
+    */
   static getStack(filter = null) {
     var stack = Boot.getStack();
     var files = [];
@@ -136,7 +142,7 @@ module.exports = class Tools {
     */
   static sorting(order, objects, sorting = null) {
     if (sorting == null) {
-      sorting = function(order_value, object_value, order_index, object_index) {
+      sorting = function defaultSorting(order_value, object_value, order_index, object_index) {
         return order_value == object_index;
       };
     }
