@@ -1,6 +1,6 @@
 'use strict';
 
-const Stream = SYS.use('stream/Stream');
+const Stream = SYS.use('./Stream');
 
 module.exports = class EntityStream extends Stream {
 
@@ -14,7 +14,7 @@ module.exports = class EntityStream extends Stream {
       ids = ids || vars.ids;
 
       struct.multi(ids, this.callback(function(entities) {
-        vars.entities = SYS.mapping(ids, entities, function(id, entity) {
+        vars.entities = TOOLS.sorting(ids, entities, function(id, entity) {
           return id == entity.id;
         });
         this.next();

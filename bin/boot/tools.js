@@ -126,4 +126,30 @@ module.exports = class Tools {
     return Boot.filter(files, filter);
   }
 
+  /**
+    * Sort the objects after an order
+    *
+    * @param (array) order - the order of objects
+    * @param (array) objects - the objects to sort
+    * @param (function) sorting (optional) - function(order_value, object_value, order_index, object_index)
+    * @return new array - the sorted array
+    */
+  static sorting(order, objects, sorting = null) {
+    if (sorting == null) {
+      sorting = function(order_value, object_value, order_index, object_index) {
+        return order_value == object_index;
+      };
+    }
+    var ordered = [];
+
+    for (var index in order) {
+      for (var o in objects) {
+        if (sorting(order[index], objects[o], index, o)) {
+          ordered.push(objects[o]);
+        }
+      }
+    }
+    return ordered;
+  }
+
 };

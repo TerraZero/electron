@@ -1,7 +1,7 @@
 'use strict';
 
 const Handler = SYS.use('handler/Handler');
-const StreamLine = SYS.use('stream/StreamLine');
+const StreamLine = SYS.use('./StreamLine');
 
 module.exports = class Stream {
 
@@ -35,16 +35,6 @@ module.exports = class Stream {
 
   args(vars) {
     return vars;
-  }
-
-  log(message = null) {
-    this.pipe(function() {
-      if (message) console.log('START --- ' + message + ' --- ');
-      console.log(this.vars());
-      if (message) console.log('END --- ' + message + ' --- ');
-      this.next();
-    });
-    return this;
   }
 
 }

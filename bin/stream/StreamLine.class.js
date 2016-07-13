@@ -1,6 +1,6 @@
 'use strict';
 
-const Stream = SYS.use('stream/Stream');
+const Stream = SYS.use('./Stream');
 const Handler = SYS.use('handler/Handler');
 
 module.exports = class StreamLine {
