@@ -158,4 +158,11 @@ module.exports = class Tools {
     return ordered;
   }
 
+  /**
+    * Define getter and/or setter for objects
+    */
+  static define(object, name, getter = null, setter = null) {
+    Object.defineProperty(object, name, {get: getter, set: setter});
+  }
+
 };

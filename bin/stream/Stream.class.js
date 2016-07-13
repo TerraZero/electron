@@ -1,12 +1,12 @@
 'use strict';
 
-const Handler = SYS.use('handler/Handler');
+const EventHandler = SYS.use('events/EventHandler');
 const StreamLine = SYS.use('./StreamLine');
 
 module.exports = class Stream {
 
   constructor() {
-    this._handler = new Handler(this);
+    this._handler = new EventHandler(this);
     this._pipe = [];
   }
 
@@ -30,7 +30,7 @@ module.exports = class Stream {
   run() {
     var line = this.create();
 
-    return SYS.passOn(line, line.run, arguments);
+    return TOOLS.passOn(line, line.run, arguments);
   }
 
   args(vars) {

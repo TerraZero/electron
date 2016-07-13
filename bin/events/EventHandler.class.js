@@ -2,7 +2,7 @@
 
 const Event = SYS.use('./Event');
 
-module.exports = class Handler {
+module.exports = class EventHandler {
 
   constructor(host, handler = null) {
     this._host = host;

@@ -50,8 +50,18 @@
 // t.handler.trigger('test', 'cool');
 
 const User = SYS.use('entity/User');
+const Stream = SYS.use('stream/Stream');
 
-var u = new User();
-u.load(2, function(user) {
-  console.log(user);
+var s = new Stream();
+
+s.pipe(function(vars) {
+  vars.user = new User();
+  vars.user.load(2, this.callback(function(entity) {
+    vars.user = entity;
+    this.next();
+  }));
+}).pipe(function(vars) {
+  console.log(vars);
 });
+
+s.run({});

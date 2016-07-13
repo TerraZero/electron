@@ -24,7 +24,7 @@ module.exports = class StreamLine {
   }
 
   run() {
-    this._vars = this._stream.args(SYS.args(arguments));
+    this._vars = this._stream.args(TOOLS.args(arguments));
     this.handler().trigger('run').next();
     return this;
   }
@@ -56,7 +56,7 @@ module.exports = class StreamLine {
 
     return function() {
       pipe._context = this;
-      return SYS.passOn(pipe, callback, arguments);
+      return TOOLS.passOn(pipe, callback, arguments);
     };
   }
 
