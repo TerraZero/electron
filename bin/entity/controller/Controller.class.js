@@ -173,18 +173,19 @@ module.exports = class Controller {
     query.setFieldsRows(rows);
   }
 
-  update(entity, callback = null) {
-    var query = Squel.update()
-      .table(this.table());
+  update(entities, callback = null) {
+    var sync = TOOLS.sync(callback);
 
-    this.idCondition(entity, query);
-    this.updateFields(entity, query);
+    for (var index in entities) {
+      var entity = entities[index];
+      var query = Squel.update()
+        .table(this.table());
 
-    this.execute('update', entity, query, function(err, rows) {
-      if (err) throw err;
+      this.idCondition(entity, query);
+      this.updateFields(entity, query);
 
-      TOOLS.passOn(this, callback, [entity, rows, query]);
-    });
+      this.execute('update', entity, query, sync.sync());
+    }
   }
 
   updateFields(entity, query) {
