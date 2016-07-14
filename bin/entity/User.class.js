@@ -9,8 +9,12 @@ module.exports = class User extends Entity {
     return UC;
   }
 
+  static type() {
+    return 'user';
+  }
+
   constructor(row) {
-    super('user', row);
+    super(row);
   }
 
 }

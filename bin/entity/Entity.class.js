@@ -8,28 +8,67 @@ module.exports = class Entity {
     SYS.context('Entity', 'static:controller').abstract();
   }
 
-  static multi(ids, callback) {
-    this.controller().multi(ids, this, callback);
+  static save(struct = null) {
+    struct = struct || this;
+
+    return function pipeSave(vars) {
+      vars.entities = vars.entities || {};
+      var entities = vars.entities[struct.type()];
+
+      if (!ISDEF(entities)) {
+        this.next();
+        return;
+      }
+
+      struct.controller().save(entities, this.callback(function pipeSaveCallback() {
+        this.next();
+      }));
+    };
   }
 
-  constructor(type, row = null) {
-    this._type = type;
+  static load(ids, struct = null) {
+    struct = struct || this;
+
+    return function pipeLoad(vars) {
+      struct.controller().load(ids, struct, this.callback(function pipeLoadCallback(entities) {
+        vars.entities = vars.entities || {};
+        vars.entities[struct.type()] = vars.entities[struct.type()] || [];
+
+        for (var index in entities) {
+          vars.entities[struct.type()].push(entities[index]);
+        }
+        this.next();
+      }));
+    };
+  }
+
+  static create(entities) {
+    var struct = this;
+
+    return function pipeCreate(vars) {
+      vars.entities = vars.entities || {};
+      vars.entities[struct.type()] = vars.entities[struct.type()] || [];
+
+      for (var index in entities) {
+        vars.entities[struct.type()].push(entities[index]);
+      }
+      this.next();
+    };
+  }
+
+  static type() {
+    SYS.context('Entity', 'static:type').abstract();
+  }
+
+  constructor(row = null) {
     this._fields = {};
     this._view = {};
 
-    this.controller().create(this, row);
+    this.controller().build(this, row);
   }
 
   controller() {
     return this.constructor.controller();
-  }
-
-  load(id, callback) {
-    this.controller().load(this, id, callback);
-  }
-
-  type() {
-    return this._type;
   }
 
   unique() {

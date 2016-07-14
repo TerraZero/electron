@@ -1,31 +1,22 @@
 'use strict';
 
-const Stream = SYS.use('./Stream');
-const Handler = SYS.use('handler/Handler');
+const EventHandler = SYS.use('events/EventHandler');
 
 module.exports = class StreamLine {
 
   constructor(stream) {
+    new EventHandler(this, stream.events());
+
     this._stream = stream;
-    this._handler = new Handler(this, stream.handler());
     this._pipe = stream._pipe;
-    this._vars = null;
+    this._vars = this._stream.args();
 
     this._index = 0;
     this._context = null;
   }
 
-  handler() {
-    return this._handler;
-  }
-
-  on(name, listener) {
-    return this.handler().on(name, listener);
-  }
-
   run() {
-    this._vars = this._stream.args(TOOLS.args(arguments));
-    this.handler().trigger('run').next();
+    this.trigger('run').next();
     return this;
   }
 
@@ -47,7 +38,6 @@ module.exports = class StreamLine {
   call(index = null) {
     if (index == null) index = this._index;
 
-    this.handler().trigger('call', index);
     this._pipe[index].apply(this, this._vars);
   }
 

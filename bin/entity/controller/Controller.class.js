@@ -49,7 +49,7 @@ module.exports = class Controller {
     return this.fields()[name].name();
   }
 
-  multi(ids, struct, callback) {
+  load(ids, struct, callback) {
     var query = Squel.select()
       .from(this.table());
 
@@ -80,7 +80,7 @@ module.exports = class Controller {
     query.where(fields[field].name() + ' = ' + id);
   }
 
-  create(entity, row = null) {
+  build(entity, row = null) {
     var fields = this.fields();
 
     if (row) {
@@ -109,22 +109,6 @@ module.exports = class Controller {
     }
   }
 
-  load(entity, id, callback) {
-    var fields = this.fields();
-    var query = Squel.select()
-      .from(this.table());
-
-    this.idCondition(entity, query, id);
-    this.execute('load', entity, query, function(err, rows) {
-      if (err) throw err;
-
-      for (var field in fields) {
-        entity._fields[field] = rows[0][fields[field].name()];
-      }
-      TOOLS.passOn(this, callback, [entity, rows[0], query]);
-    });
-  }
-
   data(entity, row) {
     var fields = this.fields();
 
@@ -133,34 +117,60 @@ module.exports = class Controller {
     }
   }
 
-  save(entity, callback = null) {
-    if (entity.isNew()) {
-      this.insert(entity, callback);
-    } else {
-      this.update(entity, callback);
+  save(entities, callback = null) {
+    var inserts = [];
+    var updates = [];
+
+    for (var index in entities) {
+      if (entities[index].isNew()) {
+        inserts.push(entities[index]);
+      } else {
+        updates.push(entities[index]);
+      }
+    }
+
+    var sync = TOOLS.sync(callback);
+
+    if (inserts.length) {
+      this.insert(inserts, sync.sync());
+    }
+
+    if (updates.length) {
+      this.update(updates, sync.sync());
     }
   }
 
-  insert(entity, callback = null) {
+  insert(entities, callback = null) {
     var query = Squel.insert()
       .into(this.table());
 
-    this.insertFields(entity, query);
+    this.insertFields(entities, query);
 
-    this.execute('insert', entity, query, function(err, rows) {
+    DB.execute(query.toString(), function(err, rows) {
       if (err) throw err;
+      var id = rows.insertId;
 
-      entity.id = rows.insertId;
-      TOOLS.passOn(this, callback, [entity, rows, query]);
+      for (var index in entities) {
+        entities[index].id = id++;
+      }
+      TOOLS.passOn(this, callback, [entities, rows, query]);
     });
   }
 
-  insertFields(entity, query) {
+  insertFields(entities, query) {
     var fields = this.fields();
+    var rows = [];
 
-    for (var field in fields) {
-      query.set(fields[field].name(), entity[field]);
+    for (var index in entities) {
+      var row = {};
+
+      for (var field in fields) {
+        row[fields[field].name()] = entities[index][field];
+      }
+      rows.push(row);
     }
+
+    query.setFieldsRows(rows);
   }
 
   update(entity, callback = null) {

@@ -52,16 +52,28 @@
 const User = SYS.use('entity/User');
 const Stream = SYS.use('stream/Stream');
 
-var s = new Stream();
+var u1 = new User();
+var u2 = new User();
+u1.name = 'test 1';
+u2.name = 'test 2';
 
-s.pipe(function(vars) {
-  vars.user = new User();
-  vars.user.load(2, this.callback(function(entity) {
-    vars.user = entity;
+new Stream()
+  .pipe(User.create([u1, u2]))
+  .pipe(function(vars) {
+    console.log(vars);
     this.next();
-  }));
-}).pipe(function(vars) {
-  console.log(vars);
-});
+  })
+  .pipe(User.save())
+  .pipe(function(vars) {
+    console.log(vars);
+    this.next();
+  })
+.run();
 
-s.run({});
+new Stream()
+  .pipe(User.load())
+  .pipe(function(vars) {
+    console.log('load', vars);
+    this.next();
+  })
+.run();

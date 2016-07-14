@@ -4,9 +4,20 @@ const Event = SYS.use('./Event');
 
 module.exports = class EventHandler {
 
-  constructor(host, handler = null) {
+  constructor(host, events = null) {
+    host._events = this;
+    host.events = function() {
+      return this._events;
+    };
+    host.on = function(name, listener) {
+      this.events().on(name, listener);
+    };
+    host.trigger = function() {
+      return TOOLS.passOn(this.events(), this.events().trigger, arguments);
+    };
+
     this._host = host;
-    this._listeners = handler && handler.listeners() || {};
+    this._listeners = events && events.listeners() || {};
   }
 
   on(name, listener) {

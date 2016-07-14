@@ -24,7 +24,7 @@ module.exports = class Tools {
     * Pass variables back to a stream and continue it
     */
   static passOn(object, callback = null, args = []) {
-    if (!callback) return;
+    if (!callback) return undefined;
 
     var _args = args;
 
@@ -32,7 +32,7 @@ module.exports = class Tools {
     if (Tools.isArguments(_args)) {
       _args = Tools.args(_args);
     }
-    callback.apply(object, _args);
+    return callback.apply(object, _args);
   }
 
 
@@ -163,6 +163,23 @@ module.exports = class Tools {
     */
   static define(object, name, getter = null, setter = null) {
     Object.defineProperty(object, name, {get: getter, set: setter});
+  }
+
+  static sync(callback) {
+    return {
+      number: 0,
+      index: 0,
+      sync: function() {
+        var that = this;
+        that.number++;
+        return function() {
+          that.index++;
+          if (that.number == that.index) {
+            return TOOLS.passOn(null, callback, arguments);
+          }
+        };
+      },
+    };
   }
 
 };

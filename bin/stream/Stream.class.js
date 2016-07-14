@@ -6,16 +6,9 @@ const StreamLine = SYS.use('./StreamLine');
 module.exports = class Stream {
 
   constructor() {
-    this._handler = new EventHandler(this);
+    new EventHandler(this);
+
     this._pipe = [];
-  }
-
-  handler() {
-    return this._handler;
-  }
-
-  on(name, listener) {
-    return this.handler().on(name, listener);
   }
 
   pipe(pipe) {
@@ -24,7 +17,7 @@ module.exports = class Stream {
   }
 
   create() {
-    return new StreamLine(this.handler().trigger('create'));
+    return new StreamLine(this.trigger('create'));
   }
 
   run() {
@@ -33,8 +26,8 @@ module.exports = class Stream {
     return TOOLS.passOn(line, line.run, arguments);
   }
 
-  args(vars) {
-    return vars;
+  args() {
+    return [{}];
   }
 
 }
