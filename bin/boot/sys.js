@@ -18,18 +18,51 @@ const remote = require('electron').remote;
 module.exports = class Sys {
 
   static initialize() {
+    this.initializeCache();
+    this.initializeRoutines();
+    this.initializeErrors();
+    this.initializeMods();
+  }
+
+  static initializeCache() {
     this._cache = {};
+  }
 
-    this._SysError = SYS.use('sys/SysError');
+  static initializeRoutines() {
+    this._routines = {};
 
-    // this._mods = {
-    //   files: null,
-    //   instances: null,
-    //   hooks: {},
-    // };
-    // this._vars = {};
-    // this._paths = {};
-    // this._struct = {};
+    var files = Boot.list(this.base() + '/bin/boot/routines');
+
+    for (var index in files) {
+      var routine = require(files[index])(Boot, Module);
+      this._routines[routine.type()] = routine;
+    }
+  }
+
+  static initializeErrors() {
+    this._SysError = SYS.use('bin/sys/SysError');
+  }
+
+  static initializeMods() {
+    this._Mod = SYS.use('bin/sys/Mod');
+    this._mods = [];
+    this._hooks = {};
+
+    // get all mod files in mods directory
+    var files = Boot.list(this.base() + '/mods', '.*\.mod\.js');
+
+    for (var index in files) {
+      var mod = SYS.use(files[index], 'resolved');
+
+      if (TOOLS.isBased(mod, this._Mod)) {
+        this._mods.push({
+          mod: new mod(),
+          file: files[index],
+        });
+      } else {
+        // TODO ERROR
+      }
+    }
   }
 
   /**
@@ -70,32 +103,6 @@ module.exports = class Sys {
   }
 
   /**
-    * Create the path for invoke
-    *
-    * @param path - the path to invoke
-    * @param type - the type of the object
-    * @param file - if the invoke path will be a file
-    * @param offset - the offset for caller
-    * @param absolute - flag if the path is already absolute
-    */
-  static usePath(path, type = 'class', file = false, offset = 0, absolute = false) {
-    if (path.startsWith('.')) {
-      path = Boot.getCaller(2 + offset).dir + path.substring(1);
-    } else if (!absolute) {
-      path = this.base() + 'bin/' + path;
-    }
-
-    if (file) {
-      if (type) {
-        return path + '.' + type + '.js';
-      } else {
-        return path + '.js';
-      }
-    }
-    return path;
-  }
-
-  /**
     * Invokes a class or object of a specific type
     *
     * @param path - the path to look up
@@ -108,60 +115,35 @@ module.exports = class Sys {
     *                 - remote (load the node module directly over remote)
     * @param absolute - flag if the path is already absolute
     */
-  static use(path, type = 'class', absolute = false) {
-    // if type is a node or remote package than load it directly
-    if (type == 'node') {
-      return require(path);
-    }
-    if (type == 'remote') {
-      return remote.require(path);
-    }
+  static use(path, type = 'class', options = {}) {
+    var cid = options.cid || path + '::' + type;
+    var cache = Sys.cache('use', cid);
 
-    // if path has a trailing slash then invoke the package
-    if (path.endsWith('/')) return Sys.usePackage(path, type, absolute);
-
-    var struct = require(Sys.usePath(path, type, true, 0, absolute));
-
-    // if struct is an Module than call build function to create the module
-    if (TOOLS.isBased(struct, Module)) {
-      return struct.build.apply(struct, TOOLS.args(arguments, 3));
-    }
-
-    return struct;
-  }
-
-  /**
-    * Creates an object for all objects of a type in the package
-    *
-    * @param path - the path to look
-    * @param type - the type of files to filter
-    * @param absolute - flag if the path is already absolute
-    * @return a package of classes and objects
-    */
-  static usePackage(path, type = 'class', absolute = false) {
-    var key = path;
-    var cache = Sys.cache('package', key);
-    // load package from cache if exists
     if (cache) return cache;
 
-    var files = [];
-    var pack = {};
+    options.cid = cid;
+    options.path = path;
+    options.type = type;
 
-    path = Sys.usePath(path, type, false, 1, absolute);
+    var routine = Sys.getUseRoutine(type);
 
-    // if type is set load only the filtered files
-    if (type == null) {
-      files = Boot.list(path, '.*\..*\.js', 1);
+    path = routine.usePath(path, options);
+
+    if (routine.isPackage(path, options)) {
+      return Sys.cache('use', cid, routine.usePackage(path, options));
+    }
+
+    var struct = require(routine.usePath(path, options));
+
+    return Sys.cache('use', cid, routine.useInit(struct, options));
+  }
+
+  static getUseRoutine(type = 'class') {
+    if (this._routines[type]) {
+      return this._routines[type];
     } else {
-      files = Boot.list(path, '.*\.' + type + '\.js', 1);
+      return this._routines[null];
     }
-
-    for (var index in files) {
-      pack[Boot.name(files[index])] = Sys.use(Boot.path(files[index]), Boot.type(files[index]), true);
-    }
-
-    // cache loaded packages
-    return Sys.cache('package', key, pack);
   }
 
   /**

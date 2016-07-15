@@ -49,7 +49,5 @@
 // });
 // t.handler.trigger('test', 'cool');
 
-const Frame = SYS.use('frame/Frame');
 
-Frame.resolve('sys:init');
 

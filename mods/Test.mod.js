@@ -1,6 +1,6 @@
 'use strict';
 
-const Mod = SYS.use('!Mod');
+const Mod = SYS.use('bin/sys/Mod');
 
 module.exports = class Test extends Mod {
 

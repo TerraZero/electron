@@ -88,4 +88,8 @@ module.exports = {
     return Stack.get();
   },
 
+  classRoutine: function(path) {
+
+  },
+
 };

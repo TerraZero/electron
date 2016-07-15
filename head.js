@@ -2,7 +2,7 @@
 
 // Invoke Sys and make it global
 global.SYS = require('./bin/boot/sys.js');
-SYS._base = __dirname + '/';
+SYS._base = __dirname;
 
 // Invoke Tools and make it global
 global.TOOLS = require('./bin/boot/tools.js');
