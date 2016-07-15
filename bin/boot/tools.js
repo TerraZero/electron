@@ -29,8 +29,8 @@ module.exports = class Tools {
     var _args = args;
 
     // if args are an arguments object than convert it into an array
-    if (Tools.isArguments(_args)) {
-      _args = Tools.args(_args);
+    if (this.isArguments(_args)) {
+      _args = this.args(_args);
     }
     return callback.apply(object, _args);
   }
@@ -108,7 +108,7 @@ module.exports = class Tools {
     *         [object[name]]  - if the getter will call
     */
   static setGet(object, variable, name) {
-    if (Tools.isDef(variable)) {
+    if (this.isDef(variable)) {
       object[name] = variable;
       return object;
     } else {
@@ -117,7 +117,7 @@ module.exports = class Tools {
   }
 
   static log() {
-    console.log.apply(console, Tools.args(arguments));
+    console.log.apply(console, this.args(arguments));
   }
 
   /**
