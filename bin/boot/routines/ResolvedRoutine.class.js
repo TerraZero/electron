@@ -1,6 +1,6 @@
 'use strict';
 
-var UseRoutine = require('./UseRoutine.class.js');
+var UseRoutine = SYS.use('./UseRoutine');
 
 module.exports = class ResolvedRoutine extends UseRoutine {
 

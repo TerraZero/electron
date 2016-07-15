@@ -1,6 +1,6 @@
 'use strict';
 
-const UseRoutine = SYS.use('bin/boot/routines/UseRoutine');
+var UseRoutine = SYS.use('./UseRoutine');
 
 module.exports = class NodeRoutine extends UseRoutine {
 
