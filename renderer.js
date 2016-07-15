@@ -48,3 +48,6 @@
 //   console.log(name);
 // });
 // t.handler.trigger('test', 'cool');
+
+const User = SYS.use('bin/entity/User');
+var u = new User();
