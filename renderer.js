@@ -49,6 +49,7 @@
 // });
 // t.handler.trigger('test', 'cool');
 
-const User = SYS.use('entity/User');
-const Stream = SYS.use('stream/Stream');
+const Frame = SYS.use('frame/Frame');
+
+Frame.resolve('sys:init');
 

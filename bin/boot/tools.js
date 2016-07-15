@@ -116,6 +116,10 @@ module.exports = class Tools {
     }
   }
 
+  static log() {
+    console.log.apply(console, Tools.args(arguments));
+  }
+
   /**
     * Get filtered stacktree
     *

@@ -8,6 +8,7 @@ SYS._base = __dirname + '/';
 global.TOOLS = require('./bin/boot/tools.js');
 global.ISDEF = TOOLS.isDef;
 global.SETGET = TOOLS.setGet;
+global.LOG = TOOLS.log;
 
 // SYS.register('!Module', 'sys/Module');
 // SYS.register('!Mod', 'sys/Mod');

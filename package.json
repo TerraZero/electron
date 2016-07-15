@@ -6,6 +6,7 @@
   "scripts": {
     "start": "gulp build && electron main.js",
     "build": "gulp build && electron-packager . tz-electron --platform=linux --arch=x64 --out=ignore/releases --ignore='(ignore|gulpfile.js)' --overwrite --prune --asar",
+    "main": "electron main.js",
     "index": "gulp index",
     "release": "./ignore/releases/tz-electron-linux-x64/tz-electron"
   },
