@@ -31,12 +31,25 @@ module.exports = {
   filter: function(array, expression = null, value = null) {
     if (!expression) return array;
     value = value || function(value) { return value; };
-    var pattern = new RegExp(expression);
-    var _array = [];
 
-    for (var index in array) {
-      if (pattern.test(value(array[index]))) {
-        _array.push(array[index]);
+    var _array = [];
+    var negative = expression.startsWith('!');
+
+    if (negative) {
+      var pattern = new RegExp(expression.substring(1));
+
+      for (var index in array) {
+        if (!pattern.test(value(array[index]))) {
+          _array.push(array[index]);
+        }
+      }
+    } else {
+      var pattern = new RegExp(expression);
+
+      for (var index in array) {
+        if (pattern.test(value(array[index]))) {
+          _array.push(array[index]);
+        }
       }
     }
     return _array;
@@ -78,6 +91,13 @@ module.exports = {
     return parse;
   },
 
+  resolvePath: function(path, offset = 0) {
+    if (path.startsWith('.')) {
+      path = this.getCaller(offset + 1).dir + path.substring(1);
+    }
+    return path;
+  },
+
   getCaller: function(offset = 0) {
     var stack = this.getStack();
 
@@ -86,10 +106,6 @@ module.exports = {
 
   getStack: function() {
     return Stack.get();
-  },
-
-  classRoutine: function(path) {
-
   },
 
 };

@@ -1,6 +1,6 @@
 'use strict';
 
-const EventHandler = SYS.use('events/EventHandler');
+const EventHandler = SYS.use('bin/events/EventHandler');
 
 module.exports = class StreamLine {
 

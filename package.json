@@ -15,7 +15,7 @@
   "dependencies": {
     "electron-prebuilt": "^1.2.0",
     "graceful-fs": "^4.1.4",
-    "node-mysql": "^0.4.2",
+    "mysql": "^2.11.1",
     "pug": "^2.0.0-alpha8",
     "squel": "^5.2.1",
     "stack-trace": "0.0.9"

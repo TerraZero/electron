@@ -5,36 +5,36 @@ const Module = require('./../sys/Module.class.js');
 
 const remote = require('electron').remote;
 
-
-
-// const Module = require('./../classes/sys/Module.class.js');
-// const Mod = require('./../classes/sys/Mod.class.js');
-// const SysError = require('./../classes/sys/SysError.class.js');
-// var Arrays = require('./arrays.js');
-// Arrays = new Arrays();
-
-// const fs = require('graceful-fs');
-
 module.exports = class Sys {
 
   static initialize() {
-    this.initializeCache();
+    this._infos = {};
+    this._cache = {};
+    this._hooks = {};
+    this._routines = {};
+
+    // load default routine for classes
+    this._routines['class'] = new (require('./routines/ClassRoutine.class.js'))(Boot, Module);
+
+    this.initializeInfos();
     this.initializeRoutines();
     this.initializeErrors();
     this.initializeMods();
   }
 
-  static initializeCache() {
-    this._cache = {};
+  static initializeInfos() {
+    var files = Boot.list(this.base() + '/mods', '.*\.info\.js');
+
+    for (var index in files) {
+      this._infos[index] = new (require(files[index]))(Boot);
+    }
   }
 
   static initializeRoutines() {
-    this._routines = {};
-
-    var files = Boot.list(this.base() + '/bin/boot/routines');
+    var files = this.infoHook('routines');
 
     for (var index in files) {
-      var routine = require(files[index])(Boot, Module);
+      var routine = new (require(files[index]))(Boot, Module);
       this._routines[routine.type()] = routine;
     }
   }
@@ -46,7 +46,6 @@ module.exports = class Sys {
   static initializeMods() {
     this._Mod = SYS.use('bin/sys/Mod');
     this._mods = [];
-    this._hooks = {};
 
     // get all mod files in mods directory
     var files = Boot.list(this.base() + '/mods', '.*\.mod\.js');
@@ -61,6 +60,74 @@ module.exports = class Sys {
         });
       } else {
         // TODO ERROR
+      }
+    }
+  }
+
+  static hook(hook) {
+    if (!this._hooks[hook]) {
+      this.generateHook(hook);
+    }
+    var args = TOOLS.args(arguments, 1);
+    var results = [];
+
+    for (var mod in this._hooks[hook]) {
+      var result = this._hooks[hook][mod][hook].apply(this._hooks[hook][mod], args);
+
+      if (result != undefined) {
+        results.push(result);
+      }
+    }
+    return results;
+  }
+
+  static cHook(hook) {
+    var cid = hook;
+    var cache = this.cache('hook', cid);
+
+    if (cache) return cache;
+
+    var results = this.hook.apply(this, TOOLS.args(arguments, 1));
+    var array = [];
+
+    for (var result in results) {
+      for (var info in results[result]) {
+        array.push(results[result][info]);
+      }
+    }
+
+    return this.cache('hook', cid, array);
+  }
+
+  static infoHook(hook) {
+    var cid = hook;
+    var cache = this.cache('info', cid);
+
+    if (cache) return cache;
+
+    var args = TOOLS.args(arguments, 1);
+    var results = [];
+
+    for (var info in this._infos) {
+      if (this._infos[info][hook] && typeof this._infos[info][hook] == 'function') {
+        var result = this._infos[info][hook].apply(this._infos[info], args);
+
+        if (TOOLS.isArray(result)) {
+          for (var index in result) {
+            results.push(result[index]);
+          }
+        }
+      }
+    }
+    return this.cache('info', cid, results);
+  }
+
+  static generateHook(hook) {
+    this._hooks[hook] = [];
+
+    for (var mod in this._mods) {
+      if (mods[mod].mod[hook] && typeof mods[mod][hook] == 'function') {
+        this._hooks[hook].push(mods[mod].mod);
       }
     }
   }
@@ -105,37 +172,33 @@ module.exports = class Sys {
   /**
     * Invokes a class or object of a specific type
     *
-    * @param path - the path to look up
-    * @param type - the type of the object
+    * @param path     - the path to look up
+    * @param type     - the type of the object
     *         options - class (default)
     *                 - null
     *                 - module
     *                 - mod
     *                 - node (load the node module directly)
     *                 - remote (load the node module directly over remote)
-    * @param absolute - flag if the path is already absolute
+    * @param options  - Object for the use routine
+    * @param args...  - Arguments for Module classes
     */
   static use(path, type = 'class', options = {}) {
     var cid = options.cid || path + '::' + type;
-    var cache = Sys.cache('use', cid);
+    var cache = this.cache('use', cid);
 
     if (cache) return cache;
 
+    var routine = this.getUseRoutine(type);
+
     options.cid = cid;
-    options.path = path;
-    options.type = type;
-
-    var routine = Sys.getUseRoutine(type);
-
+    routine.useOptions(path, type, options, TOOLS.args(arguments, 3));
     path = routine.usePath(path, options);
-
     if (routine.isPackage(path, options)) {
-      return Sys.cache('use', cid, routine.usePackage(path, options));
+      return this.cache('use', cid, routine.usePackage(path, options));
     }
 
-    var struct = require(routine.usePath(path, options));
-
-    return Sys.cache('use', cid, routine.useInit(struct, options));
+    return this.cache('use', cid, routine.useInit(require(path), options));
   }
 
   static getUseRoutine(type = 'class') {
@@ -188,60 +251,6 @@ module.exports = class Sys {
     return this._base;
   }
 
-  // boot: function() {
-  //   const File = SYS.module('file');
-
-  //   this._mods.files = File.listSync(this.base + 'mods', '.*\.mod\.js$');
-  //   this.hook('boot');
-  // },
-
-  // mods: function() {
-  //   if (this._mods.instances) return this._mods.instances;
-
-  //   this._mods.instances = [];
-  //   for (var file in this._mods.files) {
-  //     var mod = require(this._mods.files[file]);
-
-  //     mod = new mod();
-  //     this.context('SYS', 'mods', 'Mod "' + this._mods.files[file] + '" are not a Mod instance but has the "mod.js" extension!').checkTypes(mod, Mod);
-  //     this._mods.instances.push(mod);
-  //   }
-  //   return this._mods.instances;
-  // },
-
-  // hook: function(hook) {
-  //   if (!this._mods.hooks[hook]) {
-  //     this.generateHook(hook);
-  //   }
-  //   var mods = this._mods.hooks[hook];
-  //   var args = this.args(arguments, 1);
-  //   var results = [];
-
-  //   for (var mod in mods) {
-  //     var result = mods[mod][hook].apply(mods[mod], args);
-
-  //     if (result != undefined) {
-  //       results.push(result);
-  //     }
-  //   }
-  //   return results;
-  // },
-
-  // generateHook: function(hook) {
-  //   var mods = this.mods();
-  //   this._mods.hooks[hook] = [];
-
-  //   for (var mod in mods) {
-  //     if (mods[mod][hook] && typeof mods[mod][hook] == 'function') {
-  //       this._mods.hooks[hook].push(mods[mod]);
-  //     }
-  //   }
-  // },
-
-  // read: function(type, name) {
-  //   return fs.readFileSync(this.path(type, name));
-  // },
-
   // arrayArgs: function(args, offset = 0) {
   //   var _args = [];
 
@@ -256,10 +265,6 @@ module.exports = class Sys {
   // },
 
   //   callback.apply(object, _args);
-  // },
-
-  // isStream: function(object) {
-  //   return object instanceof this.struct('stream/Stream');
   // },
 
 };

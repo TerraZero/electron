@@ -48,6 +48,3 @@
 //   console.log(name);
 // });
 // t.handler.trigger('test', 'cool');
-
-
-

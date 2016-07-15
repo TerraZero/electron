@@ -11,10 +11,26 @@ module.exports = class UseRoutine {
     return null;
   }
 
-  ifPackage(path, options = {}) {
+  /**
+    * Determine if a path is a package path
+    */
+  isPackage(path, options = {}) {
     return path.endsWith('/');
   }
 
+  /**
+    * Define default settings and set settings
+    */
+  useOptions(path, type, options, args) {
+    options.cid = options.cid || cid;
+    options.path = options.path || path;
+    options.type = options.type || type;
+    options.args = options.args || args;
+  }
+
+  /**
+    * Create package content
+    */
   usePackage(path, options = {}) {
     var files = [];
     var pack = {};
@@ -28,16 +44,22 @@ module.exports = class UseRoutine {
     return pack;
   }
 
+  /**
+    * Resolve path
+    */
   usePath(path, options = {}) {
     if (path.startsWith('.')) {
-      path = this._boot.getCaller(2 + offset).dir + path.substring(1);
+      path = this._boot.getCaller(2).dir + path.substring(1);
     } else {
-      path = this.base() + '/' + path;
+      path = SYS.base() + '/' + path;
     }
 
     return path + this.useExtensions(options);
   }
 
+  /**
+    * Search regex for package find
+    */
   useRegex(options = {}) {
     if (this.type()) {
       return '.*\.' + this.type() + '\.js';
@@ -46,6 +68,9 @@ module.exports = class UseRoutine {
     }
   }
 
+  /**
+    * Create file extensions to invoke
+    */
   useExtensions(options = {}) {
     if (this.type()) {
       return '.' + this.type() + '.js';
@@ -54,9 +79,12 @@ module.exports = class UseRoutine {
     }
   }
 
+  /**
+    * Init struct
+    */
   useInit(struct, options = {}) {
     if (TOOLS.isBased(struct, this._module)) {
-      return
+      return struct.build.apply(struct, options.args);
     }
     return struct;
   }

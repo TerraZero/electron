@@ -121,19 +121,28 @@ module.exports = class Tools {
   }
 
   /**
-    * Get filtered stacktree
-    *
-    * @param (string:regex) filter (optional) - the filter for stack
-    * @return array - array of stack tree paths
+    * Get Debug Callstack
     */
-  static getStack(filter = null) {
+  static getDebug(filter = null, offset = 0) {
     var stack = Boot.getStack();
-    var files = [];
+    var fullstack = [];
 
-    for (var i in stack) {
-      files.push(stack[i].getFileName());
+    for (var index = offset + 2; index < stack.length; index++) {
+      var line = [];
+      if (stack[index].getTypeName()) {
+        line.push(stack[index].getTypeName() + ':');
+      }
+      if (stack[index].getMethodName()) {
+        line.push(stack[index].getMethodName() + ' -> ');
+      }
+      line.push(stack[index].getFileName().substring(SYS.base().length + 1) + ':' + stack[index].getLineNumber());
+      fullstack.push(line.join(''));
     }
-    return Boot.filter(files, filter);
+    return Boot.filter(fullstack, filter);
+  }
+
+  static logDebug(filter = null, offset = 0) {
+    this.log(this.getDebug(filter, offset + 1));
   }
 
   /**

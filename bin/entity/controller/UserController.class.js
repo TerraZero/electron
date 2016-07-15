@@ -1,7 +1,7 @@
 'use strict';
 
 const Controller = SYS.use('./Controller');
-const Field = SYS.use('entity/fields/FieldInstance');
+const Field = SYS.use('bin/entity/fields/FieldInstance');
 
 module.exports = class UserController extends Controller {
 

@@ -1,11 +1,7 @@
 'use strict';
 
-const Squel = SYS.use('db/Squel');
-const DB = SYS.use('db/DB');
-
-let _instance = null;
-
-// get primary keys as function
+const Squel = SYS.use('bin/db/Squel');
+const DB = SYS.use('bin/db/DB');
 
 module.exports = class Controller {
 
