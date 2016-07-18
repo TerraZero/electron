@@ -22,14 +22,21 @@ module.exports = class Sys {
     this.initializeMods();
   }
 
+  /**
+    * Read info files from mods directory ans save it
+    */
   static initializeInfos() {
     var files = Boot.list(this.base() + '/mods', '.*\.info\.js');
 
     for (var index in files) {
       this._infos[index] = new (require(files[index]))(Boot);
+      this._infos[index]._base = Boot.parse(files[index]).dir;
     }
   }
 
+  /**
+    * Load UseRoutines from system
+    */
   static initializeRoutines() {
     var files = this.infoHook('routines');
 
@@ -39,10 +46,16 @@ module.exports = class Sys {
     }
   }
 
+  /**
+    * Init errors
+    */
   static initializeErrors() {
     this._SysError = SYS.use('bin/sys/SysError');
   }
 
+  /**
+    * Loading mods from mods directory
+    */
   static initializeMods() {
     this._Mod = SYS.use('bin/sys/Mod');
     this._mods = [];
@@ -64,6 +77,15 @@ module.exports = class Sys {
     }
   }
 
+  /**
+    * Executing a hook without caching
+    *
+    * @see Sys.cHook
+    *
+    * @param (string) hook  - the name (function name) of the hook
+    * @param ...            - arguments for the hook
+    * @return array - the results from hooks
+    */
   static hook(hook) {
     if (!this._hooks[hook]) {
       this.generateHook(hook);
@@ -81,6 +103,16 @@ module.exports = class Sys {
     return results;
   }
 
+  /**
+    * Executing a hook with caching and merge the result
+    *
+    * @see Sys.hook
+    * @see Tools.merge
+    *
+    * @param (string) hook  - the name (function name) of the hook
+    * @param ...            - arguments for the hook
+    * @return array - the merged results of an hook
+    */
   static cHook(hook) {
     var cid = hook;
     var cache = this.cache('hook', cid);
@@ -95,6 +127,15 @@ module.exports = class Sys {
     return this.cache('hook', cid, array);
   }
 
+  /**
+    * Executing a info hook with caching from info files
+    *
+    * @see Sys.cHook
+    *
+    * @param (string) hook  - the name (function name) of the hook
+    * @param ...            - arguments for the hook
+    * @return array - the merged results of an hook
+    */
   static infoHook(hook) {
     var cid = hook;
     var cache = this.cache('info', cid);
@@ -114,12 +155,19 @@ module.exports = class Sys {
     return this.cache('info', cid, results);
   }
 
+  /**
+    * Generate the hook array for the hook function
+    *
+    * @see Sys.hook
+    *
+    * @param hook - the hook name to generate
+    */
   static generateHook(hook) {
     this._hooks[hook] = [];
 
     for (var mod in this._mods) {
-      if (mods[mod].mod[hook] && typeof mods[mod][hook] == 'function') {
-        this._hooks[hook].push(mods[mod].mod);
+      if (this._mods[mod].mod[hook] && typeof this._mods[mod].mod[hook] == 'function') {
+        this._hooks[hook].push(this._mods[mod].mod);
       }
     }
   }

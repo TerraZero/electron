@@ -4,13 +4,24 @@ module.exports = class Info {
 
   constructor(boot) {
     this._boot = boot;
+    this._base = null;
   }
 
-  resolve(paths, offset = 0) {
-    for (var index in paths) {
-      paths[index] = this._boot.resolvePath(paths[index], offset + 1);
+  base() {
+    return this._base;
+  }
+
+  path(path) {
+    if (TOOLS.isArray(path)) {
+      for (var index in path) {
+        path[index] = this.path(path[index]);
+      }
+    } else {
+      if (path.startsWith('.')) {
+        return this.base() + path.substring(1);
+      }
     }
-    return paths;
+    return path;
   }
 
 }

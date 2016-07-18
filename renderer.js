@@ -49,5 +49,7 @@
 // });
 // t.handler.trigger('test', 'cool');
 
-const User = SYS.use('bin/entity/User');
-var u = new User();
+// const User = SYS.use('bin/entity/User');
+// var u = new User();
+
+SYS.hook('init');

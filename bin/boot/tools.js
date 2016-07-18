@@ -117,7 +117,7 @@ module.exports = class Tools {
   }
 
   static log() {
-    console.log.apply(console, this.args(arguments));
+    console.log.apply(console, TOOLS.args(arguments));
   }
 
   /**
@@ -171,6 +171,13 @@ module.exports = class Tools {
     return ordered;
   }
 
+  /**
+    * Merge array's into one array
+    *
+    * @param (array) array  - the array to merge in
+    * @param (array) ...    - a list of array's to merge
+    * @return (param:array) - the merged array
+    */
   static merge(array) {
     var args = this.args(arguments, 1);
 
