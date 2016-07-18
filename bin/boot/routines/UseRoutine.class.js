@@ -48,6 +48,7 @@ module.exports = class UseRoutine {
     * Resolve path
     */
   usePath(path, options = {}) {
+    // TODO when path startswith // no absolute path
     if (path.startsWith('.')) {
       path = this._boot.getCaller(2).dir + path.substring(1);
     } else {
