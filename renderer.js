@@ -53,3 +53,9 @@
 // var u = new User();
 
 SYS.hook('init');
+
+const FrameMod = SYS.mod('FrameMod');
+
+var frame = FrameMod.resolve('core');
+
+LOG(frame.p());

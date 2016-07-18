@@ -117,7 +117,11 @@ module.exports = class Tools {
   }
 
   static log() {
-    console.log.apply(console, TOOLS.args(arguments));
+    var args = TOOLS.args(arguments);
+    var caller = Boot.getCaller(1);
+
+    console.log(caller.dir + '/' + caller.base);
+    console.log.apply(console, args);
   }
 
   /**

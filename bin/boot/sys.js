@@ -64,12 +64,13 @@ module.exports = class Sys {
     var files = Boot.list(this.base() + '/mods', '.*\.mod\.js');
 
     for (var index in files) {
-      var mod = SYS.use(files[index], 'resolved');
+      var mod = SYS.use(files[index], 'resolved', {type: 'mod'});
 
-      if (TOOLS.isBased(mod, this._Mod)) {
+      if (TOOLS.is(mod, this._Mod)) {
         this._mods.push({
-          mod: new mod(),
+          mod: mod,
           file: files[index],
+          name: mod.constructor.name,
         });
       } else {
         // TODO ERROR
@@ -241,12 +242,33 @@ module.exports = class Sys {
     return this.cache('use', cid, routine.useInit(require(path), options));
   }
 
+  /**
+    * Get the defined use routine for a givin type
+    *
+    * @param type - the type of the routine
+    * @return UseRoutine - the use routine for the type
+    */
   static getUseRoutine(type = 'class') {
     if (this._routines[type]) {
       return this._routines[type];
     } else {
       return this._routines[null];
     }
+  }
+
+  /**
+    * Get a mod
+    *
+    * @param name - the name of the mod class
+    * @return Mod - the mod type
+    */
+  static mod(name) {
+    for (var mod in this._mods) {
+      if (this._mods[mod].name == name) {
+        return this._mods[mod].mod;
+      }
+    }
+    return null;
   }
 
   /**
@@ -290,21 +312,5 @@ module.exports = class Sys {
   static base() {
     return this._base;
   }
-
-  // arrayArgs: function(args, offset = 0) {
-  //   var _args = [];
-
-  //   for (var i = offset; i < args.length; i++) {
-  //     if (this.isArray(args[i])) {
-  //       Arrays.merge(_args, args[i]);
-  //     } else {
-  //       _args.push(args[i]);
-  //     }
-  //   }
-  //   return _args;
-  // },
-
-  //   callback.apply(object, _args);
-  // },
 
 };
