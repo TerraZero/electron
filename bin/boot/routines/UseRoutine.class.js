@@ -34,6 +34,7 @@ module.exports = class UseRoutine {
   usePackage(path, options = {}) {
     var files = [];
     var pack = {};
+    path = TOOLS.usePath(path);
 
     files = this._boot.list(path, this.useRegex(options), 1);
 
@@ -48,14 +49,7 @@ module.exports = class UseRoutine {
     * Resolve path
     */
   usePath(path, options = {}) {
-    // TODO when path startswith // no absolute path
-    if (path.startsWith('.')) {
-      path = this._boot.getCaller(2).dir + path.substring(1);
-    } else {
-      path = SYS.base() + '/' + path;
-    }
-
-    return path + this.useExtensions(options);
+    return TOOLS.resolvePath(path, 2);
   }
 
   /**

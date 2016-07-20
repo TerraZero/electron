@@ -17,11 +17,19 @@ module.exports = class Info {
         path[index] = this.path(path[index]);
       }
     } else {
-      if (path.startsWith('.')) {
-        return this.base() + path.substring(1);
-      }
+      return TOOLS.resolvePath(path, this.base());
     }
     return path;
+  }
+
+  list(dir, expression, recursive = null) {
+    var list = this._boot.list(dir, expression, recursive);
+
+    return TOOLS.pathResolved(list);
+  }
+
+  filter(array, expression = null, value = null) {
+    return this._boot.filter(array, expression, value);
   }
 
 }

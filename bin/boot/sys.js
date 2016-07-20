@@ -41,7 +41,9 @@ module.exports = class Sys {
     var files = this.infoHook('routines');
 
     for (var index in files) {
-      var routine = new (require(files[index]))(Boot, Module);
+      var routine = SYS.use(files[index]);
+
+      routine = new routine(Boot, Module);
       this._routines[routine.type()] = routine;
     }
   }
@@ -63,8 +65,9 @@ module.exports = class Sys {
     // get all mod files in mods directory
     var files = Boot.list(this.base() + '/mods', '.*\.mod\.js');
 
+    files = TOOLS.pathResolved(files);
     for (var index in files) {
-      var mod = SYS.use(files[index], 'resolved', {type: 'mod'});
+      var mod = SYS.use(files[index], 'mod');
 
       if (TOOLS.is(mod, this._Mod)) {
         this._mods.push({
@@ -233,13 +236,17 @@ module.exports = class Sys {
     var routine = this.getUseRoutine(type);
 
     options.cid = cid;
+    options.resolved = TOOLS.isPathResolved(path);
     routine.useOptions(path, type, options, TOOLS.args(arguments, 3));
     path = routine.usePath(path, options);
     if (routine.isPackage(path, options)) {
       return this.cache('use', cid, routine.usePackage(path, options));
     }
 
-    return this.cache('use', cid, routine.useInit(require(path), options));
+    if (!options.resolved) {
+      path += routine.useExtensions(options);
+    }
+    return this.cache('use', cid, routine.useInit(require(TOOLS.usePath(path)), options));
   }
 
   /**

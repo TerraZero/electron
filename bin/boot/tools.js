@@ -88,6 +88,10 @@ module.exports = class Tools {
     return Object.prototype.toString.call(object) === '[object Array]';
   }
 
+  static isString(object) {
+    return typeof object === 'string';
+  }
+
   /**
     * Determine if the object is defined
     *
@@ -219,6 +223,45 @@ module.exports = class Tools {
         };
       },
     };
+  }
+
+
+
+  static resolvePath(path, offset = 0) {
+    // the path is already resolved
+    if (TOOLS.isPathResolved(path)) return path;
+
+    var base = SYS.base();
+    if (TOOLS.isString(offset)) base = offset;
+
+    // the path is relative to caller
+    if (path.startsWith('.')) {
+      path = Boot.getCaller(offset + 1).dir + path.substring(1);
+    } else {
+      path = SYS.base() + '/' + path;
+    }
+    // mark the path as resolved
+    return TOOLS.pathResolved(path);
+  }
+
+  static pathResolved(path) {
+    if (TOOLS.isArray(path)) {
+      for (var index in path) {
+        path[index] = TOOLS.pathResolved(path[index]);
+      }
+    } else {
+      path = '$' + path;
+    }
+    return path;
+  }
+
+  static isPathResolved(path) {
+    return path.startsWith('$');
+  }
+
+  static usePath(path) {
+    if (TOOLS.isPathResolved(path)) return path.substring(1);
+    return path;
   }
 
 };
