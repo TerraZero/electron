@@ -16,7 +16,7 @@ module.exports = class FrameMod extends Mod {
   resolve(path) {
     for (var index in this._frames) {
       if (this._frames[index].path == path) {
-        var frame = SYS.use(this._frames[index].file, 'resolved', {type: 'class'});
+        var frame = SYS.use(this._frames[index].file);
 
         return new frame();
       }

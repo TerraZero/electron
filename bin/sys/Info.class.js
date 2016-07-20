@@ -17,7 +17,7 @@ module.exports = class Info {
         path[index] = this.path(path[index]);
       }
     } else {
-      return TOOLS.resolvePath(path, this.base());
+      return new TOOLS.Path(path, this.base());
     }
     return path;
   }
@@ -25,7 +25,10 @@ module.exports = class Info {
   list(dir, expression, recursive = null) {
     var list = this._boot.list(dir, expression, recursive);
 
-    return TOOLS.pathResolved(list);
+    for (var index in list) {
+      list[index] = '$' + list[index];
+    }
+    return list;
   }
 
   filter(array, expression = null, value = null) {

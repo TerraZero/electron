@@ -15,7 +15,7 @@ module.exports = class UseRoutine {
     * Determine if a path is a package path
     */
   isPackage(path, options = {}) {
-    return path.endsWith('/');
+    return path.resolve().endsWith('/');
   }
 
   /**
@@ -34,9 +34,8 @@ module.exports = class UseRoutine {
   usePackage(path, options = {}) {
     var files = [];
     var pack = {};
-    path = TOOLS.usePath(path);
 
-    files = this._boot.list(path, this.useRegex(options), 1);
+    files = this._boot.list(path.resolve(), this.useRegex(options), 1);
 
     for (var index in files) {
       pack[this._boot.name(files[index])] = Sys.use(this._boot.path(files[index]), this._boot.type(files[index]), true);
@@ -49,7 +48,7 @@ module.exports = class UseRoutine {
     * Resolve path
     */
   usePath(path, options = {}) {
-    return TOOLS.resolvePath(path, 2);
+    return path;
   }
 
   /**

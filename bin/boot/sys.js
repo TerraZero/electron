@@ -65,9 +65,8 @@ module.exports = class Sys {
     // get all mod files in mods directory
     var files = Boot.list(this.base() + '/mods', '.*\.mod\.js');
 
-    files = TOOLS.pathResolved(files);
     for (var index in files) {
-      var mod = SYS.use(files[index], 'mod');
+      var mod = SYS.use('$' + files[index], 'mod');
 
       if (TOOLS.is(mod, this._Mod)) {
         this._mods.push({
@@ -228,7 +227,8 @@ module.exports = class Sys {
     * @param args...  - Arguments for Module classes
     */
   static use(path, type = 'class', options = {}) {
-    var cid = options.cid || path + '::' + type;
+    if (!TOOLS.is(path, TOOLS.Path)) path = new TOOLS.Path(path, 1);
+    var cid = options.cid || path.path() + '::' + type;
     var cache = this.cache('use', cid);
 
     if (cache) return cache;
@@ -236,17 +236,16 @@ module.exports = class Sys {
     var routine = this.getUseRoutine(type);
 
     options.cid = cid;
-    options.resolved = TOOLS.isPathResolved(path);
     routine.useOptions(path, type, options, TOOLS.args(arguments, 3));
     path = routine.usePath(path, options);
     if (routine.isPackage(path, options)) {
       return this.cache('use', cid, routine.usePackage(path, options));
     }
 
-    if (!options.resolved) {
-      path += routine.useExtensions(options);
-    }
-    return this.cache('use', cid, routine.useInit(require(TOOLS.usePath(path)), options));
+    var extension = routine.useExtensions(options);
+    var struct = require(path.resolve(extension));
+    var object = routine.useInit(struct, options);
+    return this.cache('use', cid, object);
   }
 
   /**

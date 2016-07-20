@@ -13,7 +13,7 @@ module.exports = class CoreInfo extends Info {
     return [
       {
         path: 'core',
-        file: this.path('./CoreFrame.class.js'),
+        file: this.path('./CoreFrame'),
       }
     ];
   }

@@ -112,7 +112,7 @@ module.exports = class Tools {
     *         [object[name]]  - if the getter will call
     */
   static setGet(object, variable, name) {
-    if (this.isDef(variable)) {
+    if (ISDEF(variable)) {
       object[name] = variable;
       return object;
     } else {
@@ -124,7 +124,7 @@ module.exports = class Tools {
     var args = TOOLS.args(arguments);
     var caller = Boot.getCaller(1);
 
-    console.log(caller.dir + '/' + caller.base);
+    console.log('FILE: ' + caller.dir + '/' + caller.base);
     console.log.apply(console, args);
   }
 
@@ -225,43 +225,6 @@ module.exports = class Tools {
     };
   }
 
-
-
-  static resolvePath(path, offset = 0) {
-    // the path is already resolved
-    if (TOOLS.isPathResolved(path)) return path;
-
-    var base = SYS.base();
-    if (TOOLS.isString(offset)) base = offset;
-
-    // the path is relative to caller
-    if (path.startsWith('.')) {
-      path = Boot.getCaller(offset + 1).dir + path.substring(1);
-    } else {
-      path = SYS.base() + '/' + path;
-    }
-    // mark the path as resolved
-    return TOOLS.pathResolved(path);
-  }
-
-  static pathResolved(path) {
-    if (TOOLS.isArray(path)) {
-      for (var index in path) {
-        path[index] = TOOLS.pathResolved(path[index]);
-      }
-    } else {
-      path = '$' + path;
-    }
-    return path;
-  }
-
-  static isPathResolved(path) {
-    return path.startsWith('$');
-  }
-
-  static usePath(path) {
-    if (TOOLS.isPathResolved(path)) return path.substring(1);
-    return path;
-  }
-
 };
+
+module.exports.Path = require('./tool/Path.class.js');
