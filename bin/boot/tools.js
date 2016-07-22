@@ -180,28 +180,6 @@ module.exports = class Tools {
   }
 
   /**
-    * Merge array's into one array
-    *
-    * @param (array) array  - the array to merge in
-    * @param (array) ...    - a list of array's to merge
-    * @return (param:array) - the merged array
-    */
-  static merge(array) {
-    var args = this.args(arguments, 1);
-
-    for (var arg in args) {
-      if (this.isArray(args[arg])) {
-        for (var a in args[arg]) {
-          array.push(args[arg][a]);
-        }
-      } else {
-        array.push(args[arg]);
-      }
-    }
-    return array;
-  }
-
-  /**
     * Define getter and/or setter for objects
     */
   static define(object, name, getter = null, setter = null) {
@@ -228,3 +206,4 @@ module.exports = class Tools {
 };
 
 module.exports.Path = require('./tool/Path.class.js');
+module.exports.Array = require('./tool/Array.class.js');

@@ -125,7 +125,7 @@ module.exports = class Sys {
     var results = this.hook.apply(this, TOOLS.args(arguments, 1));
     results.unshift([]);
     // merge all arrays from result
-    var array = TOOLS.merge.apply(TOOLS, results);
+    var array = TOOLS.Array.merge.apply(TOOLS.Array, results);
 
     return this.cache('hook', cid, array);
   }
@@ -152,7 +152,7 @@ module.exports = class Sys {
       if (this._infos[info][hook] && typeof this._infos[info][hook] == 'function') {
         var result = this._infos[info][hook].apply(this._infos[info], args);
 
-        results = TOOLS.merge(results, result);
+        results = TOOLS.Array.merge(results, result);
       }
     }
     return this.cache('info', cid, results);
