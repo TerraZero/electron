@@ -2,6 +2,18 @@
 
 module.exports = class Array {
 
+  static maxLength() {
+    var args = TOOLS.args(arguments);
+
+    var max = 0;
+    for (var index in args) {
+      if (TOOLS.isArray(args[index]) && max < args[index].length) {
+        max = args[index].length;
+      }
+    }
+    return max;
+  }
+
   /**
    * Merge array's into one array
    *
@@ -49,6 +61,6 @@ module.exports = class Array {
       }
     }
     return _array;
-  },
+  }
 
 }

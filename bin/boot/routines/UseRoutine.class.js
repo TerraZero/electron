@@ -35,7 +35,7 @@ module.exports = class UseRoutine {
     var files = [];
     var pack = {};
 
-    files = this._boot.list(path.resolve(), this.useRegex(options), 1);
+    files = TOOLS.File.list(path.resolve(), this.useRegex(options), 1);
 
     for (var index in files) {
       pack[this._boot.name(files[index])] = Sys.use(this._boot.path(files[index]), this._boot.type(files[index]), true);

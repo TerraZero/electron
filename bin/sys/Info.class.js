@@ -23,7 +23,7 @@ module.exports = class Info {
   }
 
   list(dir, expression, recursive = null) {
-    var list = this._boot.list(dir, expression, recursive);
+    var list = TOOLS.File.list(dir, expression, recursive);
 
     for (var index in list) {
       list[index] = '$' + list[index];
@@ -32,7 +32,7 @@ module.exports = class Info {
   }
 
   filter(array, expression = null, value = null) {
-    return this._boot.filter(array, expression, value);
+    return TOOLS.Array.filter(array, expression, value);
   }
 
 }

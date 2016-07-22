@@ -146,7 +146,7 @@ module.exports = class Tools {
       line.push(stack[index].getFileName().substring(SYS.base().length + 1) + ':' + stack[index].getLineNumber());
       fullstack.push(line.join(''));
     }
-    return Boot.filter(fullstack, filter);
+    return TOOLS.Array.filter(fullstack, filter);
   }
 
   static logDebug(filter = null, offset = 0) {
@@ -207,3 +207,4 @@ module.exports = class Tools {
 
 module.exports.Path = require('./tool/Path.class.js');
 module.exports.Array = require('./tool/Array.class.js');
+module.exports.File = require('./tool/File.class.js');

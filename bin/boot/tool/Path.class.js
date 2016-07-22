@@ -1,5 +1,7 @@
 'use strict';
 
+const Path = require('path');
+
 const Boot = require('./../boot.js');
 
 module.exports = class Path {

@@ -6,55 +6,6 @@ var Stack = require('stack-trace');
 
 module.exports = {
 
-  list: function(dir, expression, recursive = null) {
-    var results = [];
-
-    this.walk(dir, results, recursive);
-    return this.filter(results, expression);
-  },
-
-  walk: function(dir, results, recursive = null, deep = 0) {
-    var list = fs.readdirSync(dir);
-
-    for (var i in list) {
-      var file = Path.resolve(dir, list[i]);
-      var stat = fs.statSync(file);
-
-      if (stat && stat.isDirectory()) {
-        if (recursive == null || recursive > deep) this.walk(file, results, recursive, deep + 1);
-      } else {
-        results.push(file);
-      }
-    }
-  },
-
-  filter: function(array, expression = null, value = null) {
-    if (!expression) return array;
-    value = value || function(value) { return value; };
-
-    var _array = [];
-    var negative = expression.startsWith('!');
-
-    if (negative) {
-      var pattern = new RegExp(expression.substring(1));
-
-      for (var index in array) {
-        if (!pattern.test(value(array[index]))) {
-          _array.push(array[index]);
-        }
-      }
-    } else {
-      var pattern = new RegExp(expression);
-
-      for (var index in array) {
-        if (pattern.test(value(array[index]))) {
-          _array.push(array[index]);
-        }
-      }
-    }
-    return _array;
-  },
-
   match: function(string, expression, value = null) {
     if (value == null) {
       return string.match(expression);
