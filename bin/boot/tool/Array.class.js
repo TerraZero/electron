@@ -47,7 +47,7 @@ module.exports = class Array {
       var pattern = new RegExp(expression.substring(1));
 
       for (var index in array) {
-        if (!pattern.test(value(array[index]))) {
+        if (!pattern.test((array[index].__filterValue || value)(array[index]))) {
           _array.push(array[index]);
         }
       }
@@ -55,7 +55,7 @@ module.exports = class Array {
       var pattern = new RegExp(expression);
 
       for (var index in array) {
-        if (pattern.test(value(array[index]))) {
+        if (pattern.test((array[index].__filterValue || value)(array[index]))) {
           _array.push(array[index]);
         }
       }

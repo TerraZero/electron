@@ -58,4 +58,4 @@ const FrameMod = SYS.mod('FrameMod');
 
 var frame = FrameMod.resolve('core');
 
-LOG(frame.p());
+frame.test();

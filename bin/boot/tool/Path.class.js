@@ -6,6 +6,15 @@ const Boot = require('./../boot.js');
 
 module.exports = class Path {
 
+  static list(dir, expression, recursive = null) {
+    var files = TOOLS.File.list(dir, expression, recursive);
+
+    for (var index in files) {
+      files[index] = new Path(files[index]);
+    }
+    return files;
+  }
+
   constructor(path, offset = 0) {
     this.path(path);
     this._base = SYS.base();
@@ -48,6 +57,13 @@ module.exports = class Path {
       path = this.base() + '/' + path;
     }
     return path + extend;
+  }
+
+    /**
+    * MAGIC: gives the filter value
+    */
+  __filterValue(path) {
+    return path.resolve();
   }
 
 }
