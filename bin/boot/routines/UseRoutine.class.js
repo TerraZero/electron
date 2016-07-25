@@ -31,10 +31,8 @@ module.exports = class UseRoutine {
     * Create package content
     */
   usePackage(path, options = {}) {
-    var files = [];
     var pack = {};
-
-    files = TOOLS.Path.list(path.resolve(), this.useRegex(options), 1);
+    var files = TOOLS.Path.list(path.resolve(), this.useRegex(options), 0);
 
     for (var index in files) {
       var data = files[index].parseSys();
