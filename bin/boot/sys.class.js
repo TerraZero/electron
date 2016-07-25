@@ -1,6 +1,5 @@
 'use strict';
 
-const Boot = require('./boot.js');
 const Module = require('./../sys/Module.class.js');
 
 const remote = require('electron').remote;
@@ -14,7 +13,7 @@ module.exports = class Sys {
     this._routines = {};
 
     // load default routine for classes
-    this._routines['class'] = new (require('./routines/ClassRoutine.class.js'))(Boot, Module);
+    this._routines['class'] = new (require('./routines/ClassRoutine.class.js'))(Module);
 
     this.initializeInfos();
     this.initializeRoutines();
@@ -43,7 +42,7 @@ module.exports = class Sys {
     for (var index in files) {
       var routine = SYS.use(files[index]);
 
-      routine = new routine(Boot, Module);
+      routine = new routine(Module);
       this._routines[routine.type()] = routine;
     }
   }

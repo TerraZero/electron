@@ -2,8 +2,7 @@
 
 module.exports = class Info {
 
-  constructor(boot) {
-    this._boot = boot;
+  constructor() {
     this._base = null;
   }
 

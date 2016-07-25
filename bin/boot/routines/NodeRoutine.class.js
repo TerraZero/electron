@@ -17,7 +17,8 @@ module.exports = class NodeRoutine extends UseRoutine {
   }
 
   usePath(path, options = {}) {
-    return path;
+    // make the path final
+    return path.path('$' + path.path());
   }
 
   useRegex(options = {}) {

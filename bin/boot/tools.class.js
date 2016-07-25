@@ -1,7 +1,5 @@
 'use strict';
 
-const Boot = require('./boot.js');
-
 module.exports = class Tools {
 
   /**
@@ -122,7 +120,7 @@ module.exports = class Tools {
 
   static log() {
     var args = TOOLS.args(arguments);
-    var caller = Boot.getCaller(1);
+    var caller = TOOLS.Reflection.getCaller(1);
 
     console.log('FILE: ' + caller.dir + '/' + caller.base);
     console.log.apply(console, args);
@@ -132,7 +130,7 @@ module.exports = class Tools {
     * Get Debug Callstack
     */
   static getDebug(filter = null, offset = 0) {
-    var stack = Boot.getStack();
+    var stack = TOOLS.Reflection.getStack();
     var fullstack = [];
 
     for (var index = offset + 2; index < stack.length; index++) {
@@ -209,3 +207,4 @@ module.exports.Path = require('./tool/Path.class.js');
 module.exports.Array = require('./tool/Array.class.js');
 module.exports.String = require('./tool/String.class.js');
 module.exports.File = require('./tool/File.class.js');
+module.exports.Reflection = require('./tool/Reflection.class.js');

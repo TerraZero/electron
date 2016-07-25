@@ -2,8 +2,6 @@
 
 const NPath = require('path');
 
-const Boot = require('./../boot.js');
-
 module.exports = class Path {
 
   static list(dir, expression, recursive = null, offset = 0) {
@@ -21,7 +19,7 @@ module.exports = class Path {
     if (TOOLS.isString(offset)) {
       this._rel = offset;
     } else {
-      this._rel = Boot.getCaller(offset + 1).dir;
+      this._rel = TOOLS.Reflection.getCaller(offset + 1).dir;
     }
   }
 
@@ -40,6 +38,10 @@ module.exports = class Path {
       this._path = path;
     }
     return this;
+  }
+
+  isFinal() {
+    return this._final;
   }
 
   rel(rel) {
@@ -68,6 +70,16 @@ module.exports = class Path {
     */
   __filterValue(path) {
     return path.resolve();
+  }
+
+  parseSys() {
+    var parse = this.parse();
+    var sysparse = {};
+
+    sysparse.path = parse.dir + '/' + TOOLS.String.match(parse.name, '^([^.]*)', 0);
+    sysparse.name = TOOLS.String.match(parse.name, '^([^.]*)', 0);
+    sysparse.type = TOOLS.String.match(parse.name, '[^\.]*$', 0);
+    return sysparse;
   }
 
 }

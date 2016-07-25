@@ -2,8 +2,7 @@
 
 module.exports = class UseRoutine {
 
-  constructor(boot, module) {
-    this._boot = boot;
+  constructor(module) {
     this._module = module;
   }
 
@@ -35,10 +34,12 @@ module.exports = class UseRoutine {
     var files = [];
     var pack = {};
 
-    files = TOOLS.File.list(path.resolve(), this.useRegex(options), 1);
+    files = TOOLS.Path.list(path.resolve(), this.useRegex(options), 1);
 
     for (var index in files) {
-      pack[this._boot.name(files[index])] = Sys.use(this._boot.path(files[index]), this._boot.type(files[index]), true);
+      var data = files[index].parseSys();
+
+      pack[data.name] = SYS.use(files[index], data.type, options);
     }
 
     return pack;
