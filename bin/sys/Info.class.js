@@ -12,6 +12,8 @@ module.exports = class Info {
   }
 
   path(path) {
+    if (TOOLS.is(path, TOOLS.Path)) return path;
+
     if (TOOLS.isArray(path)) {
       for (var index in path) {
         path[index] = this.path(path[index]);
@@ -23,16 +25,7 @@ module.exports = class Info {
   }
 
   list(dir, expression, recursive = null) {
-    var list = TOOLS.File.list(dir, expression, recursive);
-
-    for (var index in list) {
-      list[index] = '$' + list[index];
-    }
-    return list;
-  }
-
-  filter(array, expression = null, value = null) {
-    return TOOLS.Array.filter(array, expression, value);
+    return TOOLS.Path.list(dir, expression, recursive, 1);
   }
 
 }

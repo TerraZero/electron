@@ -1,18 +1,14 @@
 'use strict';
 
 // Invoke Sys and make it global
-global.SYS = require('./bin/boot/sys.js');
+
+global.SYS = require('./bin/boot/sys.class.js');
 SYS._base = __dirname;
 
 // Invoke Tools and make it global
-global.TOOLS = require('./bin/boot/tools.js');
+global.TOOLS = require('./bin/boot/tools.class.js');
 global.ISDEF = TOOLS.isDef;
 global.SETGET = TOOLS.setGet;
 global.LOG = TOOLS.log;
 
-// SYS.register('!Module', 'sys/Module');
-// SYS.register('!Mod', 'sys/Mod');
-
 SYS.initialize();
-
-// SYS.set('jquery', SYS.src('js', 'jquery-2.2.4.min.js'));

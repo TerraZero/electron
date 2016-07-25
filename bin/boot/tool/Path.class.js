@@ -1,16 +1,16 @@
 'use strict';
 
-const Path = require('path');
+const NPath = require('path');
 
 const Boot = require('./../boot.js');
 
 module.exports = class Path {
 
-  static list(dir, expression, recursive = null) {
+  static list(dir, expression, recursive = null, offset = 0) {
     var files = TOOLS.File.list(dir, expression, recursive);
 
     for (var index in files) {
-      files[index] = new Path(files[index]);
+      files[index] = new Path('$' + files[index], offset + 1);
     }
     return files;
   }
@@ -57,6 +57,10 @@ module.exports = class Path {
       path = this.base() + '/' + path;
     }
     return path + extend;
+  }
+
+  parse() {
+    return NPath.parse(this.resolve());
   }
 
     /**

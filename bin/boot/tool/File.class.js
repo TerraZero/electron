@@ -1,7 +1,7 @@
 'use strict';
 
 const FS = require('graceful-fs');
-const Path = require('path');
+const NPath = require('path');
 
 module.exports = class File {
 
@@ -16,7 +16,7 @@ module.exports = class File {
     var list = FS.readdirSync(dir);
 
     for (var i in list) {
-      var file = Path.resolve(dir, list[i]);
+      var file = NPath.resolve(dir, list[i]);
       var stat = FS.statSync(file);
 
       if (stat && stat.isDirectory()) {

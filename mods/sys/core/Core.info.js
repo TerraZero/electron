@@ -5,8 +5,7 @@ const Info = SYS.use('bin/sys/Info');
 module.exports = class CoreInfo extends Info {
 
   routines() {
-    var files = this.list(SYS.base() + '/bin/boot/routines');
-    return this.path(this.filter(files, '!.*ClassRoutine\.class\.js'));
+    return this.list(SYS.base() + '/bin/boot/routines', '!.*ClassRoutine\.class\.js');
   }
 
   frames() {

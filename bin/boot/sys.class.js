@@ -26,11 +26,11 @@ module.exports = class Sys {
     * Read info files from mods directory ans save it
     */
   static initializeInfos() {
-    var files = TOOLS.File.list(this.base() + '/mods', '.*\.info\.js');
+    var files = TOOLS.Path.list(this.base() + '/mods', '.*\.info\.js');
 
     for (var index in files) {
-      this._infos[index] = new (require(files[index]))(Boot);
-      this._infos[index]._base = Boot.parse(files[index]).dir;
+      this._infos[index] = new (require(files[index].resolve()))();
+      this._infos[index]._base = files[index].parse().dir;
     }
   }
 

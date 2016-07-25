@@ -207,4 +207,5 @@ module.exports = class Tools {
 
 module.exports.Path = require('./tool/Path.class.js');
 module.exports.Array = require('./tool/Array.class.js');
+module.exports.String = require('./tool/String.class.js');
 module.exports.File = require('./tool/File.class.js');
