@@ -1,3 +1,4 @@
+/* global TOOLS */
 'use strict';
 
 const Module = require('./../sys/Module.class.js');
@@ -42,7 +43,7 @@ module.exports = class Sys {
     for (var index in files) {
       var routine = SYS.use(files[index]);
 
-      routine = new routine(Module);
+      routine = new (routine)(Module);
       this._routines[routine.type()] = routine;
     }
   }
