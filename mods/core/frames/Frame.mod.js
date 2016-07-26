@@ -10,7 +10,7 @@ module.exports = class FrameMod extends Mod {
   }
 
   init() {
-    this._frames = SYS.infoHook('frames');
+    this._frames = SYS.info('frames');
   }
 
   resolve(path) {

@@ -1,4 +1,3 @@
-/* global SYS */
 'use strict';
 
 // var results = {};

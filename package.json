@@ -8,17 +8,20 @@
     "build": "gulp build && electron-packager . tz-electron --platform=linux --arch=x64 --out=ignore/releases --ignore='(ignore|gulpfile.js)' --overwrite --prune --asar",
     "main": "electron main.js",
     "index": "gulp index",
-    "release": "./ignore/releases/tz-electron-linux-x64/tz-electron"
+    "release": "./ignore/releases/tz-electron-linux-x64/tz-electron",
+    "command": "node command.js"
   },
   "author": "TerraZero",
   "license": "CC0-1.0",
   "dependencies": {
+    "colors": "^1.1.2",
     "electron-prebuilt": "^1.2.0",
     "graceful-fs": "^4.1.4",
     "mysql": "^2.11.1",
     "pug": "^2.0.0-alpha8",
     "squel": "^5.2.1",
-    "stack-trace": "0.0.9"
+    "stack-trace": "0.0.9",
+    "yargs": "^4.8.1"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
