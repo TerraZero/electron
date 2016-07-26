@@ -1,3 +1,4 @@
+/* global SYS */
 /* global TOOLS */
 'use strict';
 

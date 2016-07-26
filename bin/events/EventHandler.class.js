@@ -1,3 +1,5 @@
+/* global TOOLS */
+/* global SYS */
 'use strict';
 
 const Event = SYS.use('./Event');

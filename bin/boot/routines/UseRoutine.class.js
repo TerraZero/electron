@@ -1,3 +1,5 @@
+/* global SYS */
+/* global TOOLS */
 'use strict';
 
 module.exports = class UseRoutine {
@@ -21,7 +23,7 @@ module.exports = class UseRoutine {
     * Define default settings and set settings
     */
   useOptions(path, type, options, args) {
-    options.cid = options.cid || cid;
+    options.cid = options.cid;
     options.path = options.path || path;
     options.type = options.type || type;
     options.args = options.args || args;
