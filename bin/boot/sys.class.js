@@ -1,10 +1,9 @@
-/* global SYS */
-/* global TOOLS */
 'use strict';
 
 const Module = require('./../sys/Module.class.js');
 
-const remote = require('electron').remote;
+// TODO solution for: remote only when in app context
+// const remote = require('electron').remote;
 
 module.exports = class Sys {
 
@@ -39,7 +38,7 @@ module.exports = class Sys {
     * Load UseRoutines from system
     */
   static initializeRoutines() {
-    var files = this.infoHook('routines');
+    var files = this.info('routines');
 
     for (var index in files) {
       var routine = SYS.use(files[index]);
@@ -140,7 +139,7 @@ module.exports = class Sys {
     * @param ...            - arguments for the hook
     * @return array - the merged results of an hook
     */
-  static infoHook(hook) {
+  static info(hook) {
     var cid = hook;
     var cache = this.cache('info', cid);
 
@@ -282,7 +281,7 @@ module.exports = class Sys {
     * Close the application complete.
     */
   static exit() {
-    remote.require('electron').app.quit();
+    // remote.require('electron').app.quit();
   }
 
   /**
@@ -320,4 +319,4 @@ module.exports = class Sys {
     return this._base;
   }
 
-};
+}
