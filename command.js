@@ -1,10 +1,16 @@
 'use strict';
 
+const args = require('yargs').argv;
+
 require('./head.js');
 global.CLI = SYS.use('bin/boot/cli');
+
+
+// start script
+console.log();
+console.log('start command');
 console.log();
 
-var args = require('yargs').argv;
 var commands = SYS.info('commands');
 
 var exe = args._[0];
@@ -21,3 +27,8 @@ for (var index in commands) {
     }
   }
 }
+
+// end script
+console.log();
+console.log('end command');
+console.log();

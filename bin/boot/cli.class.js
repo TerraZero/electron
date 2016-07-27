@@ -8,14 +8,15 @@ module.exports = class CLI {
     var args = TOOLS.args(arguments);
 
     args[0] = args[0].red;
-    console.log.apply(console, args);
+    TOOLS.award(CLI, 'console', args);
   }
 
   static log() {
-    var args = TOOLS.args(arguments);
+    TOOLS.award(CLI, 'console', arguments);
+  }
 
-    args[0] = args[0].debug;
-    console.log.apply(console, args);
+  static console() {
+    console.log.apply(console, TOOLS.args(arguments));
   }
 
 }

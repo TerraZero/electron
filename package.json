@@ -14,6 +14,7 @@
   "author": "TerraZero",
   "license": "CC0-1.0",
   "dependencies": {
+    "annotation": "^0.1.0",
     "colors": "^1.1.2",
     "electron-prebuilt": "^1.2.0",
     "graceful-fs": "^4.1.4",

@@ -8,4 +8,4 @@ module.exports = class TestCommandInfo extends Command {
     CLI.log('sdjdasd');
   }
 
-};
+}

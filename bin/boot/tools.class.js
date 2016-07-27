@@ -18,19 +18,28 @@ module.exports = class Tools {
     return _args;
   }
 
+  static cArgs(args, offset = 0) {
+    if (Tools.isArguments(args)) {
+      return Tools.args(args, offset);
+    }
+    return args;
+  }
+
   /**
     * Pass variables back to a stream and continue it
     */
   static passOn(object, callback = null, args = []) {
     if (!callback) return undefined;
 
-    var _args = args;
+    return callback.apply(object, Tools.cArgs(args));
+  }
 
-    // if args are an arguments object than convert it into an array
-    if (this.isArguments(_args)) {
-      _args = this.args(_args);
+  static award(context = null, funcname = null, args = []) {
+    if (Tools.isFunction(funcname)) {
+      funcname.apply(context, Tools.cArgs(args));
+    } else {
+      context[funcname].apply(context, Tools.cArgs(args));
     }
-    return callback.apply(object, _args);
   }
 
 
