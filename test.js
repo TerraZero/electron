@@ -1,4 +1,4 @@
-const annotations = require('ecmas-annotations');
+const annotations = require('tzero-annotations');
 const registry = new annotations.Registry();
 
 registry.registerAnnotation(__dirname + '/test.annotation.js');

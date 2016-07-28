@@ -1,5 +1,5 @@
 'use strict'
-const Annotation = require('ecmas-annotations').Annotation;
+const Annotation = require('tzero-annotations').Annotation;
 
 module.exports = class TestAnnotation extends Annotation {
 
