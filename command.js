@@ -28,10 +28,8 @@ for (var index in commands) {
   }
 }
 
-var reader = TOOLS.Annotation.createReader();
-reader.parse(__dirname + '/annotations.js');
-
-console.log(reader.getDefinitions('Test2Annotation')[0]);
+var annotation = new TOOLS.Annotation(__dirname + '/annotations.js').getDefinitions();
+console.log(annotation);
 
 // end script
 console.log();

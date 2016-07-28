@@ -16,10 +16,15 @@ module.exports = class Sys {
     // load default routine for classes
     this._routines['class'] = new (require('./routines/ClassRoutine.class.js'))(Module);
 
+    this.initializeAnnotations();
     this.initializeInfos();
     this.initializeRoutines();
     this.initializeErrors();
     this.initializeMods();
+  }
+
+  static initializeAnnotations() {
+    TOOLS.Annotation.initialize();
   }
 
   /**

@@ -99,6 +99,10 @@ module.exports = class Tools {
     return typeof object === 'string';
   }
 
+  static isInt(object) {
+    return Number.isInteger(object);
+  }
+
   /**
     * Determine if the object is defined
     *
@@ -217,4 +221,4 @@ module.exports.Array = require('./tool/Array.class.js');
 module.exports.String = require('./tool/String.class.js');
 module.exports.File = require('./tool/File.class.js');
 module.exports.Reflection = require('./tool/Reflection.class.js');
-module.exports.Annotation = require('./tool/annotations/Annotation.class.js');
+module.exports.Annotation = require('./tool/Annotation.class.js');
