@@ -5,31 +5,17 @@ const args = require('yargs').argv;
 require('./head.js');
 global.CLI = SYS.use('bin/boot/cli');
 
+const Command = SYS.use('bin/command/Command');
 
 // start script
 console.log();
 console.log('start command');
 console.log();
 
-var commands = SYS.info('commands');
+var command = args._[0];
+var _args = args._;
 
-var exe = args._[0];
-var exe = exe.split('.');
-
-for (var index in commands) {
-  if (commands[index].name == exe[0]) {
-    var c = SYS.use(commands[index].file, 'command', {args: [args]});
-
-    if (TOOLS.isFunction(c[exe[1]])) {
-      c[exe[1]].apply(c);
-    } else {
-      CLI.error('[ERROR] no command found "%s"', exe.join('.'));
-    }
-  }
-}
-
-var annotation = new TOOLS.Annotation(__dirname + '/annotations.js').getDefinitions();
-console.log(annotation);
+Command.execute(command, _args);
 
 // end script
 console.log();

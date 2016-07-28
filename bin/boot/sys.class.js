@@ -31,12 +31,16 @@ module.exports = class Sys {
     * Read info files from mods directory ans save it
     */
   static initializeInfos() {
-    var files = TOOLS.Path.list(this.base() + '/mods', '.*\.info\.js');
+    var files = Sys.listInfos();
 
     for (var index in files) {
       this._infos[index] = new (require(files[index].resolve()))();
       this._infos[index]._base = files[index].parse().dir;
     }
+  }
+
+  static listInfos() {
+    return TOOLS.Path.list(this.base() + '/mods', '.*\.info\.js');
   }
 
   /**
@@ -68,21 +72,25 @@ module.exports = class Sys {
     this._mods = [];
 
     // get all mod files in mods directory
-    var files = TOOLS.File.list(this.base() + '/mods', '.*\.mod\.js');
+    var files = Sys.listMods();
 
     for (var index in files) {
-      var mod = SYS.use('$' + files[index], 'mod');
+      var mod = SYS.use(files[index], 'mod');
 
       if (TOOLS.is(mod, this._Mod)) {
         this._mods.push({
           mod: mod,
-          file: files[index],
+          file: files[index].resolve(),
           name: mod.constructor.name,
         });
       } else {
         // TODO ERROR
       }
     }
+  }
+
+  static listMods() {
+    return TOOLS.Path.list(this.base() + '/mods', '.*\.mod\.js');
   }
 
   /**

@@ -6,11 +6,15 @@ const AnnotationRegistry = new AnnotationBase.Registry();
 module.exports = class Annotation {
 
   static initialize() {
-    var files = TOOLS.Array.merge(TOOLS.Path.list(SYS.base() + '/mods', '.*\.annotation\.js'), TOOLS.Path.list(SYS.base() + '/bin', '.*\.annotation\.js'));
+    var files = Annotation.listAnnotations();
 
     for (var index in files) {
       AnnotationRegistry.registerAnnotation(files[index].resolve());
     }
+  }
+
+  static listAnnotations() {
+    return TOOLS.Array.merge(TOOLS.Path.list(SYS.base() + '/mods', '.*\.annotation\.js'), TOOLS.Path.list(SYS.base() + '/bin', '.*\.annotation\.js'));
   }
 
   constructor(path = null) {
@@ -29,7 +33,7 @@ module.exports = class Annotation {
       return this._reader.definitionAnnotations[index];
     }
     if (TOOLS.isString(index)) {
-      return TOOLS.Array.filter(this._reader.definitionAnnotations, index, function(value) { return value.name(); });
+      return TOOLS.Array.filter(this._reader.definitionAnnotations, index);
     }
     return this._reader.definitionAnnotations;
   }

@@ -18,8 +18,12 @@ module.exports = class Annotation extends AnnotationBase {
    */
   constructor(data, filePath) {
     super(data, filePath);
-
     this._originalData = data;
+
+    var definition = this.definition();
+    for (var field in definition) {
+      this[field] = data[field] || definition[field];
+    }
   }
 
   originalData() {
@@ -34,11 +38,24 @@ module.exports = class Annotation extends AnnotationBase {
    * @return {void}
    */
   init(data) {
-    this.value = data.value;
+
+  }
+
+  definition() {
+    return {
+      value: null,
+    };
   }
 
   name() {
     return this.constructor.name;
+  }
+
+  /**
+    * MAGIC: gives the filter value
+    */
+  __filterValue(annotation) {
+    return annotation.name();
   }
 
 };

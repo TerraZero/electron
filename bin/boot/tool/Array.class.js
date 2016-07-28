@@ -38,6 +38,8 @@ module.exports = class Array {
 
   static filter(array, expression = null, value = null) {
     if (!expression) return array;
+    if (TOOLS.isFunction(expression)) return Array.filterFunc(array, expression);
+
     value = value || function(value) { return value; };
 
     var _array = [];
@@ -58,6 +60,19 @@ module.exports = class Array {
         if (pattern.test((array[index].__filterValue || value)(array[index]))) {
           _array.push(array[index]);
         }
+      }
+    }
+    return _array;
+  }
+
+  static filterFunc(array, func = null) {
+    if (!func) return array;
+
+    var _array = [];
+
+    for (var index in array) {
+      if (func(array[index], index)) {
+        _array.push(array[index]);
       }
     }
     return _array;

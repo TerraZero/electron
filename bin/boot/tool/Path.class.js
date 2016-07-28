@@ -65,13 +65,6 @@ module.exports = class Path {
     return NPath.parse(this.resolve());
   }
 
-    /**
-    * MAGIC: gives the filter value
-    */
-  __filterValue(path) {
-    return path.resolve();
-  }
-
   parseSys() {
     var parse = this.parse();
     var sysparse = {};
@@ -80,6 +73,13 @@ module.exports = class Path {
     sysparse.name = TOOLS.String.match(parse.name, '^([^.]*)', 0);
     sysparse.type = TOOLS.String.match(parse.name, '[^\.]*$', 0);
     return sysparse;
+  }
+
+  /**
+    * MAGIC: gives the filter value
+    */
+  __filterValue(path) {
+    return path.resolve();
   }
 
 }
