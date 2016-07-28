@@ -16,13 +16,13 @@
   "dependencies": {
     "annotation": "^0.1.0",
     "colors": "^1.1.2",
-    "ecmas-annotations": "^1.0.2",
     "electron-prebuilt": "^1.2.0",
     "graceful-fs": "^4.1.4",
     "mysql": "^2.11.1",
     "pug": "^2.0.0-alpha8",
     "squel": "^5.2.1",
     "stack-trace": "0.0.9",
+    "tzero-annotations": "^1.0.4",
     "yargs": "^4.8.1"
   },
   "devDependencies": {
