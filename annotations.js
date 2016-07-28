@@ -5,6 +5,9 @@
  *  "dsfjsdf",
  *  test='Sdfsfj'
  * )
+ * @Test2Annotation(
+ *   "sadaddddadadsdadaad"
+ * );
  */
 module.exports = class Annot {
 

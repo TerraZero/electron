@@ -31,7 +31,7 @@ for (var index in commands) {
 var reader = TOOLS.Annotation.createReader();
 reader.parse(__dirname + '/annotations.js');
 
-console.log(reader);
+console.log(reader.getDefinitions('Test2Annotation')[0]);
 
 // end script
 console.log();

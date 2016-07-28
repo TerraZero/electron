@@ -3,6 +3,8 @@
 const AnnotationBase = require('tzero-annotations');
 const AnnotationRegistry = new AnnotationBase.Registry();
 
+const AnnotationReader = require('./AnnotationReader.class.js');
+
 var init = false;
 
 module.exports = class Annotation {
@@ -20,7 +22,7 @@ module.exports = class Annotation {
 
   static createReader() {
     this.register();
-    return new AnnotationBase.Reader(AnnotationRegistry);
+    return new AnnotationReader(new AnnotationBase.Reader(AnnotationRegistry));
   }
 
 }
