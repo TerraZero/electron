@@ -28,6 +28,11 @@ for (var index in commands) {
   }
 }
 
+var reader = TOOLS.Annotation.createReader();
+reader.parse(__dirname + '/annotations.js');
+
+console.log(reader);
+
 // end script
 console.log();
 console.log('end command');
