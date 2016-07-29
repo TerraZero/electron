@@ -6,6 +6,10 @@ module.exports = class CommandBase {
     return new this(args);
   }
 
+  static get OK() {
+    return 0;
+  }
+
   static get ERROR() {
     return 1;
   }
@@ -16,6 +20,11 @@ module.exports = class CommandBase {
 
   constructor(args) {
     this._valueargs = args;
+    this._result = {
+      outs: [],
+      ins: [],
+      code: CommandBase.OK,
+    };
     this._outs = [];
   }
 
@@ -23,8 +32,8 @@ module.exports = class CommandBase {
     var suggestions = this._suggestion();
     var exe = this._args()[0].split('.');
 
-    CLI.error('Command "' + exe[1] + '" not found in "' + this._name() + '" or multiply suggestions available');
-    CLI.log('Try one of the following commands:');
+    this.error('Command "' + exe[1] + '" not found in "' + this._name() + '" or multiply suggestions available');
+    this.log('Try one of the following commands:');
 
     if (exe[1]) {
       suggestions = TOOLS.Array.filter(suggestions, exe[1] + '.*');
@@ -33,17 +42,26 @@ module.exports = class CommandBase {
     if (suggestions.length == 0) suggestions = this._suggestion();
 
     for (var i in suggestions) {
-      CLI.log('  ' + i + ': ' + exe[0] + '.' + suggestions[i]);
+      this.log('  ' + i + ': ' + exe[0] + '.' + suggestions[i]);
     }
+  }
+
+  log() {
+    CLI.log.apply(CLI, TOOLS.args(arguments));
   }
 
   out(item) {
     CLI.log(item);
-    this._outs.push(item);
+    this._result.outs.push(item);
   }
 
-  _getOuts() {
-    return this._outs;
+  error(message) {
+    CLI.error(message);
+    this._result.code = CommandBase.ERROR;
+  }
+
+  _getResult() {
+    return this._result;
   }
 
   _name() {

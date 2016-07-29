@@ -10,7 +10,7 @@ module.exports = class Command {
     var exe = command.split('.');
     var execution = {
       command: null,
-      result: null,
+      result: {},
       args: args,
       exe: exe,
     };
@@ -23,10 +23,14 @@ module.exports = class Command {
         try {
           var func = Command.getFunction(execution);
 
-          execution.result = func.apply(execution.command, applyArgs);
+          var code = func.apply(execution.command, applyArgs);
+          execution.result = execution.command._getResult();
+          if (code) {
+            execution.result.code = code;
+          }
         } catch (e) {
           Command.error(e);
-          execution.result = Command.FATAL;
+          execution.result.code = Command.FATAL;
         }
         break;
       }
@@ -52,17 +56,16 @@ module.exports = class Command {
   }
 
   static error(exception) {
-    CLI.error(e.toString());
-    result = Command.FATAL;
+    CLI.error(exception.toString());
   }
 
   static evaluation(execution) {
-    if (execution.result === undefined) {
+    if (execution.result.code === CommandBase.OK) {
       // OK
-    } else if (execution.result === null) {
+    } else if (execution.result.code === undefined) {
       CLI.error('No command found with name "%s"', execution.exe[0]);
-    } else if (TOOLS.isInt(execution.result)) {
-      CLI.error('Command terminated unexpectedly with exit code "' + execution.result + '"');
+    } else if (TOOLS.isInt(execution.result.code)) {
+      CLI.error('Command terminated unexpectedly with exit code "' + execution.result.code + '"');
     }
 
     return execution;
