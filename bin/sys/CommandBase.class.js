@@ -30,6 +30,8 @@ module.exports = class CommandBase {
       suggestions = TOOLS.Array.filter(suggestions, exe[1] + '.*');
     }
 
+    if (suggestions.length == 0) suggestions = this._suggestion();
+
     for (var i in suggestions) {
       CLI.log('  ' + i + ': ' + exe[0] + '.' + suggestions[i]);
     }
