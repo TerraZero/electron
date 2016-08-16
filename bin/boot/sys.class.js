@@ -14,7 +14,7 @@ module.exports = class Sys {
     this._routines = {};
 
     // load default routine for classes
-    this._routines['class'] = new (require('./routines/ClassRoutine.class.js'))(Module);
+    this._routines[null] = new (require('./routines/UseRoutine.routine.js'))();
 
     this.initializeAnnotations();
     this.initializeInfos();
@@ -31,7 +31,7 @@ module.exports = class Sys {
     * Read info files from mods directory ans save it
     */
   static initializeInfos() {
-    var files = Sys.listInfos();
+    var files = this.lookup('info', 'mods');
 
     for (var index in files) {
       this._infos[index] = new (require(files[index].resolve()))();
@@ -39,21 +39,18 @@ module.exports = class Sys {
     }
   }
 
-  static listInfos() {
-    return TOOLS.Path.list(this.base() + '/mods', '.*\.info\.js');
-  }
-
   /**
     * Load UseRoutines from system
     */
   static initializeRoutines() {
-    var files = this.info('routines');
+    var paths = this.lookup('routine');
 
-    for (var index in files) {
-      var routine = SYS.use(files[index]);
+    paths = TOOLS.Array.filter(paths, '!.*UseRoutine\.routine\.js$');
 
-      routine = new (routine)(Module);
-      this._routines[routine.type()] = routine;
+    for (var index in paths) {
+      var routine = new (paths[index].resolve());
+
+      this._routines[index] = routine;
     }
   }
 
@@ -72,10 +69,10 @@ module.exports = class Sys {
     this._mods = [];
 
     // get all mod files in mods directory
-    var files = Sys.listMods();
+    var files = this.lookup('mod', 'mods');
 
     for (var index in files) {
-      var mod = SYS.use(files[index], 'mod');
+      var mod = SYS.use(files[index]);
 
       if (TOOLS.is(mod, this._Mod)) {
         this._mods.push({
@@ -87,10 +84,6 @@ module.exports = class Sys {
         // TODO ERROR
       }
     }
-  }
-
-  static listMods() {
-    return TOOLS.Path.list(this.base() + '/mods', '.*\.mod\.js');
   }
 
   /**
@@ -171,6 +164,10 @@ module.exports = class Sys {
     return this.cache('info', cid, results);
   }
 
+  static lookup(type, dir) {
+    return TOOLS.Path.list(this.base() + '/' + dir, '.*\.' + type + '\.js$');
+  }
+
   /**
     * Generate the hook array for the hook function
     *
@@ -241,38 +238,48 @@ module.exports = class Sys {
     */
   static use(path, type = 'class', options = {}) {
     if (!TOOLS.is(path, TOOLS.Path)) path = new TOOLS.Path(path, 1);
-    var cid = options.cid || path.path() + '::' + type;
+
+    var cid = path.path();
     var cache = this.cache('use', cid);
 
     if (cache) return cache;
 
-    var routine = this.getUseRoutine(type);
+    var routine = this.getRoutine(path);
+    return routine.use(path);
 
-    options.cid = cid;
-    routine.useOptions(path, type, options, TOOLS.args(arguments, 3));
-    path = routine.usePath(path, options);
-    if (routine.isPackage(path, options)) {
-      return this.cache('use', cid, routine.usePackage(path, options));
-    }
+    // var cid = options.cid || path.path() + '::' + type;
+    // var cache = this.cache('use', cid);
 
-    var extension = routine.useExtensions(options);
-    var struct = require(path.resolve(extension));
-    var object = routine.useInit(struct, options);
-    return this.cache('use', cid, object);
+    // if (cache) return cache;
+
+    // var routine = this.getUseRoutine(type);
+
+    // options.cid = cid;
+    // routine.useOptions(path, type, options, TOOLS.args(arguments, 3));
+    // path = routine.usePath(path, options);
+    // if (routine.isPackage(path, options)) {
+    //   return this.cache('use', cid, routine.usePackage(path, options));
+    // }
+
+    // var extension = routine.useExtensions(options);
+    // var struct = require(path.resolve(extension));
+    // var object = routine.useInit(struct, options);
+    // return this.cache('use', cid, object);
   }
 
   /**
     * Get the defined use routine for a givin type
     *
-    * @param type - the type of the routine
+    * @param (Path) path - the type of the routine
     * @return UseRoutine - the use routine for the type
     */
-  static getUseRoutine(type = 'class') {
-    if (this._routines[type]) {
-      return this._routines[type];
-    } else {
-      return this._routines[null];
+  static getRoutine(path) {
+    for (var index in this._routines) {
+      if (this._routines[index].isRoutine(path)) {
+        return this._routines[index];
+      }
     }
+    return this._routines[null];
   }
 
   /**

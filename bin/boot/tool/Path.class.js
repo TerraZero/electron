@@ -75,6 +75,10 @@ module.exports = class Path {
     return sysparse;
   }
 
+  match(expression) {
+    return TOOLS.String.match(this.resolve(), expression);
+  }
+
   /**
     * MAGIC: gives the filter value
     */

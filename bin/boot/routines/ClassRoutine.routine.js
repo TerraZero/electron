@@ -1,12 +1,12 @@
 'use strict';
 
 // !!! Don't use SYS.use before boot
-var UseRoutine = require('./UseRoutine.class.js');
+var UseRoutine = require('./UseRoutine.routine.js');
 
 module.exports = class ClassRoutine extends UseRoutine {
 
-  type() {
-    return 'class';
+  isRoutine(path) {
+    return path.match('.*\.class[^\/]*$');
   }
 
 }
