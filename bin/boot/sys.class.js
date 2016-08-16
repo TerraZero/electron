@@ -1,7 +1,5 @@
 'use strict';
 
-const Module = require('./../sys/Module.class.js');
-
 // TODO solution for: remote only when in app context
 // const remote = require('electron').remote;
 
