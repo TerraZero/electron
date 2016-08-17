@@ -1,6 +1,6 @@
 'use strict';
 
-const CommandBase = SYS.use('bin/sys/CommandBase');
+const CommandBase = SYS.use('bin/sys/CommandBase.class');
 
 const commands = SYS.info('commands');
 

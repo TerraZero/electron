@@ -41,12 +41,12 @@ module.exports = class Sys {
     * Load UseRoutines from system
     */
   static initializeRoutines() {
-    var paths = this.lookup('routine');
+    var paths = this.lookup('routine', 'bin', 'mods');
 
     paths = TOOLS.Array.filter(paths, '!.*UseRoutine\.routine\.js$');
 
     for (var index in paths) {
-      var routine = new (paths[index].resolve());
+      var routine = new (require(paths[index].resolve()));
 
       this._routines[index] = routine;
     }
@@ -56,14 +56,14 @@ module.exports = class Sys {
     * Init errors
     */
   static initializeErrors() {
-    this._SysError = SYS.use('bin/sys/SysError');
+    this._SysError = SYS.use('bin/sys/SysError.error');
   }
 
   /**
     * Loading mods from mods directory
     */
   static initializeMods() {
-    this._Mod = SYS.use('bin/sys/Mod');
+    this._Mod = SYS.use('bin/sys/Mod.class');
     this._mods = [];
 
     // get all mod files in mods directory
@@ -162,8 +162,14 @@ module.exports = class Sys {
     return this.cache('info', cid, results);
   }
 
-  static lookup(type, dir) {
-    return TOOLS.Path.list(this.base() + '/' + dir, '.*\.' + type + '\.js$');
+  static lookup(type) {
+    var dirs = TOOLS.args(arguments, 1);
+
+    var result = [];
+    for (var dir in dirs) {
+      result = TOOLS.Array.merge(result, TOOLS.Path.list(this.base() + '/' + dirs[dir], '.*\.' + type + '\.js$'));
+    }
+    return result;
   }
 
   /**
@@ -234,7 +240,7 @@ module.exports = class Sys {
     * @param options  - Object for the use routine
     * @param args...  - Arguments for Module classes
     */
-  static use(path, type = 'class', options = {}) {
+  static use(path) {
     if (!TOOLS.is(path, TOOLS.Path)) path = new TOOLS.Path(path, 1);
 
     var cid = path.path();

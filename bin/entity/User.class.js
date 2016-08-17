@@ -1,7 +1,7 @@
 'use strict';
 
-const Entity = SYS.use('./Entity');
-const UC = SYS.use('./controller/UserController').instance();
+const Entity = SYS.use('./Entity.class');
+const UC = SYS.use('./controller/UserController.class').instance();
 
 module.exports = class User extends Entity {
 

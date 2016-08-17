@@ -2,8 +2,8 @@
 /* global SYS */
 'use strict';
 
-const EventHandler = SYS.use('bin/events/EventHandler');
-const StreamLine = SYS.use('./StreamLine');
+const EventHandler = SYS.use('bin/events/EventHandler.class');
+const StreamLine = SYS.use('./StreamLine.class');
 
 module.exports = class Stream {
 

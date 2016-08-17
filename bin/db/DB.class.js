@@ -1,6 +1,6 @@
 'use strict';
 
-const mysql = SYS.use('mysql', 'node');
+const mysql = SYS.use('mysql.node');
 
 const Module = SYS.use('bin/sys/Module');
 const Controller = SYS.use('bin/entity/controller/Controller');

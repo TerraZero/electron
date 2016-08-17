@@ -1,6 +1,6 @@
 'use strict';
 
-const Info = SYS.use('bin/sys/Info');
+const Info = SYS.use('bin/sys/Info.class');
 
 module.exports = class CommandsInfo extends Info {
 

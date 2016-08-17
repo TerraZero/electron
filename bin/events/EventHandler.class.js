@@ -2,7 +2,7 @@
 /* global SYS */
 'use strict';
 
-const Event = SYS.use('./Event');
+const Event = SYS.use('./Event.class');
 
 module.exports = class EventHandler {
 

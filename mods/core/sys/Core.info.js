@@ -1,12 +1,8 @@
 'use strict';
 
-const Info = SYS.use('bin/sys/Info');
+const Info = SYS.use('bin/sys/Info.class');
 
 module.exports = class CoreInfo extends Info {
-
-  routines() {
-    return this.list(SYS.base() + '/bin/boot/routines', '!.*ClassRoutine\.class\.js');
-  }
 
   frames() {
     return [

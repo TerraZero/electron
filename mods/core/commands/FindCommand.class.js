@@ -1,8 +1,8 @@
 'use strict';
 
-const CommandBase = SYS.use('bin/sys/CommandBase');
+const CommandBase = SYS.use('bin/sys/CommandBase.class');
 
-const Command = SYS.use('bin/command/Command');
+const Command = SYS.use('bin/command/Command.class');
 
 module.exports = class FindCommand extends CommandBase {
 
