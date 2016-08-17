@@ -69,8 +69,8 @@ module.exports = class Path {
     var parse = this.parse();
     var sysparse = {};
 
-    sysparse.path = parse.dir + '/' + TOOLS.String.match(parse.name, '^([^.]*)', 0);
-    sysparse.name = TOOLS.String.match(parse.name, '^([^.]*)', 0);
+    sysparse.path = parse.dir + '/' + TOOLS.String.match(parse.name, '^([^\.]*)', 0);
+    sysparse.name = TOOLS.String.match(parse.name, '^([^\.]*)', 0);
     sysparse.type = TOOLS.String.match(parse.name, '[^\.]*$', 0);
     return sysparse;
   }
