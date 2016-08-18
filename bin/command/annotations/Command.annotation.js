@@ -8,6 +8,7 @@ module.exports = class Command extends Annotation {
 
   definition() {
     return {
+      description: [],
       alias: [],
       params: {},
     };

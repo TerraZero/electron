@@ -17,7 +17,7 @@ module.exports = class FindCommand extends CommandBase {
   /**
     * @Command(
     *   params={
-    *     expression: null
+    *     expression: {type: "string", value: null}
     *   }
     * )
     */
@@ -34,7 +34,7 @@ module.exports = class FindCommand extends CommandBase {
   /**
     * @Command(
     *   params={
-    *     expression: null
+    *     expression: {type: "string", value: null}
     *   }
     * )
     */
@@ -50,7 +50,7 @@ module.exports = class FindCommand extends CommandBase {
   /**
     * @Command(
     *   params={
-    *     expression: null
+    *     expression: {type: "string", value: null}
     *   }
     * )
     */
@@ -67,7 +67,7 @@ module.exports = class FindCommand extends CommandBase {
     * @Command(
     *   alias=["class"],
     *   params={
-    *     expression: null
+    *     expression: {type: "string", value: null}
     *   }
     * )
     */
@@ -83,7 +83,7 @@ module.exports = class FindCommand extends CommandBase {
   /**
     * @Command(
     *   params={
-    *     expression: null
+    *     expression: {type: "string", value: null}
     *   }
     * )
     */

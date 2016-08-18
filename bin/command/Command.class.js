@@ -66,13 +66,15 @@ module.exports = class Command {
     var exe = command.split('.');
     execution.exe = exe;
 
-    execution.info = Command.getCommandInfo(exe[0]);
-    execution.command = SYS.use(execution.info.path);
-    execution.command = execution.command.build.apply(execution.command, [{args: args, info: execution.info}]);
+    var data = Command.getCommand(exe[0], args);
+
+    execution.info = data.info;
+    execution.command = data.command;
+
     var applyArgs = TOOLS.args(args, 1);
 
     try {
-      var func = Command.getFunction(execution);
+      var func = Command.getCallFunctionData(data, exe[1]);
 
       var code = func.apply(execution.command, applyArgs);
       execution.result = execution.command.getResult();
@@ -87,18 +89,32 @@ module.exports = class Command {
     return Command.evaluation(execution);
   }
 
-  static getFunction(execution) {
-    var methods = execution.info.annotation.getMethods('Command');
+  static getFunctionData(data, name = null) {
+    return Command.getFunction(data.info.annotation, name);
+  }
+
+  static getFunction(annotation, name = null) {
+    var methods = annotation.getMethods('Command');
     var found = [];
 
     for (var i in methods) {
-      if (methods[i].target.startsWith(execution.exe[1]) || TOOLS.Array.startsWith(methods[i].alias, execution.exe[1])) {
+      if (!name || methods[i].target.startsWith(name) || TOOLS.Array.startsWith(methods[i].alias, name)) {
         found.push(methods[i].target);
       }
     }
 
-    if (found.length == 1) return execution.command[found[0]];
-    return execution.command.def;
+    return found;
+  }
+
+  static getCallFunctionData(data, name = null) {
+    return Command.getCallFunction(data.command, data.info.annotation, name);
+  }
+
+  static getCallFunction(command, annotation, name = null) {
+    var found = Command.getFunction(annotation, name);
+
+    if (found.length == 1) return command[found[0]];
+    return command.def;
   }
 
   static error(exception) {
