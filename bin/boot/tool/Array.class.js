@@ -29,6 +29,21 @@ module.exports = class Array {
     return null;
   }
 
+  static inArrayKey(array, string, value = null) {
+    value = value || function(value) { return value; };
+    for (var index in array) {
+      if ((array[index].__stringValue || value)(array[index]) == string) return index;
+    }
+    return null;
+  }
+
+  static inArray(array, string, value = null) {
+    var key = Array.inArrayKey(array, string, value);
+
+    if (key) return array[key];
+    return null;
+  }
+
   /**
    * Merge array's into one array
    *

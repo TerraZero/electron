@@ -3,10 +3,23 @@
 const CommandBase = SYS.use('bin/sys/CommandBase.class');
 
 // load commands
-const commands = SYS.lookup('command', 'mods', 'bin');
-for (var i in commands) {
-  commands[i].struct = SYS.use(commands[i]);
-}
+const commands = (function() {
+  var paths = SYS.lookup('command', 'mods', 'bin');
+  var accepted = [];
+
+  for (var i in paths) {
+    var annotation = new TOOLS.Annotation(paths[i]);
+
+    if (annotation.getDefinitions('Command').length) {
+      accepted.push({
+        path: paths[i],
+        annotation: annotation,
+        alias: annotation.getDefinitions('Command')[0].alias,
+      });
+    }
+  }
+  return accepted;
+})();
 
 module.exports = class Command {
 
@@ -14,10 +27,32 @@ module.exports = class Command {
     return commands;
   }
 
+  static getCommandInfo(name) {
+    for (var index in commands) {
+      if (TOOLS.Array.inArray(commands[index].alias, name)) {
+        return commands[index];
+      }
+    }
+    return null;
+  }
+
+  static getCommand(name, args = null) {
+    var info = Command.getCommandInfo(name);
+    if (!info) return null;
+
+    var struct = SYS.use(info.path);
+    var command = struct.build.apply(struct, [{args: args, info: info}]);
+    return {
+      info: info,
+      struct: struct,
+      command: command,
+    };
+  }
+
   static execute(command, args = []) {
     var execution = {
       command: null,
-      path: null,
+      info: null,
       result: {},
       args: args,
       exe: null,
@@ -31,33 +66,29 @@ module.exports = class Command {
     var exe = command.split('.');
     execution.exe = exe;
 
-    for (var index in commands) {
-      if (commands[index].struct.alias() == exe[0]) {
-        execution.path = commands[index];
-        execution.command = commands[index].struct.build.apply(commands[index].struct, [{args: args, path: execution.path}]);
-        var applyArgs = TOOLS.args(args, 1);
+    execution.info = Command.getCommandInfo(exe[0]);
+    execution.command = SYS.use(execution.info.path);
+    execution.command = execution.command.build.apply(execution.command, [{args: args, info: execution.info}]);
+    var applyArgs = TOOLS.args(args, 1);
 
-        try {
-          var func = Command.getFunction(execution);
+    try {
+      var func = Command.getFunction(execution);
 
-          var code = func.apply(execution.command, applyArgs);
-          execution.result = execution.command.getResult();
-          if (code) {
-            execution.result.code = code;
-          }
-        } catch (e) {
-          Command.error(e);
-          execution.result.code = Command.FATAL;
-        }
-        break;
+      var code = func.apply(execution.command, applyArgs);
+      execution.result = execution.command.getResult();
+      if (code) {
+        execution.result.code = code;
       }
+    } catch (e) {
+      Command.error(e);
+      execution.result.code = Command.FATAL;
     }
+
     return Command.evaluation(execution);
   }
 
   static getFunction(execution) {
-    var annotations = new TOOLS.Annotation(execution.path);
-    var methods = annotations.getMethods('Command');
+    var methods = execution.info.annotation.getMethods('Command');
     var found = [];
 
     for (var i in methods) {

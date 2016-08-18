@@ -2,10 +2,6 @@
 
 module.exports = class CommandBase {
 
-  static alias() {
-    return null;
-  }
-
   static build(args) {
     return new this(args);
   }
@@ -24,7 +20,8 @@ module.exports = class CommandBase {
 
   constructor(args) {
     this._args = args.args;
-    this._path = args.path;
+    this._info = args.info;
+
     this._result = {
       outs: [],
       ins: [],
@@ -52,8 +49,9 @@ module.exports = class CommandBase {
     }
 
     this.error('Command "' + exe[1] + '" not found in "' + this.name() + '" or multiply suggestions available');
-    this.log('Try one of the following commands:');
 
+    this.log('Command "' + this.name() + '" (alias: [' + this.alias().join(', ') + '])');
+    this.log('Try one of the following commands:');
     for (var i in found) {
       this.log('  ' + i + ': ' + exe[0] + '.' + found[i].target);
       if (found[i].alias.length) {
@@ -89,7 +87,15 @@ module.exports = class CommandBase {
   }
 
   path() {
-    return this._path;
+    return this._info.path;
+  }
+
+  annotation() {
+    return this._info.annotation;
+  }
+
+  alias() {
+    return this._info.alias;
   }
 
 }
