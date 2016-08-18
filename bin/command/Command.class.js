@@ -2,22 +2,33 @@
 
 const CommandBase = SYS.use('bin/sys/CommandBase.class');
 
-const commands = SYS.info('commands');
+// load commands
+const commands = SYS.lookup('command', 'mods');
+for (var i in commands) {
+  commands[i] = SYS.use(commands[i]);
+}
 
 module.exports = class Command {
 
   static execute(command, args = []) {
-    var exe = command.split('.');
     var execution = {
       command: null,
       result: {},
       args: args,
-      exe: exe,
+      exe: null,
     };
 
+    if (!ISDEF(command)) {
+      execution.result.code = Command.FATAL;
+      CLI.error('No commands to execute found!');
+      return execution;
+    }
+    var exe = command.split('.');
+    execution.exe = exe;
+
     for (var index in commands) {
-      if (commands[index].name == exe[0]) {
-        execution.command = SYS.use(commands[index].file, 'command', {args: [args]});
+      if (commands[index].alias() == exe[0]) {
+        execution.command = commands[index].build.apply(commands[index], [{args: args}]);
         var applyArgs = TOOLS.args(args, 1);
 
         try {
@@ -46,12 +57,12 @@ module.exports = class Command {
     var found = [];
 
     for (var i in suggestions) {
-      if (suggestions[i].startsWith(execution.exe[1])) {
+      if (suggestions[i].name.startsWith(execution.exe[1])) {
         found.push(suggestions[i]);
       }
     }
 
-    if (found.length == 1) return execution.command[found[0]];
+    if (found.length == 1) return execution.command[found[0].func || found[0].name];
     return execution.command.def;
   }
 

@@ -2,6 +2,10 @@
 
 module.exports = class CommandBase {
 
+  static alias() {
+    return null;
+  }
+
   static build(args) {
     return new this(args);
   }
@@ -19,7 +23,7 @@ module.exports = class CommandBase {
   }
 
   constructor(args) {
-    this._valueargs = args;
+    this._valueargs = args.args;
     this._result = {
       outs: [],
       ins: [],
@@ -35,6 +39,12 @@ module.exports = class CommandBase {
     this.error('Command "' + exe[1] + '" not found in "' + this._name() + '" or multiply suggestions available');
     this.log('Try one of the following commands:');
 
+    for (var i in suggestions) {
+      suggestions[i].__filterValue = function(value) {
+        return value.name;
+      };
+    }
+
     if (exe[1]) {
       suggestions = TOOLS.Array.filter(suggestions, exe[1] + '.*');
     }
@@ -42,7 +52,7 @@ module.exports = class CommandBase {
     if (suggestions.length == 0) suggestions = this._suggestion();
 
     for (var i in suggestions) {
-      this.log('  ' + i + ': ' + exe[0] + '.' + suggestions[i]);
+      this.log('  ' + i + ': ' + exe[0] + '.' + suggestions[i].name);
     }
   }
 

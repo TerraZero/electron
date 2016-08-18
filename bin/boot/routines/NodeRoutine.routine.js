@@ -9,7 +9,7 @@ module.exports = class NodeRoutine extends UseRoutine {
   }
 
   use(path) {
-    return require(path.path().substring(0, path.path().length() - 5));
+    return require(path.path().substring(0, path.path().length - 5));
   }
 
 }

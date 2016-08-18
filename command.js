@@ -3,9 +3,9 @@
 const args = require('yargs').argv;
 
 require('./head.js');
-global.CLI = SYS.use('bin/boot/cli');
+global.CLI = SYS.use('bin/boot/cli.class');
 
-const Command = SYS.use('bin/command/Command');
+const Command = SYS.use('bin/command/Command.class');
 
 // start script
 console.log();

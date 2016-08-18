@@ -195,7 +195,7 @@ module.exports = class Controller {
   }
 
   execute(type, entity, query, callback) {
-    DB.execute(query.toString(), callback);
+    DB.build().execute(query.toString(), callback);
   }
 
 }

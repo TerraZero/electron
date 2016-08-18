@@ -70,7 +70,7 @@ module.exports = class Sys {
     var files = this.lookup('mod', 'mods');
 
     for (var index in files) {
-      var mod = SYS.use(files[index]);
+      var mod = require(files[index].resolve()).build();
 
       if (TOOLS.is(mod, this._Mod)) {
         this._mods.push({
@@ -240,7 +240,7 @@ module.exports = class Sys {
     * @param options  - Object for the use routine
     * @param args...  - Arguments for Module classes
     */
-  static use(path) {
+  static use(path, args = []) {
     if (!TOOLS.is(path, TOOLS.Path)) path = new TOOLS.Path(path, 1);
 
     var cid = path.path();
@@ -249,7 +249,7 @@ module.exports = class Sys {
     if (cache) return cache;
 
     var routine = this.getRoutine(path);
-    return routine.use(path);
+    return routine.use(path, args);
 
     // var cid = options.cid || path.path() + '::' + type;
     // var cache = this.cache('use', cid);

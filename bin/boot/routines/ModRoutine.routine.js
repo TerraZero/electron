@@ -1,4 +1,3 @@
-/* global SYS */
 'use strict';
 
 var UseRoutine = SYS.use('./UseRoutine.routine');
@@ -10,9 +9,7 @@ module.exports = class ModRoutine extends UseRoutine {
   }
 
   use(path) {
-    var struct = require(path.resolve('.js'));
-
-    return struct.build.apply(struct);
+    return SYS.mod(path.path().substring(0, path.path().length - 4));
   }
 
 }
