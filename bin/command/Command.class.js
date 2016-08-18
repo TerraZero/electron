@@ -3,16 +3,21 @@
 const CommandBase = SYS.use('bin/sys/CommandBase.class');
 
 // load commands
-const commands = SYS.lookup('command', 'mods');
+const commands = SYS.lookup('command', 'mods', 'bin');
 for (var i in commands) {
-  commands[i] = SYS.use(commands[i]);
+  commands[i].struct = SYS.use(commands[i]);
 }
 
 module.exports = class Command {
 
+  static getCommands() {
+    return commands;
+  }
+
   static execute(command, args = []) {
     var execution = {
       command: null,
+      path: null,
       result: {},
       args: args,
       exe: null,
@@ -27,15 +32,16 @@ module.exports = class Command {
     execution.exe = exe;
 
     for (var index in commands) {
-      if (commands[index].alias() == exe[0]) {
-        execution.command = commands[index].build.apply(commands[index], [{args: args}]);
+      if (commands[index].struct.alias() == exe[0]) {
+        execution.path = commands[index];
+        execution.command = commands[index].struct.build.apply(commands[index].struct, [{args: args, path: execution.path}]);
         var applyArgs = TOOLS.args(args, 1);
 
         try {
           var func = Command.getFunction(execution);
 
           var code = func.apply(execution.command, applyArgs);
-          execution.result = execution.command._getResult();
+          execution.result = execution.command.getResult();
           if (code) {
             execution.result.code = code;
           }
@@ -50,19 +56,17 @@ module.exports = class Command {
   }
 
   static getFunction(execution) {
-    if (TOOLS.isFunction(execution.command[execution.exe[1]])) {
-      return execution.command[execution.exe[1]];
-    }
-    var suggestions = execution.command._suggestion();
+    var annotations = new TOOLS.Annotation(execution.path);
+    var methods = annotations.getMethods('Command');
     var found = [];
 
-    for (var i in suggestions) {
-      if (suggestions[i].name.startsWith(execution.exe[1])) {
-        found.push(suggestions[i]);
+    for (var i in methods) {
+      if (methods[i].target.startsWith(execution.exe[1]) || TOOLS.Array.startsWith(methods[i].alias, execution.exe[1])) {
+        found.push(methods[i].target);
       }
     }
 
-    if (found.length == 1) return execution.command[found[0].func || found[0].name];
+    if (found.length == 1) return execution.command[found[0]];
     return execution.command.def;
   }
 

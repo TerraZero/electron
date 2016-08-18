@@ -2,14 +2,24 @@
 
 const CommandBase = SYS.use('bin/sys/CommandBase.class');
 
-const Command = SYS.use('bin/command/Command.class');
-
+/**
+  * @Command(
+  *   alias=["find"]
+  * )
+  */
 module.exports = class FindCommand extends CommandBase {
 
   static alias() {
     return 'find';
   }
 
+  /**
+    * @Command(
+    *   params={
+    *     expression: null
+    *   }
+    * )
+    */
   annotations(expression = null) {
     var annotations = TOOLS.Annotation.listAnnotations();
 
@@ -20,6 +30,13 @@ module.exports = class FindCommand extends CommandBase {
     }
   }
 
+  /**
+    * @Command(
+    *   params={
+    *     expression: null
+    *   }
+    * )
+    */
   mods(expression = null) {
     var mods = SYS.lookup('mod', 'mods');
 
@@ -29,6 +46,13 @@ module.exports = class FindCommand extends CommandBase {
     }
   }
 
+  /**
+    * @Command(
+    *   params={
+    *     expression: null
+    *   }
+    * )
+    */
   routines(expression = null) {
     var routines = SYS.lookup('routine', 'bin', 'mods');
 
@@ -38,41 +62,21 @@ module.exports = class FindCommand extends CommandBase {
     }
   }
 
-  _suggestion(suggestions = []) {
-    suggestions.push({
-      name: 'annotations',
-      param: {
-        expression: {
-          value: null,
-        }
-      },
-    });
-    suggestions.push({
-      name: 'mods',
-      param: {
-        expression: {
-          value: null,
-        }
-      },
-    });
-    suggestions.push({
-      name: 'class',
-      func: 'findclass',
-      param: {
-        expression: {
-          value: null,
-        }
-      },
-    });
-    suggestions.push({
-      name: 'routines',
-      param: {
-        expression: {
-          value: null,
-        }
-      },
-    });
-    return suggestions;
+  /**
+    * @Command(
+    *   alias=["class"],
+    *   params={
+    *     expression: null
+    *   }
+    * )
+    */
+  findclass(expression = null) {
+    var classes = SYS.lookup('class', 'bin', 'mods');
+
+    classes = TOOLS.Array.filter(classes, expression);
+    for (var i in classes) {
+      this.out(classes[i].resolve());
+    }
   }
 
 }

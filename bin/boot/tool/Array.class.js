@@ -14,6 +14,21 @@ module.exports = class Array {
     return max;
   }
 
+  static startsWithKey(array, string, value = null) {
+    value = value || function(value) { return value; };
+    for (var index in array) {
+      if ((array[index].__stringValue || value)(array[index]).startsWith(string)) return index;
+    }
+    return null;
+  }
+
+  static startsWith(array, string, value = null) {
+    var key = Array.startsWithKey(array, string, value);
+
+    if (key) return array[key];
+    return null;
+  }
+
   /**
    * Merge array's into one array
    *

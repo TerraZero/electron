@@ -14,17 +14,19 @@ module.exports = class Annotation {
   }
 
   static listAnnotations() {
-    return TOOLS.Array.merge(TOOLS.Path.list(SYS.base() + '/mods', '.*\.annotation\.js'), TOOLS.Path.list(SYS.base() + '/bin', '.*\.annotation\.js'));
+    return SYS.lookup('annotation', 'bin', 'mods');
   }
 
   constructor(path = null) {
+    if (!TOOLS.is(path, TOOLS.Path)) path = new TOOLS.Path(path);
     this._reader = new AnnotationBase.Reader(AnnotationRegistry);
-    if (path) this.parse(path);
+    if (path) this.parse(path, 1);
   }
 
   parse(path) {
+    if (!TOOLS.is(path, TOOLS.Path)) path = new TOOLS.Path(path);
     this._path = path;
-    this._reader.parse(path);
+    this._reader.parse(path.resolve('.js'));
     return this;
   }
 
@@ -36,6 +38,16 @@ module.exports = class Annotation {
       return TOOLS.Array.filter(this._reader.definitionAnnotations, index);
     }
     return this._reader.definitionAnnotations;
+  }
+
+  getMethods(index = null) {
+    if (TOOLS.isInt(index)) {
+      return this._reader.methodAnnotations[index];
+    }
+    if (TOOLS.isString(index)) {
+      return TOOLS.Array.filter(this._reader.methodAnnotations, index);
+    }
+    return this._reader.methodAnnotations;
   }
 
 }

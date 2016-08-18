@@ -23,7 +23,8 @@ module.exports = class CommandBase {
   }
 
   constructor(args) {
-    this._valueargs = args.args;
+    this._args = args.args;
+    this._path = args.path;
     this._result = {
       outs: [],
       ins: [],
@@ -33,26 +34,31 @@ module.exports = class CommandBase {
   }
 
   def() {
-    var suggestions = this._suggestion();
-    var exe = this._args()[0].split('.');
+    var exe = this.args()[0].split('.');
+    var annotations = new TOOLS.Annotation(this.path());
+    var methods = annotations.getMethods('Command');
+    var found = [];
 
-    this.error('Command "' + exe[1] + '" not found in "' + this._name() + '" or multiply suggestions available');
+    for (var i in methods) {
+      if (!exe[1] || methods[i].target.startsWith(exe[1]) || TOOLS.Array.startsWith(methods[i].alias, exe[1])) {
+        found.push(methods[i]);
+      }
+    }
+
+    if (found.length == 0) {
+      for (var i in methods) {
+        found.push(methods[i]);
+      }
+    }
+
+    this.error('Command "' + exe[1] + '" not found in "' + this.name() + '" or multiply suggestions available');
     this.log('Try one of the following commands:');
 
-    for (var i in suggestions) {
-      suggestions[i].__filterValue = function(value) {
-        return value.name;
-      };
-    }
-
-    if (exe[1]) {
-      suggestions = TOOLS.Array.filter(suggestions, exe[1] + '.*');
-    }
-
-    if (suggestions.length == 0) suggestions = this._suggestion();
-
-    for (var i in suggestions) {
-      this.log('  ' + i + ': ' + exe[0] + '.' + suggestions[i].name);
+    for (var i in found) {
+      this.log('  ' + i + ': ' + exe[0] + '.' + found[i].target);
+      if (found[i].alias.length) {
+        this.log('       alias: [' + found[i].alias.join(', ') + ']');
+      }
     }
   }
 
@@ -70,20 +76,20 @@ module.exports = class CommandBase {
     this._result.code = CommandBase.ERROR;
   }
 
-  _getResult() {
+  getResult() {
     return this._result;
   }
 
-  _name() {
+  name() {
     return this.constructor.name;
   }
 
-  _args() {
-    return this._valueargs;
+  args() {
+    return this._args;
   }
 
-  _suggestion(suggestions = []) {
-    return suggestions;
+  path() {
+    return this._path;
   }
 
 }
