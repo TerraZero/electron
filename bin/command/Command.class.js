@@ -99,7 +99,7 @@ module.exports = class Command {
 
     for (var i in methods) {
       if (!name || methods[i].target.startsWith(name) || TOOLS.Array.startsWith(methods[i].alias, name)) {
-        found.push(methods[i].target);
+        found.push(methods[i]);
       }
     }
 
@@ -113,7 +113,7 @@ module.exports = class Command {
   static getCallFunction(command, annotation, name = null) {
     var found = Command.getFunction(annotation, name);
 
-    if (found.length == 1) return command[found[0]];
+    if (found.length == 1) return command[found[0].target];
     return command.def;
   }
 

@@ -18,7 +18,8 @@ module.exports = class FindCommand extends CommandBase {
     * @Command(
     *   params={
     *     expression: {type: "string", value: null}
-    *   }
+    *   },
+    *   description=["Show annotations"]
     * )
     */
   annotations(expression = null) {
