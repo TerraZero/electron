@@ -20,7 +20,7 @@ module.exports = class HelpCommand extends CommandBase {
     * )
     */
   command(name) {
-    if (!name) return this.error('Error');
+    if (!name) name = CLI.input('Command: ');
 
     name = name.split('.');
     if (name.length == 1) {

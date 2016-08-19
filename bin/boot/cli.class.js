@@ -20,8 +20,10 @@ module.exports = class CLI {
     console.log.apply(console, TOOLS.args(arguments));
   }
 
-  static input(question) {
-    return readlineSync.question(question);
+  static input(message) {
+    if (TOOLS.isString(message)) {
+      return readlineSync.question('> ' + message);
+    }
   }
 
 }
