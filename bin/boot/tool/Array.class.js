@@ -44,6 +44,21 @@ module.exports = class Array {
     return null;
   }
 
+  static split(array, explode) {
+    var splited = [[]];
+    var index = 0;
+
+    for (var i in array) {
+      if (array[i] == explode) {
+        splited.push([]);
+        index++;
+      } else {
+        splited[index].push(array[i]);
+      }
+    }
+    return splited;
+  }
+
   /**
    * Merge array's into one array
    *
