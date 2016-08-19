@@ -75,15 +75,15 @@ module.exports = class Command {
 
     try {
       var func = Command.getCallFunctionData(data, exe[1]);
-
       var code = func.apply(execution.command, applyArgs);
+
       execution.result = execution.command.getResult();
       if (code) {
         execution.result.code = code;
       }
     } catch (e) {
       Command.error(e);
-      execution.result.code = Command.FATAL;
+      execution.result.code = CommandBase.FATAL;
     }
 
     return Command.evaluation(execution);
@@ -122,8 +122,8 @@ module.exports = class Command {
   }
 
   static evaluation(execution) {
-    if (execution.result.code === CommandBase.OK) {
-      // OK
+    if (execution.result.code === CommandBase.OK || execution.result.code === CommandBase.ERROR) {
+      // OK or ERROR is handeled by command
     } else if (execution.result.code === undefined) {
       CLI.error('No command found with name "%s"', execution.exe[0]);
     } else if (TOOLS.isInt(execution.result.code)) {
