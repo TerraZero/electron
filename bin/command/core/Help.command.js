@@ -20,7 +20,7 @@ module.exports = class HelpCommand extends CommandBase {
     * )
     */
   command(name) {
-    if (!name) return this.error('Please enter name param for help command.');
+    if (!name) return this.error('Error');
 
     name = name.split('.');
     if (name.length == 1) {
@@ -28,7 +28,6 @@ module.exports = class HelpCommand extends CommandBase {
     } else if (name.length == 2) {
       this.commandMethodHelp(name[0], name[1]);
     }
-    this.sdfsfds();
   }
 
   commandHelp(name) {

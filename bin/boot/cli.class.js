@@ -1,6 +1,7 @@
 'use strict';
 
-var colors = require('colors');
+const colors = require('colors');
+const readlineSync = require('readline-sync');
 
 module.exports = class CLI {
 
@@ -17,6 +18,10 @@ module.exports = class CLI {
 
   static console() {
     console.log.apply(console, TOOLS.args(arguments));
+  }
+
+  static input(question) {
+    return readlineSync.question(question);
   }
 
 }
