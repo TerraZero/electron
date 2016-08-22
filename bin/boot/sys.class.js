@@ -172,6 +172,27 @@ module.exports = class Sys {
     return result;
   }
 
+  static plugins(annotation) {
+    var dirs = TOOLS.args(arguments, 1);
+
+    var result = [];
+    for (var dir in dirs) {
+      var paths = TOOLS.Path.list(this.base() + '/' + dirs[dir], '.*plugins.*\.js$');
+
+      for (var path in paths) {
+        var annot = new TOOLS.Annotation(paths[path]);
+
+        if (annot.hasDefinition(annotation)) {
+          result.push({
+            path: paths[path],
+            annotation: annot,
+          });
+        }
+      }
+    }
+    return result;
+  }
+
   /**
     * Generate the hook array for the hook function
     *

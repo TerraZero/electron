@@ -100,4 +100,25 @@ module.exports = class FindCommand extends CommandBase {
     }
   }
 
+  /**
+    * @Command(
+    *   params={
+    *     annotation: {type: "string"},
+    *     expression: {type: "string", value: null}
+    *   }
+    * )
+    */
+  plugins(annotation, expression = null) {
+    if (!annotation) annotation = CLI.input('Annotation: ');
+    var plugins = SYS.plugins(annotation, 'bin', 'mods');
+
+    plugins = TOOLS.Array.filter(plugins, expression, function(plugin) {
+      return plugin.path;
+    });
+
+    for (var i in plugins) {
+      this.out(plugins[i].path.resolve());
+    }
+  }
+
 }

@@ -30,6 +30,10 @@ module.exports = class Annotation {
     return this;
   }
 
+  hasDefinition(name) {
+    return this.getDefinitions(name).length > 0;
+  }
+
   getDefinitions(index = null) {
     if (TOOLS.isInt(index)) {
       return this._reader.definitionAnnotations[index];
