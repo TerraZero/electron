@@ -1,5 +1,3 @@
-/* global SYS */
-/* global TOOLS */
 'use strict';
 
 module.exports = class UseRoutine {

@@ -1,6 +1,6 @@
 'use strict';
 
-const Module = SYS.use('bin/sys/Module.class');
+const Module = SYS.use('Module.base');
 const pug = SYS.use('pug.node');
 const fs = SYS.use('graceful-fs.node');
 

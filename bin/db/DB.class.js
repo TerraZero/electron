@@ -2,7 +2,7 @@
 
 const mysql = SYS.use('mysql.node');
 
-const Module = SYS.use('bin/sys/Module.class');
+const Module = SYS.use('Module.base');
 const Controller = SYS.use('bin/entity/controller/Controller.class');
 
 const cache = {};

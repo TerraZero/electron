@@ -1,6 +1,6 @@
 'use strict';
 
-const Module = SYS.use('bin/sys/Module.class');
+const Module = SYS.use('Module.base');
 
 module.exports = class SysError {
 

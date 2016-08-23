@@ -3,11 +3,11 @@
 const FormContainer = SYS.use('./FormContainer.class');
 
 const types = (function formLoadTypes() {
-  var loaded = SYS.plugins('FieldType', 'bin', 'mods');
+  var plugins = SYS.plugins('FieldType', 'bin', 'mods');
   var result = {};
 
-  for (var i in loaded) {
-    result[loaded[i].annotation.getDefinitions('FieldType')[0].value] = SYS.use(loaded[i].path);
+  for (var i in plugins) {
+    result[plugins[i].annotation.getDefinitions('FieldType')[0].value] = SYS.use(plugins[i].path);
   }
   return result;
 })();

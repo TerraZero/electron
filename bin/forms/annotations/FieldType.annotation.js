@@ -1,6 +1,6 @@
 'use strict'
 
-const Annotation = SYS.use('bin/sys/Annotation.class');
+const Annotation = SYS.use('Annotation.base');
 
 module.exports = class FieldType extends Annotation {
 

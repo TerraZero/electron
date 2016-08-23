@@ -1,24 +1,20 @@
 'use strict';
 
-const CommandBase = SYS.use('bin/sys/CommandBase.class');
+const CommandBase = SYS.use('CommandBase.base');
 
 // load commands
 const commands = (function() {
-  var paths = SYS.lookup('command', 'mods', 'bin');
-  var accepted = [];
+  var plugins = SYS.plugins('Command', 'bin', 'mods');
+  var result = [];
 
-  for (var i in paths) {
-    var annotation = new TOOLS.Annotation(paths[i]);
-
-    if (annotation.getDefinitions('Command').length) {
-      accepted.push({
-        path: paths[i],
-        annotation: annotation,
-        alias: annotation.getDefinitions('Command')[0].alias,
-      });
-    }
+  for (var i in plugins) {
+    result.push({
+      path: plugins[i].path,
+      annotation: plugins[i].annotation,
+      alias: plugins[i].annotation.getDefinitions('Command')[0].alias,
+    });
   }
-  return accepted;
+  return result;
 })();
 
 module.exports = class Command {

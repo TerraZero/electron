@@ -1,11 +1,11 @@
 'use strict';
 
-const CommandBase = SYS.use('bin/sys/CommandBase.class');
-const Command = SYS.use('bin/command/Command.class');
+const CommandBase = SYS.use('CommandBase.base');
+const Command = SYS.use('bin/commands/Command.class');
 
 /**
   * @Command(
-  *   alias=["find", "search"]
+  *   alias=["find"]
   * )
   */
 module.exports = class FindCommand extends CommandBase {
@@ -97,6 +97,25 @@ module.exports = class FindCommand extends CommandBase {
 
     for (var i in commands) {
       this.out(commands[i].path.resolve());
+    }
+  }
+
+  /**
+    * @Command(
+    *   params={
+    *     expression: {type: "string", value: null}
+    *   }
+    * )
+    */
+  base(expression = null) {
+    var bases = SYS.use(TOOLS.Array.filter(SYS.lookup('routine', 'bin', 'mods'), '.*BaseRoutine\.routine\.js$')[0]).bases();
+
+    bases = TOOLS.Array.filter(bases, expression, function(base) {
+      return base.baseClassPath.resolve();
+    });
+
+    for (var i in bases) {
+      this.out(bases[i].baseClassPath.resolve());
     }
   }
 

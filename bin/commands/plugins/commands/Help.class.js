@@ -1,8 +1,7 @@
 'use strict';
 
-const CommandBase = SYS.use('bin/sys/CommandBase.class');
-
-const Command = SYS.use('bin/command/Command.class');
+const CommandBase = SYS.use('CommandBase.base');
+const Command = SYS.use('bin/commands/Command.class');
 
 /**
   * @Command(

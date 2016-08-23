@@ -14,9 +14,9 @@ module.exports = class Sys {
     // load default routine for classes
     this._routines[null] = new (require('./routines/UseRoutine.routine.js'))();
 
+    this.initializeRoutines();
     this.initializeAnnotations();
     this.initializeInfos();
-    this.initializeRoutines();
     this.initializeErrors();
     this.initializeMods();
   }
@@ -63,7 +63,7 @@ module.exports = class Sys {
     * Loading mods from mods directory
     */
   static initializeMods() {
-    this._Mod = SYS.use('bin/sys/Mod.class');
+    this._Mod = SYS.use('Mod.base');
     this._mods = [];
 
     // get all mod files in mods directory
