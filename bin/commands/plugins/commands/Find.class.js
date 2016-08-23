@@ -10,10 +10,6 @@ const Command = SYS.use('bin/commands/Command.class');
   */
 module.exports = class FindCommand extends CommandBase {
 
-  static alias() {
-    return 'find';
-  }
-
   /**
     * @Command(
     *   params={

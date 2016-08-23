@@ -1,6 +1,8 @@
 'use strict';
 
-module.exports = class CommandBase {
+const Gettable = SYS.use('./interfaces/Gettable.base');
+
+module.exports = class CommandBase extends Gettable {
 
   static build(args) {
     return new this(args);
@@ -19,6 +21,7 @@ module.exports = class CommandBase {
   }
 
   constructor(args) {
+    super();
     this._args = args.args;
     this._info = args.info;
 

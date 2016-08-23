@@ -1,4 +1,5 @@
 'use strict'
+
 const AnnotationBase = require('tzero-annotations').Annotation;
 
 module.exports = class Annotation extends AnnotationBase {

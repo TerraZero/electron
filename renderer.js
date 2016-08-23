@@ -54,11 +54,11 @@
 
 SYS.hook('init');
 
-// const FrameMod = SYS.use('FrameMod.mod');
+const FrameMod = SYS.use('FrameMod.mod');
 
-// var frame = FrameMod.resolve('core');
+var frame = FrameMod.resolve('core');
 
-// frame.test();
+frame.test();
 
 // const Stream = SYS.use('bin/stream/Stream.class');
 // const User = SYS.use('bin/entity/User.class');
