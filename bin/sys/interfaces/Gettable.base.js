@@ -20,4 +20,6 @@ module.exports = class Gettable {
     return object;
   }
 
+  SYS.use('bin/commad')
+
 };
