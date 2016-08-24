@@ -1,6 +1,6 @@
 'use strict';
 
-const Gettable = SYS.use('./interfaces/Gettable.base');
+const Gettable = SYS.use('Gettable.base');
 
 module.exports = class CommandBase extends Gettable {
 

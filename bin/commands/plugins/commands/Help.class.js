@@ -6,7 +6,7 @@ const Command = SYS.use('bin/commands/Command.class');
 /**
   * @Command(
   *   alias=["help"],
-  *   description=["Help for commands"]
+  *   description=["Help for commands", "sahdjshd"]
   * )
   */
 module.exports = class HelpCommand extends CommandBase {
@@ -33,16 +33,23 @@ module.exports = class HelpCommand extends CommandBase {
     var data = Command.getCommand(name);
 
     if (data) {
-      this.log('Command:     ' + data.command.name());
-      this.log('Alias:       ' + data.info.alias.join(', '));
-      this.log('File:        ' + data.info.path.resolve());
+      var rows = [];
+
+      rows.push(['Command', data.command.name()]);
+      rows.push(['Alias', data.info.alias.join(', ')]);
+      rows.push(['File', data.info.path.resolve()]);
 
       if (data.info.annotation.getDefinitions('Command')[0].description.length) {
-        this.log('Description: ');
         for (var i in data.info.annotation.getDefinitions('Command')[0].description) {
-          this.log('  ' + data.info.annotation.getDefinitions('Command')[0].description[i]);
+          if (i == 0) {
+            rows.push(['Description', data.info.annotation.getDefinitions('Command')[0].description[i]]);
+          } else {
+            rows.push(['', data.info.annotation.getDefinitions('Command')[0].description[i]]);
+          }
         }
       }
+
+      CLI.table(rows);
     } else {
       this.error('No command found with name "' + name + '"');
     }
@@ -52,32 +59,54 @@ module.exports = class HelpCommand extends CommandBase {
     var data = Command.getCommand(name);
 
     if (data) {
-      this.log('Command:  ' + data.command.name());
-      this.log();
+      var rows = [];
+
+      rows.push(['Command', data.command.name()]);
 
       var founds = Command.getFunction(data.info.annotation, method);
 
       for (var i in founds) {
-        this.log('---------------------------------------');
-        this.log('Function: ' + founds[i].target);
+        rows.push([]);
+        rows.push(['Function', founds[i].target]);
         if (founds[i].alias.length) {
-          this.log('Alias:    ' + founds[i].alias.join(', '));
+          rows.push(['Alias', founds[i].alias.join(', ')]);
         }
         if (founds[i].description.length) {
-          this.log('Description:');
           for (var d in founds[i].description) {
-            this.log('  ' + founds[i].description[d]);
+            if (d == 0) {
+              rows.push(['Description', founds[i].description[d]]);
+            } else {
+              rows.push(['', founds[i].description[d]]);
+            }
           }
         }
-        this.log('Params:');
+
+        var first = true;
         for (var param in founds[i].params) {
-          this.log('  (' + (founds[i].params[param].value === undefined ? '' : 'optional:') + founds[i].params[param].type + ') ' + param + ': ' + (founds[i].params[param].value == null ? 'null' : founds[i].params[param].value));
+          if (first) {
+            first = false;
+            rows.push(['Params', '(' + (founds[i].params[param].value === undefined ? '' : 'optional:') + founds[i].params[param].type + ') ' + param + ': ' + (founds[i].params[param].value == null ? 'null' : founds[i].params[param].value)])
+          } else {
+            rows.push(['', '(' + (founds[i].params[param].value === undefined ? '' : 'optional:') + founds[i].params[param].type + ') ' + param + ': ' + (founds[i].params[param].value == null ? 'null' : founds[i].params[param].value)])
+          }
         }
       }
-      this.log('---------------------------------------');
+
+      CLI.table(rows);
     } else {
       this.error('No command found with name "' + name + '"');
     }
+  }
+
+  /**
+    * @Command(
+    *   params={
+    *     key: {type: "string"}
+    *   }
+    * )
+    */
+  test(key) {
+    console.log(SYS.get(key));
   }
 
 }

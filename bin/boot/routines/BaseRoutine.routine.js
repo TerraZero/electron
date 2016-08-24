@@ -6,8 +6,9 @@ const bases = (function() {
   var result = {};
 
   for (var i in paths) {
-    result[paths[i].parseSys().name] = SYS.use(paths[i]);
-    result[paths[i].parseSys().name].baseClassPath = paths[i];
+    result[paths[i].parseSys().name] = {
+      path: paths[i],
+    };
   }
   return result;
 })();
@@ -25,7 +26,8 @@ module.exports = class BaseRoutine extends UseRoutine {
   use(path) {
     var name = path.path().substring(0, path.path().length - 5);
 
-    return bases[name];
+    if (!bases[name].struct) bases[name].struct = SYS.use(bases[name].path);
+    return bases[name].struct;
   }
 
 }

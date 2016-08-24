@@ -107,11 +107,11 @@ module.exports = class FindCommand extends CommandBase {
     var bases = SYS.use(TOOLS.Array.filter(SYS.lookup('routine', 'bin', 'mods'), '.*BaseRoutine\.routine\.js$')[0]).bases();
 
     bases = TOOLS.Array.filter(bases, expression, function(base) {
-      return base.baseClassPath.resolve();
+      return base.path.resolve();
     });
 
     for (var i in bases) {
-      this.out(bases[i].baseClassPath.resolve());
+      this.out(bases[i].path.resolve());
     }
   }
 

@@ -9,4 +9,8 @@ module.exports = class ClassRoutine extends UseRoutine {
     return path.match('.*\.class[^\/]*$');
   }
 
+  use(path) {
+    return require(path.resolve('.js'));
+  }
+
 }
