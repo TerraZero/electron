@@ -101,6 +101,7 @@ module.exports = class Sys {
         path: plugins[i].path,
         struct: struct,
         description: plugins[i].annotation.getDefinitions('ID')[0].description,
+        annotation: plugins[i].annotation.getDefinitions('ID')[0],
       });
     }
   }
@@ -301,6 +302,7 @@ module.exports = class Sys {
       path: data.path,
       params: data.params || [],
       struct: data.struct || undefined,
+      annotation: data.annotation || null,
     };
   }
 
@@ -311,6 +313,9 @@ module.exports = class Sys {
       if (TOOLS.isFunction(this._loaded_plugins[id].struct.initPlugin)) {
         this._loaded_plugins[id].struct.initPlugin.apply(this._loaded_plugins[id].struct, this._loaded_plugins[id].params);
       }
+    }
+    if (TOOLS.isFunction(this._loaded_plugins[id].struct.getPlugin)) {
+      return this._loaded_plugins[id].struct.getPlugin.apply(this._loaded_plugins[id].struct, TOOLS.args(arguments, 1));
     }
     return this._loaded_plugins[id].struct;
   }

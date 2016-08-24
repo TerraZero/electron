@@ -167,13 +167,23 @@ module.exports = class FindCommand extends CommandBase {
       return route.id;
     });
 
+    var rows = [];
+
     for (var i in routes) {
-      if (routes[i].description.length) {
-        this.out(routes[i].id + '  :  ' + routes[i].description)
-      } else {
-        this.out(routes[i].id);
-      }
+      rows.push([
+        routes[i].annotation._name(),
+        routes[i].id,
+        routes[i].description,
+      ]);
     }
+    CLI.table({head: ['TYPE', 'ROUTE', 'DESCRIPTION'], rows: rows});
+  }
+
+  /**
+  * @Command
+  */
+  tes() {
+    console.log(SYS.get('entity').controller('user'));
   }
 
 }

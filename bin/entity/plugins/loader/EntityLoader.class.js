@@ -10,7 +10,8 @@
 
     SYS.addPlugin(id || 'entity.' + name + '.controller', {
       path: plugins[i].path,
-      description: description || '<Loader> Entity controller for ' + name,
+      description: description || 'Loader: Entity controller for ' + name,
+      annotation: plugins[i].annotation.getDefinitions('Controller')[0],
     });
   }
 })();
@@ -29,7 +30,8 @@
     SYS.addPlugin(id || 'entity.' + name, {
       path: plugins[i].path,
       params: [controller],
-      description: description || '<Loader> Entity class for ' + name,
+      description: description || 'Loader: Entity class for ' + name,
+      annotation: plugins[i].annotation.getDefinitions('Entity')[0],
     });
   }
 })();
@@ -37,8 +39,7 @@
 /**
   * @ID(
   *   value="entity",
-  *   register=true,
-  *   description="Load entity component routes"
+  *   register=true
   * )
   */
 module.exports = class EntityLoader {

@@ -9,7 +9,7 @@ module.exports = class Entity {
   }
 
   static controller() {
-    return SYS.get(this._routeController).instance();
+    return SYS.get(this._routeController);
   }
 
   static save(struct = null) {

@@ -2,6 +2,7 @@
 
 const colors = require('colors');
 const readlineSync = require('readline-sync');
+const Table = require('cli-table2');
 
 module.exports = class CLI {
 
@@ -10,6 +11,23 @@ module.exports = class CLI {
 
     args[0] = args[0].red;
     TOOLS.award(CLI, 'console', args);
+  }
+
+  static table(data) {
+    if (TOOLS.isArray(data)) data = {rows: data};
+
+    var options = {
+      head: data.head,
+    };
+
+    if (data.colWidths) options.colWidths = data.colWidths;
+
+    var table = new Table(options);
+
+    for (var i in data.rows) {
+      table.push(data.rows[i]);
+    }
+    console.log(table.toString());
   }
 
   static log() {

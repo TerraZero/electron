@@ -5,10 +5,8 @@
 
 module.exports = class Controller {
 
-  static instance() {
-    if (!ISDEF(this._instance) || this._instance == null) {
-      this._instance = new this();
-    }
+  static getPlugin() {
+    if (!this._instance) this._instance = new this();
     return this._instance;
   }
 
