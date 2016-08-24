@@ -39,7 +39,8 @@
 /**
   * @ID(
   *   value="entity",
-  *   register=true
+  *   register=true,
+  *   description="Loader for entities"
   * )
   */
 module.exports = class EntityLoader {

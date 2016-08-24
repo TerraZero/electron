@@ -179,11 +179,4 @@ module.exports = class FindCommand extends CommandBase {
     CLI.table({head: ['TYPE', 'ROUTE', 'DESCRIPTION'], rows: rows});
   }
 
-  /**
-  * @Command
-  */
-  tes() {
-    console.log(SYS.get('entity').controller('user'));
-  }
-
 }

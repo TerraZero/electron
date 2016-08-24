@@ -1,6 +1,8 @@
 'use strict';
 
-module.exports = class FormComponent {
+const Gettable = SYS.use('Gettable.base');
+
+module.exports = class FormComponent extends Gettable {
 
   constructor() {
 

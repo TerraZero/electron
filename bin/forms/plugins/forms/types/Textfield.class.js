@@ -1,9 +1,9 @@
 'use strict';
 
-const FieldType = SYS.use('bin/forms/FieldType.class');
+const FieldType = SYS.use('FieldType.base');
 
 /**
-  * @FieldType("textfield")
+  * @FieldType("Textfield")
   */
 module.exports = class Textfield extends FieldType {
 

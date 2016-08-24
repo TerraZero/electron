@@ -2,7 +2,7 @@
 
 const Annotation = SYS.use('Annotation.base');
 
-module.exports = class FieldType extends Annotation {
+module.exports = class Form extends Annotation {
 
   static get targets() { return [Annotation.DEFINITION] }
 
