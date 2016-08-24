@@ -1,9 +1,8 @@
 'use strict';
 
-const mysql = SYS.use('mysql.node');
+const mysql = require('mysql');
 
 const Module = SYS.use('Module.base');
-const Controller = SYS.use('bin/entity/controller/Controller.class');
 
 const cache = {};
 
@@ -28,8 +27,6 @@ module.exports = class DB extends Module {
   }
 
   createTable(controller) {
-    SYS.context(this, 'createTable').checkTypes(controller, Controller);
-
     var query = 'CREATE TABLE ';
     var primary = [];
     var fields = controller.fields();

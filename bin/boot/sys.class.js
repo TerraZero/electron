@@ -10,15 +10,14 @@ module.exports = class Sys {
     this._cache = {};
     this._hooks = {};
     this._routines = {};
-
-    // load default routine for classes
-    this._routines[null] = new (require('./routines/UseRoutine.routine.js'))();
+    this._loaded_plugins = {};
 
     this.initializeRoutines();
     this.initializeAnnotations();
     this.initializeInfos();
     this.initializeErrors();
     this.initializeMods();
+    this.initializePlugins();
   }
 
   static initializeAnnotations() {
@@ -41,9 +40,13 @@ module.exports = class Sys {
     * Load UseRoutines from system
     */
   static initializeRoutines() {
-    var paths = this.lookup('routine', 'bin', 'mods');
+    this._routines[null] = new (require('./routines/UseRoutine.routine.js'))();
+    this._routines['mod'] = new (require('./routines/ModRoutine.routine.js'))();
+    this._routines['node'] = new (require('./routines/NodeRoutine.routine.js'))();
+    this._routines['class'] = new (require('./routines/ClassRoutine.routine.js'))();
+    this._routines['base'] = new (require('./routines/BaseRoutine.routine.js'))();
 
-    paths = TOOLS.Array.filter(paths, '!.*UseRoutine\.routine\.js$');
+    var paths = this.lookup('routine', 'mods');
 
     for (var index in paths) {
       var routine = new (require(paths[index].resolve()));
@@ -81,6 +84,24 @@ module.exports = class Sys {
       } else {
         // TODO ERROR
       }
+    }
+  }
+
+  static initializePlugins() {
+    var plugins = this.plugins('ID', 'bin', 'mods');
+
+    for (var i in plugins) {
+      var struct = undefined;
+
+      if (plugins[i].annotation.getDefinitions('ID')[0].register) {
+        struct = SYS.use(plugins[i].path);
+      }
+
+      this.addPlugin(plugins[i].annotation.getDefinitions('ID')[0].value, {
+        path: plugins[i].path,
+        struct: struct,
+        description: plugins[i].annotation.getDefinitions('ID')[0].description,
+      });
     }
   }
 
@@ -271,25 +292,27 @@ module.exports = class Sys {
 
     var routine = this.getRoutine(path);
     return routine.use(path, args);
+  }
 
-    // var cid = options.cid || path.path() + '::' + type;
-    // var cache = this.cache('use', cid);
+  static addPlugin(id, data) {
+    this._loaded_plugins[id.toLowerCase()] = {
+      id: id.toLowerCase(),
+      description: data.description || '',
+      path: data.path,
+      params: data.params || [],
+      struct: data.struct || undefined,
+    };
+  }
 
-    // if (cache) return cache;
-
-    // var routine = this.getUseRoutine(type);
-
-    // options.cid = cid;
-    // routine.useOptions(path, type, options, TOOLS.args(arguments, 3));
-    // path = routine.usePath(path, options);
-    // if (routine.isPackage(path, options)) {
-    //   return this.cache('use', cid, routine.usePackage(path, options));
-    // }
-
-    // var extension = routine.useExtensions(options);
-    // var struct = require(path.resolve(extension));
-    // var object = routine.useInit(struct, options);
-    // return this.cache('use', cid, object);
+  static get(id) {
+    id = id.toLowerCase();
+    if (this._loaded_plugins[id].struct === undefined) {
+      this._loaded_plugins[id].struct = SYS.use(this._loaded_plugins[id].path);
+      if (TOOLS.isFunction(this._loaded_plugins[id].struct.initPlugin)) {
+        this._loaded_plugins[id].struct.initPlugin.apply(this._loaded_plugins[id].struct, this._loaded_plugins[id].params);
+      }
+    }
+    return this._loaded_plugins[id].struct;
   }
 
   /**

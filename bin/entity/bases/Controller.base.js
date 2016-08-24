@@ -1,7 +1,7 @@
 'use strict';
 
-const Squel = SYS.use('bin/db/Squel.class');
-const DB = SYS.use('bin/db/DB.class');
+// const Squel = SYS.use('bin/db/Squel.class');
+// const DB = SYS.use('bin/db/DB.class');
 
 module.exports = class Controller {
 

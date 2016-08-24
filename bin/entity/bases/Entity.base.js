@@ -1,11 +1,15 @@
 'use strict';
 
-const Render = SYS.use('./render/Render.class');
+// const Render = SYS.use('./render/Render.class');
 
 module.exports = class Entity {
 
+  static initPlugin(controller) {
+    this._routeController = controller;
+  }
+
   static controller() {
-    SYS.context('Entity', 'static:controller').abstract();
+    return SYS.get(this._routeController).instance();
   }
 
   static save(struct = null) {

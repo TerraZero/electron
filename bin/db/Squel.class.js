@@ -1,6 +1,6 @@
 'use strict';
 
-const squel = SYS.use('squel.node').useFlavour('mysql');
+const squel = require('squel').useFlavour('mysql');
 
 class CreateTableBlock extends squel.cls.Block {
   /** The method exposed by the query builder */

@@ -1,8 +1,13 @@
 'use strict';
 
-const Controller = SYS.use('./Controller.class');
+const Controller = SYS.use('Controller.base');
 const Field = SYS.use('bin/entity/fields/FieldInstance.class');
 
+/**
+  * @Controller(
+  *   name="User"
+  * )
+  */
 module.exports = class UserController extends Controller {
 
   constructor() {

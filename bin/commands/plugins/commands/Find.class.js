@@ -128,11 +128,51 @@ module.exports = class FindCommand extends CommandBase {
     var plugins = SYS.plugins(annotation, 'bin', 'mods');
 
     plugins = TOOLS.Array.filter(plugins, expression, function(plugin) {
-      return plugin.path;
+      return plugin.path.resolve();
     });
 
     for (var i in plugins) {
       this.out(plugins[i].path.resolve());
+    }
+  }
+
+  /**
+    * @Command(
+    *   params={
+    *     expression: {type: "string", value: null}
+    *   }
+    * )
+    */
+  ids(expression = null) {
+    var ids = SYS._loaded_plugins;
+
+    ids = TOOLS.Array.filter(ids, expression, function(id) {
+      return id.path.resolve();
+    });
+
+    for (var i in ids) {
+      this.out(ids[i].path.resolve() + '  :  ' + ids[i].id);
+    }
+  }
+
+  /**
+    * @Command(
+    *   params={
+    *     expression: {type: "string", value: null}
+    *   }
+    * )
+    */
+  routes(expression = null) {
+    var routes = TOOLS.Array.filter(SYS._loaded_plugins, expression, function(route) {
+      return route.id;
+    });
+
+    for (var i in routes) {
+      if (routes[i].description.length) {
+        this.out(routes[i].id + '  :  ' + routes[i].description)
+      } else {
+        this.out(routes[i].id);
+      }
     }
   }
 

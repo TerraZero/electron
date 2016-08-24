@@ -53,7 +53,7 @@ module.exports = class Annotation extends AnnotationBase {
     };
   }
 
-  name() {
+  _name() {
     return this.constructor.name;
   }
 
@@ -61,7 +61,7 @@ module.exports = class Annotation extends AnnotationBase {
     * MAGIC: gives the filter value
     */
   __filterValue(annotation) {
-    return annotation.name();
+    return annotation._name();
   }
 
 };
