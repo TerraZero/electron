@@ -1,12 +1,12 @@
 'use strict';
 
-const CommandBase = SYS.use('CommandBase.base');
+const CommandBase = SYS.use('Command.base');
 const Command = SYS.use('bin/commands/Command.class');
 
 /**
   * @Command(
   *   alias=["help"],
-  *   description=["Help for commands", "sahdjshd"]
+  *   description=["Help for commands"]
   * )
   */
 module.exports = class HelpCommand extends CommandBase {

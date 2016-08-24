@@ -2,7 +2,7 @@
 
 const Gettable = SYS.use('Gettable.base');
 
-module.exports = class CommandBase extends Gettable {
+module.exports = class Command extends Gettable {
 
   static build(args) {
     return new this(args);
@@ -28,7 +28,7 @@ module.exports = class CommandBase extends Gettable {
     this._result = {
       outs: [],
       ins: [],
-      code: CommandBase.OK,
+      code: Command.OK,
     };
     this._outs = [];
   }
