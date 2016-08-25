@@ -1,26 +1,34 @@
 'use strict';
 
-const mysql = require('mysql');
+const mysql = SYS.use('mysql.node');
 
-const Module = SYS.use('Module.base');
+/**
+  * @ID(
+  *   value="database.connection",
+  *   description="Build mysql connection",
+  *   params={
+  *     connection:{type: "string", value: "default"}
+  *   }
+  * )
+  */
+module.exports = class Connection {
 
-const cache = {};
+  static initPlugin() {
+    this.connections = {};
+  }
 
-module.exports = class DB extends Module {
-
-  static build(connection = 'default') {
-    if (!ISDEF(cache[connection])) {
-      cache[connection] = new DB(connection);
+  static getPlugin(connection = 'default') {
+    if (!this.connections[connection]) {
+      this.connections[connection] = new Connection(connection);
     }
-    return cache[connection];
+    return this.connections[connection];
   }
 
   constructor(connection) {
-    super();
     this._connection = mysql.createConnection({
       host     : 'localhost',
       user     : 'root',
-      password : '',
+      password : 'root',
       database : 'electron',
     });
     this._connection.connect();
@@ -50,14 +58,17 @@ module.exports = class DB extends Module {
     query += ');';
 
     this.execute(query);
+    return this;
   }
 
   execute(query, callback) {
     this._connection.query(query, callback);
+    return this;
   }
 
   end() {
     this._connection.end();
+    return this;
   }
 
 };

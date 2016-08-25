@@ -60,6 +60,18 @@ module.exports = class Entity {
     };
   }
 
+  static createRowCLI() {
+    var fields = this.controller().fields();
+    var row = {};
+
+    for (var i in fields) {
+      if (fields[i].type().startsWith('VARCHAR') && !fields[i]._primary) {
+        row[fields[i].name()] = CLI.input(fields[i].name() + ': ');
+      }
+    }
+    return row;
+  }
+
   static type() {
     SYS.context('Entity', 'static:type').abstract();
   }
@@ -69,6 +81,10 @@ module.exports = class Entity {
     this._view = {};
 
     this.controller().build(this, row);
+  }
+
+  type() {
+    return this.constructor.type();
   }
 
   controller() {
@@ -108,6 +124,16 @@ module.exports = class Entity {
 
   data(row) {
     this.controller().data(this, row);
+  }
+
+  log() {
+    var rows = [];
+    var fields = this.fields();
+
+    for (var i in fields) {
+      rows.push([i, fields[i]]);
+    }
+    return rows;
   }
 
 }

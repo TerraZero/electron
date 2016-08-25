@@ -17,3 +17,6 @@ Command.execute(command, _args);
 
 // end script
 console.log();
+
+// TODO
+SYS.get('database.connection').end();

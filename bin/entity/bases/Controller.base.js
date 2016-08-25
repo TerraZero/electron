@@ -1,7 +1,6 @@
 'use strict';
 
-// const Squel = SYS.use('bin/db/Squel.class');
-// const DB = SYS.use('bin/db/DB.class');
+const Squel = SYS.use('bin/database/Squel.class');
 
 module.exports = class Controller {
 
@@ -77,17 +76,12 @@ module.exports = class Controller {
   build(entity, row = null) {
     var fields = this.fields();
 
-    if (row) {
-      this.data(entity, row);
-    }
     for (var field in fields) {
-      if (!row) {
-        // create default value for the field
-        if (typeof fields[field]._value == 'function') {
-          entity._fields[field] = fields[field]._value(entity);
-        } else {
-          entity._fields[field] = fields[field]._value;
-        }
+      // create default value for the field
+      if (typeof fields[field]._value == 'function') {
+        entity._fields[field] = fields[field]._value(entity);
+      } else {
+        entity._fields[field] = fields[field]._value;
       }
 
       // create public properties for the field
@@ -95,6 +89,9 @@ module.exports = class Controller {
       if (handler) {
         Object.defineProperty(entity, field, handler(entity, field));
       }
+    }
+    if (row) {
+      this.data(entity, row);
     }
 
     // make the object not writable
@@ -107,7 +104,9 @@ module.exports = class Controller {
     var fields = this.fields();
 
     for (var field in fields) {
-      entity._fields[field] = row[fields[field].name()];
+      if (row[fields[field].name()]) {
+        entity._fields[field] = row[fields[field].name()];
+      }
     }
   }
 
@@ -140,7 +139,7 @@ module.exports = class Controller {
 
     this.insertFields(entities, query);
 
-    DB.execute(query.toString(), function(err, rows) {
+    SYS.get('database.connection').execute(query.toString(), function(err, rows) {
       if (err) throw err;
       var id = rows.insertId;
 
@@ -193,7 +192,7 @@ module.exports = class Controller {
   }
 
   execute(type, entity, query, callback) {
-    DB.build().execute(query.toString(), callback);
+    SYS.get('database.connection').execute(query.toString(), callback);
   }
 
 }

@@ -74,7 +74,7 @@ module.exports = class Command extends Gettable {
 
   error(message) {
     CLI.error(message);
-    this._result.code = CommandBase.ERROR;
+    this._result.code = Command.ERROR;
   }
 
   getResult() {

@@ -10,6 +10,7 @@ module.exports = class ID extends Annotation {
     return {
       value: null,
       register: false,
+      params: {},
       description: '',
     };
   }
