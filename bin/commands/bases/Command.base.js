@@ -34,7 +34,7 @@ module.exports = class Command extends Gettable {
   }
 
   def() {
-    var exe = this.args()[0].split('.');
+    var exe = this.args()._[0].split('.');
     var annotations = new TOOLS.Annotation(this.path());
     var methods = annotations.getMethods('Command');
     var found = [];
@@ -64,17 +64,29 @@ module.exports = class Command extends Gettable {
   }
 
   log() {
-    CLI.log.apply(CLI, TOOLS.args(arguments));
+    SYS.get('logger').log.apply(SYS.get('logger'), TOOLS.args(arguments));
   }
 
   out(item) {
-    CLI.log(item);
+    SYS.get('logger').log(item);
     this._result.outs.push(item);
   }
 
+  warn(message) {
+    SYS.get('logger').warn(message);
+  }
+
   error(message) {
-    CLI.error(message);
+    SYS.get('logger').error(message);
     this._result.code = Command.ERROR;
+  }
+
+  input(message) {
+    return SYS.get('logger').input(message);
+  }
+
+  table(data) {
+    return SYS.get('logger').table(data);
   }
 
   getResult() {

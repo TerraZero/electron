@@ -56,7 +56,7 @@ module.exports = class Command {
 
     if (!ISDEF(command)) {
       execution.result.code = Command.FATAL;
-      CLI.error('No commands to execute found!');
+      SYS.get('logger').error('No commands to execute found!');
       return execution;
     }
     var exe = command.split('.');
@@ -67,7 +67,7 @@ module.exports = class Command {
     execution.info = data.info;
     execution.command = data.command;
 
-    var applyArgs = TOOLS.args(args, 1);
+    var applyArgs = TOOLS.args(args._, 1);
 
     try {
       var func = Command.getCallFunctionData(data, exe[1]);
@@ -114,16 +114,16 @@ module.exports = class Command {
   }
 
   static error(exception) {
-    CLI.error(exception.toString());
+    SYS.get('logger').error(exception.toString());
   }
 
   static evaluation(execution) {
     if (execution.result.code === CommandBase.OK || execution.result.code === CommandBase.ERROR) {
       // OK or ERROR is handeled by command
     } else if (execution.result.code === undefined) {
-      CLI.error('No command found with name "%s"', execution.exe[0]);
+      SYS.get('logger').error('No command found with name "%s"', execution.exe[0]);
     } else if (TOOLS.isInt(execution.result.code)) {
-      CLI.error('Command terminated unexpectedly with exit code "' + execution.result.code + '"');
+      SYS.get('logger').error('Command terminated unexpectedly with exit code "' + execution.result.code + '"');
     }
 
     return execution;

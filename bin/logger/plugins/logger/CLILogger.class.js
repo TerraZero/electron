@@ -1,19 +1,44 @@
 'use strict';
 
+const Logger = SYS.use('Logger.base');
+
 const colors = require('colors');
 const readlineSync = require('readline-sync');
 const Table = require('cli-table2');
 
-module.exports = class CLI {
+/**
+  * @ID(
+  *   value="logger.cli",
+  *   description="Logger class for command line"
+  * )
+  */
+module.exports = class CLILogger extends Logger {
 
-  static error() {
+  error() {
     var args = TOOLS.args(arguments);
 
-    args[0] = args[0].red;
-    TOOLS.award(CLI, 'console', args);
+    args[0] = args[0].error;
+    TOOLS.award(this, 'console', args);
   }
 
-  static table(data) {
+  warn() {
+    var args = TOOLS.args(arguments);
+
+    args[0] = ('WARNING: ' + args[0]).warn;
+    TOOLS.award(this, 'console', args);
+  }
+
+  log() {
+    TOOLS.award(this, 'console', arguments);
+  }
+
+  console() {
+    console.log.apply(console, TOOLS.args(arguments));
+  }
+
+
+
+  table(data) {
     if (TOOLS.isArray(data)) data = {rows: data};
 
     var options = {
@@ -27,18 +52,10 @@ module.exports = class CLI {
     for (var i in data.rows) {
       table.push(data.rows[i]);
     }
-    console.log(table.toString());
+    this.console(table.toString());
   }
 
-  static log() {
-    TOOLS.award(CLI, 'console', arguments);
-  }
-
-  static console() {
-    console.log.apply(console, TOOLS.args(arguments));
-  }
-
-  static input(message) {
+  input(message) {
     if (TOOLS.isString(message)) {
       return readlineSync.question('> ' + message);
     }

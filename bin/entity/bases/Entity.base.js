@@ -66,7 +66,7 @@ module.exports = class Entity {
 
     for (var i in fields) {
       if (fields[i].type().startsWith('VARCHAR') && !fields[i]._primary) {
-        row[fields[i].name()] = CLI.input(fields[i].name() + ': ');
+        row[fields[i].name()] = SYS.get('logger').input(fields[i].name() + ': ');
       }
     }
     return row;

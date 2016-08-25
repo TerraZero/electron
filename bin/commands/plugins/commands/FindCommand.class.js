@@ -124,7 +124,7 @@ module.exports = class FindCommand extends CommandBase {
     * )
     */
   plugins(annotation, expression = null) {
-    if (!annotation) annotation = CLI.input('Annotation: ');
+    if (!annotation) annotation = this.input('Annotation: ');
     var plugins = SYS.plugins(annotation, 'bin', 'mods');
 
     plugins = TOOLS.Array.filter(plugins, expression, function(plugin) {

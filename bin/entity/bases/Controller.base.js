@@ -42,7 +42,7 @@ module.exports = class Controller {
     return this.fields()[name].name();
   }
 
-  load(ids, struct, callback) {
+  load(ids, struct, callback, options = null) {
     var query = Squel.select()
       .from(this.table());
 
@@ -50,7 +50,7 @@ module.exports = class Controller {
       query.where(this.sqlField(this.idField()) + ' in (' + ids.join(',') + ')');
     }
 
-    this.execute('multi', null, query, function(err, rows) {
+    this.execute('multi', null, query, function controllerLoadCallback(err, rows) {
       if (err) throw err;
       var entities = [];
 
@@ -58,7 +58,7 @@ module.exports = class Controller {
         entities.push(new struct(rows[i]));
       }
       TOOLS.passOn(this, callback, [entities, rows]);
-    });
+    }, options);
   }
 
   instanceInfo() {
@@ -191,7 +191,15 @@ module.exports = class Controller {
     }
   }
 
-  execute(type, entity, query, callback) {
+  execute(type, entity, query, callback, options = null) {
+    if (options) {
+      if (options.offset) {
+        query.offset(options.offset);
+      }
+      if (options.limit) {
+        query.limit(options.limit);
+      }
+    }
     SYS.get('database.connection').execute(query.toString(), callback);
   }
 

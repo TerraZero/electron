@@ -19,7 +19,7 @@ module.exports = class HelpCommand extends CommandBase {
     * )
     */
   command(name) {
-    if (!name) name = CLI.input('Command: ');
+    if (!name) name = this.input('Command: ');
 
     name = name.split('.');
     if (name.length == 1) {
@@ -49,7 +49,7 @@ module.exports = class HelpCommand extends CommandBase {
         }
       }
 
-      CLI.table(rows);
+      this.table(rows);
     } else {
       this.error('No command found with name "' + name + '"');
     }
@@ -92,7 +92,7 @@ module.exports = class HelpCommand extends CommandBase {
         }
       }
 
-      CLI.table(rows);
+      this.table(rows);
     } else {
       this.error('No command found with name "' + name + '"');
     }

@@ -17,7 +17,7 @@ module.exports = class TestCommand extends Command {
     * )
     */
   entities(type) {
-    if (!type) type = CLI.input('Type: ');
+    if (!type) type = this.input('Type: ');
 
     var loader = SYS.get('entity');
 

@@ -30,7 +30,7 @@ module.exports = class ListCommand extends Command {
         routes[i].description,
       ]);
     }
-    CLI.table({head: ['TYPE', 'ROUTE', 'DESCRIPTION'], rows: rows});
+    this.table({head: ['TYPE', 'ROUTE', 'DESCRIPTION'], rows: rows});
   }
 
 }

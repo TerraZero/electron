@@ -3,7 +3,8 @@
 const args = require('yargs').argv;
 
 require('./head.js');
-global.CLI = SYS.use('bin/boot/cli.class');
+// set default logger to cli logger
+SYS.get('logger', 'logger.cli');
 
 const Command = SYS.use('bin/commands/Command.class');
 
@@ -11,9 +12,8 @@ const Command = SYS.use('bin/commands/Command.class');
 console.log();
 
 var command = args._[0];
-var _args = args._;
 
-Command.execute(command, _args);
+Command.execute(command, args);
 
 // end script
 console.log();
