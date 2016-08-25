@@ -1,7 +1,7 @@
 'use strict';
 
 const CommandBase = SYS.use('Command.base');
-const Command = SYS.use('bin/commands/Command.class');
+const Command = SYS.get('command');
 
 /**
   * @Command(
