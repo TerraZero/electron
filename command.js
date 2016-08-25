@@ -6,7 +6,7 @@ require('./head.js');
 // set default logger to cli logger
 SYS.get('logger', 'logger.cli');
 
-const Command = SYS.use('bin/commands/Command.class');
+const Command = SYS.get('command');
 
 // start script
 console.log();

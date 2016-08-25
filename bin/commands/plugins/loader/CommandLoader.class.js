@@ -3,8 +3,16 @@
 const CommandBase = SYS.use('Command.base');
 
 // load commands
-const commands = (function() {
+const commands = (function registerCommands() {
   var plugins = SYS.plugins('Command', 'bin', 'mods');
+
+  // for (var i in plugins) {
+  //   var id = plugins[i].annotation.getDefinitions('Entity')[0].id;
+  //   var name = plugins[i].annotation.getDefinitions('Entity')[0].name;
+  //   var controller = plugins[i].annotation.getDefinitions('Entity')[0].controller;
+  //   var description = plugins[i].annotation.getDefinitions('Entity')[0].description;
+  // }
+
   var result = [];
 
   for (var i in plugins) {
@@ -17,7 +25,34 @@ const commands = (function() {
   return result;
 })();
 
-module.exports = class Command {
+// (function registerEntity() {
+//   var plugins = SYS.plugins('Entity', 'bin', 'mods');
+
+//   for (var i in plugins) {
+//     var id = plugins[i].annotation.getDefinitions('Entity')[0].id;
+//     var name = plugins[i].annotation.getDefinitions('Entity')[0].name;
+//     var controller = plugins[i].annotation.getDefinitions('Entity')[0].controller;
+//     var description = plugins[i].annotation.getDefinitions('Entity')[0].description;
+
+//     controller = controller || 'entity.' + name + '.controller';
+
+//     SYS.addPlugin(id || 'entity.' + name, {
+//       path: plugins[i].path,
+//       params: [controller],
+//       description: description || '[Loader]: Entity class for ' + name,
+//       annotation: plugins[i].annotation.getDefinitions('Entity')[0],
+//     });
+//   }
+// })();
+
+/**
+  * @ID(
+  *   value="command",
+  *   register=true,
+  *   description="Loader for commands and basic commands function"
+  * )
+  */
+module.exports = class CommandLoader {
 
   static getCommands() {
     return commands;
@@ -33,7 +68,7 @@ module.exports = class Command {
   }
 
   static getCommand(name, args = null) {
-    var info = Command.getCommandInfo(name);
+    var info = CommandLoader.getCommandInfo(name);
     if (!info) return null;
 
     var struct = SYS.use(info.path);
@@ -62,7 +97,7 @@ module.exports = class Command {
     var exe = command.split('.');
     execution.exe = exe;
 
-    var data = Command.getCommand(exe[0], args);
+    var data = CommandLoader.getCommand(exe[0], args);
 
     execution.info = data.info;
     execution.command = data.command;
@@ -70,7 +105,7 @@ module.exports = class Command {
     var applyArgs = TOOLS.args(args._, 1);
 
     try {
-      var func = Command.getCallFunctionData(data, exe[1]);
+      var func = CommandLoader.getCallFunctionData(data, exe[1]);
       var code = func.apply(execution.command, applyArgs);
 
       execution.result = execution.command.getResult();
@@ -78,15 +113,15 @@ module.exports = class Command {
         execution.result.code = code;
       }
     } catch (e) {
-      Command.error(e);
+      CommandLoader.error(e);
       execution.result.code = CommandBase.FATAL;
     }
 
-    return Command.evaluation(execution);
+    return CommandLoader.evaluation(execution);
   }
 
   static getFunctionData(data, name = null) {
-    return Command.getFunction(data.info.annotation, name);
+    return CommandLoader.getFunction(data.info.annotation, name);
   }
 
   static getFunction(annotation, name = null) {
@@ -103,11 +138,11 @@ module.exports = class Command {
   }
 
   static getCallFunctionData(data, name = null) {
-    return Command.getCallFunction(data.command, data.info.annotation, name);
+    return CommandLoader.getCallFunction(data.command, data.info.annotation, name);
   }
 
   static getCallFunction(command, annotation, name = null) {
-    var found = Command.getFunction(annotation, name);
+    var found = CommandLoader.getFunction(annotation, name);
 
     if (found.length == 1) return command[found[0].target];
     return command.def;

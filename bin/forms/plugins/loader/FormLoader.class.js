@@ -16,7 +16,7 @@
   }
 })();
 
-(function registerFieldTypes() {
+(function registerForms() {
   var plugins = SYS.plugins('Form', 'bin', 'mods');
 
   for (var i in plugins) {
