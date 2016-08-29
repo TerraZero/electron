@@ -11,11 +11,11 @@
   */
 module.exports = class LoggerLoader {
 
-  static getPlugin(route = null) {
+  static getRoute(route = null) {
     if (route) {
       this.route = route;
     }
-    return SYS.get(this.route || 'logger.cli');
+    return SYS.get(this.route || 'logger.main');
   }
 
 }

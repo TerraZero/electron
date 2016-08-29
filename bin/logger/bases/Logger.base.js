@@ -2,7 +2,7 @@
 
 module.exports = class Logger {
 
-  static getPlugin() {
+  static getRoute() {
     if (!this.instance) {
       this.instance = new this();
     }
