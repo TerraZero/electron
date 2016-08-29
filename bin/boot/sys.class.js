@@ -88,20 +88,21 @@ module.exports = class Sys {
   }
 
   static initializePlugins() {
-    var plugins = this.plugins('ID', 'bin', 'mods');
+    var plugins = this.plugins('SysRoute', 'bin', 'mods');
 
     for (var i in plugins) {
       var struct = undefined;
+      var route = plugins[i].annotation.getDefinitions('SysRoute')[0];
 
-      if (plugins[i].annotation.getDefinitions('ID')[0].register) {
+      if (route.register) {
         struct = SYS.use(plugins[i].path);
       }
 
-      this.addPlugin(plugins[i].annotation.getDefinitions('ID')[0].value, {
+      this.addPlugin(route.value, {
         path: plugins[i].path,
         struct: struct,
-        description: plugins[i].annotation.getDefinitions('ID')[0].description,
-        annotation: plugins[i].annotation.getDefinitions('ID')[0],
+        description: route.description,
+        annotation: route,
       });
     }
   }

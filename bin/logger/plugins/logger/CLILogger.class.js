@@ -7,7 +7,7 @@ const readlineSync = require('readline-sync');
 const Table = require('cli-table2');
 
 /**
-  * @ID(
+  * @SysRoute(
   *   value="logger.cli",
   *   description="Logger class for command line"
   * )

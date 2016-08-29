@@ -18,7 +18,7 @@ const commands = (function registerCommands() {
 })();
 
 /**
-  * @ID(
+  * @SysRoute(
   *   value="command",
   *   register=true,
   *   description="Loader for commands and basic commands function"

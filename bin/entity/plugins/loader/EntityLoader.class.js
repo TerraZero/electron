@@ -32,7 +32,7 @@
 })();
 
 /**
-  * @ID(
+  * @SysRoute(
   *   value="entity",
   *   register=true,
   *   description="Loader for entities"

@@ -3,7 +3,7 @@
 const mysql = SYS.use('mysql.node');
 
 /**
-  * @ID(
+  * @SysRoute(
   *   value="database.connection",
   *   description="Build mysql connection",
   *   params={

@@ -30,7 +30,7 @@
 
 
 /**
-  * @ID(
+  * @SysRoute(
   *   value="form",
   *   register=true,
   *   description="Loader for forms"

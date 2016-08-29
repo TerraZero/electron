@@ -1,7 +1,7 @@
 'use strict';
 
 /**
-  * @ID(
+  * @SysRoute(
   *   value="logger",
   *   description="Get the relevant logger",
   *   params={
