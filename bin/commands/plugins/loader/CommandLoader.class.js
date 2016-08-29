@@ -5,14 +5,6 @@ const CommandBase = SYS.use('Command.base');
 // load commands
 const commands = (function registerCommands() {
   var plugins = SYS.plugins('Command', 'bin', 'mods');
-
-  // for (var i in plugins) {
-  //   var id = plugins[i].annotation.getDefinitions('Entity')[0].id;
-  //   var name = plugins[i].annotation.getDefinitions('Entity')[0].name;
-  //   var controller = plugins[i].annotation.getDefinitions('Entity')[0].controller;
-  //   var description = plugins[i].annotation.getDefinitions('Entity')[0].description;
-  // }
-
   var result = [];
 
   for (var i in plugins) {
@@ -24,26 +16,6 @@ const commands = (function registerCommands() {
   }
   return result;
 })();
-
-// (function registerEntity() {
-//   var plugins = SYS.plugins('Entity', 'bin', 'mods');
-
-//   for (var i in plugins) {
-//     var id = plugins[i].annotation.getDefinitions('Entity')[0].id;
-//     var name = plugins[i].annotation.getDefinitions('Entity')[0].name;
-//     var controller = plugins[i].annotation.getDefinitions('Entity')[0].controller;
-//     var description = plugins[i].annotation.getDefinitions('Entity')[0].description;
-
-//     controller = controller || 'entity.' + name + '.controller';
-
-//     SYS.addPlugin(id || 'entity.' + name, {
-//       path: plugins[i].path,
-//       params: [controller],
-//       description: description || '[Loader]: Entity class for ' + name,
-//       annotation: plugins[i].annotation.getDefinitions('Entity')[0],
-//     });
-//   }
-// })();
 
 /**
   * @ID(

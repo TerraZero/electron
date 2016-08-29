@@ -4,14 +4,12 @@
   var plugins = SYS.plugins('FieldType', 'bin', 'mods');
 
   for (var i in plugins) {
-    var id = plugins[i].annotation.getDefinitions('FieldType')[0].id;
-    var value = plugins[i].annotation.getDefinitions('FieldType')[0].value;
-    var description = plugins[i].annotation.getDefinitions('FieldType')[0].description;
+    var annot = plugins[i].annotation.getDefinitions('FieldType')[0];
 
-    SYS.addPlugin(id || 'form.field.' + value, {
+    SYS.addPlugin(annot.id || 'form.field.' + annot.value, {
       path: plugins[i].path,
-      description: description || '[Loader]: Type definition for ' + value,
-      annotation: plugins[i].annotation.getDefinitions('FieldType')[0],
+      description: annot.description || '[Loader]: Type definition for ' + annot.value,
+      annotation: annot,
     });
   }
 })();
@@ -20,14 +18,12 @@
   var plugins = SYS.plugins('Form', 'bin', 'mods');
 
   for (var i in plugins) {
-    var id = plugins[i].annotation.getDefinitions('Form')[0].id;
-    var value = plugins[i].annotation.getDefinitions('Form')[0].value;
-    var description = plugins[i].annotation.getDefinitions('Form')[0].description;
+    var annot = plugins[i].annotation.getDefinitions('Form')[0];
 
-    SYS.addPlugin(id || 'form.instance.' + value, {
+    SYS.addPlugin(annot.id || 'form.instance.' + annot.value, {
       path: plugins[i].path,
-      description: description || '[Loader]: Form class for ' + value,
-      annotation: plugins[i].annotation.getDefinitions('Form')[0],
+      description: annot.description || '[Loader]: Form class for ' + annot.value,
+      annotation: annot,
     });
   }
 })();

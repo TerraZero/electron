@@ -4,14 +4,12 @@
   var plugins = SYS.plugins('Controller', 'bin', 'mods');
 
   for (var i in plugins) {
-    var id = plugins[i].annotation.getDefinitions('Controller')[0].id;
-    var name = plugins[i].annotation.getDefinitions('Controller')[0].name;
-    var description = plugins[i].annotation.getDefinitions('Controller')[0].description;
+    var annot = plugins[i].annotation.getDefinitions('Controller')[0];
 
-    SYS.addPlugin(id || 'entity.' + name + '.controller', {
+    SYS.addPlugin(annot.id || 'entity.' + annot.name + '.controller', {
       path: plugins[i].path,
-      description: description || '[Loader]: Entity controller for ' + name,
-      annotation: plugins[i].annotation.getDefinitions('Controller')[0],
+      description: annot.description || '[Loader]: Entity controller for ' + annot.name,
+      annotation: annot,
     });
   }
 })();
@@ -20,18 +18,15 @@
   var plugins = SYS.plugins('Entity', 'bin', 'mods');
 
   for (var i in plugins) {
-    var id = plugins[i].annotation.getDefinitions('Entity')[0].id;
-    var name = plugins[i].annotation.getDefinitions('Entity')[0].name;
-    var controller = plugins[i].annotation.getDefinitions('Entity')[0].controller;
-    var description = plugins[i].annotation.getDefinitions('Entity')[0].description;
+    var annot = plugins[i].annotation.getDefinitions('Entity')[0];
 
-    controller = controller || 'entity.' + name + '.controller';
+    annot.controller = annot.controller || 'entity.' + annot.name + '.controller';
 
-    SYS.addPlugin(id || 'entity.' + name, {
+    SYS.addPlugin(annot.id || 'entity.' + annot.name, {
       path: plugins[i].path,
-      params: [controller],
-      description: description || '[Loader]: Entity class for ' + name,
-      annotation: plugins[i].annotation.getDefinitions('Entity')[0],
+      params: [annot.controller],
+      description: annot.description || '[Loader]: Entity class for ' + annot.name,
+      annotation: annot,
     });
   }
 })();

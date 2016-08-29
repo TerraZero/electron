@@ -31,10 +31,24 @@ module.exports = class Connection {
       password : 'root',
       database : 'electron',
     });
-    this._connection.connect();
+
+    this.connected = false;
+  }
+
+  connect() {
+    if (!this.isConnected()) {
+      this._connection.connect();
+      this.connected = true;
+    }
+  }
+
+  isConnected() {
+    return this.connected;
   }
 
   createTable(controller) {
+    this.connect();
+
     var query = 'CREATE TABLE ';
     var primary = [];
     var fields = controller.fields();
@@ -62,12 +76,17 @@ module.exports = class Connection {
   }
 
   execute(query, callback) {
+    this.connect();
+
     this._connection.query(query, callback);
     return this;
   }
 
   end() {
-    this._connection.end();
+    if (this.isConnected()) {
+      this._connection.end();
+      this.connected = false;
+    }
     return this;
   }
 
