@@ -26,7 +26,7 @@ module.exports = class ListCommand extends Command {
     for (var i in routes) {
       rows.push([
         routes[i].annotation._name(),
-        routes[i].id,
+        routes[i].route,
         routes[i].description,
       ]);
     }

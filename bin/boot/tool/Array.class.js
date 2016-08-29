@@ -2,6 +2,13 @@
 
 module.exports = class Array {
 
+  static run(array, f) {
+    for (var i in array) {
+      array[i] = f.call(undefined, array[i], i, array);
+    }
+    return array;
+  }
+
   static maxLength() {
     var args = TOOLS.args(arguments);
 

@@ -1,8 +1,5 @@
 'use strict';
 
-// TODO solution for: remote only when in app context
-// const remote = require('electron').remote;
-
 module.exports = class Sys {
 
   static initialize() {
@@ -89,21 +86,50 @@ module.exports = class Sys {
 
   static initializePlugins() {
     var plugins = this.plugins('SysRoute', 'bin', 'mods');
+    var register = [];
 
-    for (var i in plugins) {
-      var struct = undefined;
-      var route = plugins[i].annotation.getDefinitions('SysRoute')[0];
+    for (var p in plugins) {
+      var routes = plugins[p].annotation.getDefinitions('SysRoute');
 
-      if (route.register) {
-        struct = SYS.use(plugins[i].path);
+      for (var r in routes) {
+        if (routes[r].register) {
+          register.push(routes[r]);
+        } else {
+          this.addRoute(routes[r].value, {
+            path: plugins[p].path,
+            description: routes[r].description,
+            annotation: routes[r],
+          });
+        }
       }
+    }
 
-      this.addPlugin(route.value, {
-        path: plugins[i].path,
-        struct: struct,
-        description: route.description,
-        annotation: route,
+    for (var i in register) {
+      var plugins = this.plugins(register[i].register, 'bin', 'mods');
+      var keys = TOOLS.String.match(register[i].value, /<([^\.]*)>/g);
+      keys = TOOLS.Array.run(keys, function(v) {
+        return v.substring(1, v.length - 1);
       });
+
+      for (var p in plugins) {
+        var annots = plugins[p].annotation.getDefinitions(register[i].register);
+
+        for (var a in annots) {
+          var value = register[i].value;
+          var description = annots[a].description || register[i].description;
+
+          for (var k in keys) {
+            value = value.replace('<' + keys[k] + '>', annots[a][keys[k]]);
+            description = description.replace('<' + keys[k] + '>', annots[a][keys[k]]);
+          }
+          this.addRoute(value, {
+            path: plugins[p].path,
+            description: description,
+            annotation: annots[a],
+            register: register[i],
+          });
+        }
+      }
     }
   }
 
@@ -296,29 +322,61 @@ module.exports = class Sys {
     return routine.use(path, args);
   }
 
-  static addPlugin(id, data) {
-    this._loaded_plugins[id.toLowerCase()] = {
-      id: id.toLowerCase(),
+  /**
+    * TODO
+    */
+  static error(message) {
+    console.error(message);
+  }
+
+  static addRoute(route, data) {
+    if (this._loaded_plugins[route.toLowerCase()] !== undefined) {
+      SYS.error('SysRoute "' + route + '" is already in use! Use setRoute to override SysRoute!');
+      return;
+    }
+
+    this._loaded_plugins[route.toLowerCase()] = {
+      route: route.toLowerCase(),
       description: data.description || '',
       path: data.path,
       params: data.params || [],
       struct: data.struct || undefined,
       annotation: data.annotation || null,
+      register: data.register || null,
     };
   }
 
-  static get(id) {
-    id = id.toLowerCase();
-    if (this._loaded_plugins[id].struct === undefined) {
-      this._loaded_plugins[id].struct = SYS.use(this._loaded_plugins[id].path);
-      if (TOOLS.isFunction(this._loaded_plugins[id].struct.initPlugin)) {
-        this._loaded_plugins[id].struct.initPlugin.apply(this._loaded_plugins[id].struct, this._loaded_plugins[id].params);
+  static setRoute(data) {
+    var route = data.route.toLowerCase();
+
+    if (this._loaded_plugins[route] === undefined) {
+      SYS.error('SysRoute "' + route + '" don\'t exist! Use addRoute to add the SysRoute!');
+      return;
+    }
+
+    this._loaded_plugins[route] = {
+      route: route,
+      description: data.description || '',
+      path: data.path,
+      params: data.params || [],
+      struct: data.struct || undefined,
+      annotation: data.annotation || null,
+      register: data.register || null,
+    };
+  }
+
+  static get(route) {
+    route = route.toLowerCase();
+    if (this._loaded_plugins[route].struct === undefined) {
+      this._loaded_plugins[route].struct = SYS.use(this._loaded_plugins[route].path);
+      if (TOOLS.isFunction(this._loaded_plugins[route].struct.initPlugin)) {
+        this._loaded_plugins[route].struct.initPlugin.apply(this._loaded_plugins[route].struct, this._loaded_plugins[route].params);
       }
     }
-    if (TOOLS.isFunction(this._loaded_plugins[id].struct.getPlugin)) {
-      return this._loaded_plugins[id].struct.getPlugin.apply(this._loaded_plugins[id].struct, TOOLS.args(arguments, 1));
+    if (TOOLS.isFunction(this._loaded_plugins[route].struct.getPlugin)) {
+      return this._loaded_plugins[route].struct.getPlugin.apply(this._loaded_plugins[route].struct, TOOLS.args(arguments, 1));
     }
-    return this._loaded_plugins[id].struct;
+    return this._loaded_plugins[route].struct;
   }
 
   /**

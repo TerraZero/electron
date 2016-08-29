@@ -35,4 +35,14 @@ module.exports = class TestCommand extends Command {
     });
   }
 
+  /**
+    * @Command(
+    *   params={}
+    * )
+    */
+  test() {
+    var controller = SYS.get('entity.user.controller');
+    console.log('dfs');
+  }
+
 }

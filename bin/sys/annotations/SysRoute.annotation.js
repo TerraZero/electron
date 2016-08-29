@@ -9,7 +9,7 @@ module.exports = class SysRoute extends Annotation {
   definition() {
     return {
       value: null,
-      register: false,
+      register: null,
       params: {},
       description: '',
     };

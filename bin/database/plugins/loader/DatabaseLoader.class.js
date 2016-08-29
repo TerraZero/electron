@@ -3,7 +3,6 @@
 /**
   * @SysRoute(
   *   value="database",
-  *   register=true,
   *   description="Loader for database connections"
   * )
   */

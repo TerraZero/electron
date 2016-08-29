@@ -1,39 +1,17 @@
 'use strict';
 
-(function registerFieldTypes() {
-  var plugins = SYS.plugins('FieldType', 'bin', 'mods');
-
-  for (var i in plugins) {
-    var annot = plugins[i].annotation.getDefinitions('FieldType')[0];
-
-    SYS.addPlugin(annot.id || 'form.field.' + annot.value, {
-      path: plugins[i].path,
-      description: annot.description || '[Loader]: Type definition for ' + annot.value,
-      annotation: annot,
-    });
-  }
-})();
-
-(function registerForms() {
-  var plugins = SYS.plugins('Form', 'bin', 'mods');
-
-  for (var i in plugins) {
-    var annot = plugins[i].annotation.getDefinitions('Form')[0];
-
-    SYS.addPlugin(annot.id || 'form.instance.' + annot.value, {
-      path: plugins[i].path,
-      description: annot.description || '[Loader]: Form class for ' + annot.value,
-      annotation: annot,
-    });
-  }
-})();
-
-
 /**
   * @SysRoute(
   *   value="form",
-  *   register=true,
   *   description="Loader for forms"
+  * )
+  * @SysRoute(
+  *   value="form.instance.<value>",
+  *   register="Form"
+  * )
+  * @SysRoute(
+  *   value="form.field.<value>",
+  *   register="FieldType"
   * )
   */
 module.exports = class FormLoader {
