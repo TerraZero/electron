@@ -10,7 +10,7 @@ module.exports = class SysRoute extends Annotation {
     return {
       value: null,
       register: null,
-      params: {},
+      params: [],
       description: '',
     };
   }

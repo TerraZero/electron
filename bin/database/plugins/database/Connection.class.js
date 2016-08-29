@@ -13,11 +13,11 @@ const mysql = SYS.use('mysql.node');
   */
 module.exports = class Connection {
 
-  static initPlugin() {
+  static initRoute() {
     this.connections = {};
   }
 
-  static getPlugin(connection = 'default') {
+  static getRoute(connection = 'default') {
     if (!this.connections[connection]) {
       this.connections[connection] = new Connection(connection);
     }

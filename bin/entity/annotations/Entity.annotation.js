@@ -10,7 +10,7 @@ module.exports = class Entity extends Annotation {
     return {
       id: null,
       name: '',
-      controller: '',
+      controller: null,
       description: '',
     };
   }

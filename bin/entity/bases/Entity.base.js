@@ -4,8 +4,8 @@
 
 module.exports = class Entity {
 
-  static initPlugin(controller) {
-    this._routeController = controller;
+  static initRoute(route) {
+    this._routeController = route.annotation.controller || 'entity.' + route.annotation.name.toLowerCase() + '.controller';
   }
 
   static controller() {

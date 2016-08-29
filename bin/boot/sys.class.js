@@ -369,12 +369,12 @@ module.exports = class Sys {
     route = route.toLowerCase();
     if (this._loaded_plugins[route].struct === undefined) {
       this._loaded_plugins[route].struct = SYS.use(this._loaded_plugins[route].path);
-      if (TOOLS.isFunction(this._loaded_plugins[route].struct.initPlugin)) {
-        this._loaded_plugins[route].struct.initPlugin.apply(this._loaded_plugins[route].struct, this._loaded_plugins[route].params);
+      if (TOOLS.isFunction(this._loaded_plugins[route].struct.initRoute)) {
+        this._loaded_plugins[route].struct.initRoute.call(this._loaded_plugins[route].struct, this._loaded_plugins[route]);
       }
     }
-    if (TOOLS.isFunction(this._loaded_plugins[route].struct.getPlugin)) {
-      return this._loaded_plugins[route].struct.getPlugin.apply(this._loaded_plugins[route].struct, TOOLS.args(arguments, 1));
+    if (TOOLS.isFunction(this._loaded_plugins[route].struct.getRoute)) {
+      return this._loaded_plugins[route].struct.getRoute.apply(this._loaded_plugins[route].struct, TOOLS.args(arguments, 1));
     }
     return this._loaded_plugins[route].struct;
   }
