@@ -3,19 +3,25 @@
 /**
   * @SysRoute(
   *   value="logger",
-  *   description="Get the relevant logger",
-  *   params={
-  *     route: {type: "string", value: null}
-  *   }
+  *   description="Get the relevant logger"
+  * )
+  * @SysRoute(
+  *   value="logger.struct",
+  *   description="Get the logger struct to set functions"
   * )
   */
 module.exports = class LoggerLoader {
 
-  static getRoute(route = null) {
-    if (route) {
-      this.route = route;
+  static getRoute(sysroute) {
+    if (sysroute.route == 'logger') {
+      return SYS.get(this.route || 'logger.main');
+    } else if (sysroute.route == 'logger.struct') {
+      return this;
     }
-    return SYS.get(this.route || 'logger.main');
+  }
+
+  static setLogger(route) {
+    this.route = route;
   }
 
 }

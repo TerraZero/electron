@@ -1,6 +1,6 @@
 'use strict';
 
-const Form = SYS.use('Form.base');
+const Form = SYS.get('base.form');
 
 /**
   * @Form("Testform")

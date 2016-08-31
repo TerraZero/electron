@@ -1,8 +1,13 @@
 'use strict';
 
+/**
+  * @Base("Logger")
+  */
 module.exports = class Logger {
 
-  static getRoute() {
+  static getRoute(sysroute) {
+    if (sysroute.annotation._name() == 'Base') return this;
+
     if (!this.instance) {
       this.instance = new this();
     }

@@ -1,6 +1,6 @@
 'use strict';
 
-const Entity = SYS.use('Entity.base');
+const Entity = SYS.get('base.entity');
 
 /**
   * @Entity(

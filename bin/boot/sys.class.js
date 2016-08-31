@@ -374,7 +374,10 @@ module.exports = class Sys {
       }
     }
     if (TOOLS.isFunction(this._loaded_plugins[route].struct.getRoute)) {
-      return this._loaded_plugins[route].struct.getRoute.apply(this._loaded_plugins[route].struct, TOOLS.args(arguments, 1));
+      var args = TOOLS.args(arguments, 1);
+
+      args.unshift(this._loaded_plugins[route]);
+      return this._loaded_plugins[route].struct.getRoute.apply(this._loaded_plugins[route].struct, args);
     }
     return this._loaded_plugins[route].struct;
   }

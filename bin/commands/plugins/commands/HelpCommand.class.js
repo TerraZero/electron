@@ -1,6 +1,6 @@
 'use strict';
 
-const CommandBase = SYS.use('Command.base');
+const CommandBase = SYS.get('base.command');
 const Command = SYS.get('command');
 
 /**

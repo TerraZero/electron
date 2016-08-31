@@ -2,10 +2,14 @@
 
 // const Render = SYS.use('./render/Render.class');
 
+/**
+  * @Base("Entity")
+  */
 module.exports = class Entity {
 
-  static initRoute(route) {
-    this._routeController = route.annotation.controller || 'entity.' + route.annotation.name.toLowerCase() + '.controller';
+  static initRoute(sysroute) {
+    if (sysroute.annotation._name() == 'Base') return;
+    this._routeController = sysroute.annotation.controller || 'entity.' + sysroute.annotation.name.toLowerCase() + '.controller';
   }
 
   static controller() {

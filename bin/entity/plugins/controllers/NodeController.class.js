@@ -1,6 +1,6 @@
 'use strict';
 
-const Controller = SYS.use('Controller.base');
+const Controller = SYS.get('base.controller');
 
 /**
   * @Controller(

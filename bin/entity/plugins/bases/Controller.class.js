@@ -2,9 +2,13 @@
 
 const Squel = SYS.use('bin/database/Squel.class');
 
+/**
+  * @Base("Controller")
+  */
 module.exports = class Controller {
 
-  static getPlugin() {
+  static getRoute(sysroute) {
+    if (sysroute.annotation._name() == 'Base') return this;
     if (!this._instance) this._instance = new this();
     return this._instance;
   }

@@ -2,6 +2,9 @@
 
 const FormContainer = SYS.use('bin/forms/FormContainer.class');
 
+/**
+  * @Base("Form")
+  */
 module.exports = class Form extends FormContainer {
 
   constructor(id) {

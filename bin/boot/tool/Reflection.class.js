@@ -15,4 +15,14 @@ module.exports = class Reflection {
     return Stack.get();
   }
 
+  static getStackArray() {
+    var stack = Reflection.getStack();
+    var array = [];
+
+    for (var i in stack) {
+      array.push(stack[i].getFileName() + ':' + stack[i].getLineNumber());
+    }
+    return array;
+  }
+
 }

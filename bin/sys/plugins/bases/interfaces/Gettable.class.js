@@ -1,5 +1,8 @@
 'use strict'
 
+/**
+  * @Base("Gettable")
+  */
 module.exports = class Gettable {
 
   getting(key = null, fallback = null) {

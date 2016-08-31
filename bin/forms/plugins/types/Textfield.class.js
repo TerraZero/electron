@@ -1,6 +1,6 @@
 'use strict';
 
-const FieldType = SYS.use('FieldType.base');
+const FieldType = SYS.get('base.fieldtype');
 
 /**
   * @FieldType("Textfield")

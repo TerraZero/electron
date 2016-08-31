@@ -1,6 +1,6 @@
 'use strict';
 
-const Command = SYS.use('Command.base');
+const Command = SYS.get('base.command');
 
 /**
   * @Command(
@@ -21,18 +21,10 @@ module.exports = class TestCommand extends Command {
 
     var loader = SYS.get('entity');
 
-    var entity = loader.entity(type);
-    var controller = loader.controller(type);
+    var Entity = loader.entity(type);
+    var Controller = Entity.controller();
 
-    controller.load(null, entity, function(entities, rows) {
-      console.log(entities);
-    });
-
-    var u = new entity();
-    u.name = 'Terra';
-    controller.save([u], function(entities, rows, query) {
-      console.log(entities);
-    });
+    console.log(Controller.load);
   }
 
 }

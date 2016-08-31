@@ -1,6 +1,6 @@
 'use strict';
 
-const Gettable = SYS.use('Gettable.base');
+const Gettable = SYS.get('base.gettable');
 
 module.exports = class FormComponent extends Gettable {
 

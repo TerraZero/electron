@@ -1,7 +1,10 @@
 'use strict';
 
-const Gettable = SYS.use('Gettable.base');
+const Gettable = SYS.get('base.gettable');
 
+/**
+  * @Base("Command")
+  */
 module.exports = class Command extends Gettable {
 
   static build(args) {
