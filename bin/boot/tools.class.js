@@ -103,6 +103,10 @@ module.exports = class Tools {
     return Number.isInteger(object);
   }
 
+  static truncInt(number) {
+    return Math.trunc(number);
+  }
+
   /**
     * Determine if the object is defined
     *

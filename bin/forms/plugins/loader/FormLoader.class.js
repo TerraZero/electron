@@ -7,11 +7,13 @@
   * )
   * @SysRoute(
   *   value="form.instance.<value>",
-  *   register="Form"
+  *   register="Form",
+  *   loader="form:form(name)"
   * )
   * @SysRoute(
   *   value="form.field.<value>",
-  *   register="FieldType"
+  *   register="FieldType",
+  *   loader="form:field(name)"
   * )
   */
 module.exports = class FormLoader {

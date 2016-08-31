@@ -24,9 +24,19 @@ module.exports = class ListCommand extends Command {
     var rows = [];
 
     for (var i in routes) {
+      var route = [routes[i].route];
+
+      if (routes[i].register) {
+        route.push('-> {DynRoute} ' + routes[i].register.value);
+
+        if (routes[i].register.loader) {
+          route.push('-> {Loader} ' + routes[i].register.loader);
+        }
+      }
+
       rows.push([
         routes[i].annotation._name(),
-        routes[i].route,
+        route,
         routes[i].description,
       ]);
     }

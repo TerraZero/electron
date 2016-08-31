@@ -2,6 +2,15 @@
 
 module.exports = class Array {
 
+  static generate(number, func) {
+    var array = [];
+
+    for (var i = 0; i < number; i++) {
+      array.push(func.call(undefined, i, number, array));
+    }
+    return array;
+  }
+
   static run(array, f) {
     for (var i in array) {
       array[i] = f.call(undefined, array[i], i, array);

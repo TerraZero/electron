@@ -13,4 +13,13 @@ module.exports = class String {
     }
   }
 
+  static splitByLength(string, length) {
+    var splitted = [];
+
+    for (var i = 0; i * length < string.length; i++) {
+      splitted.push(string.substring(i * length, Math.min((i + 1) * length, string.length)));
+    }
+    return splitted;
+  }
+
 }
