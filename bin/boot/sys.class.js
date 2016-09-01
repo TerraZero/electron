@@ -7,7 +7,7 @@ module.exports = class Sys {
     this._cache = {};
     this._hooks = {};
     this._routines = {};
-    this._loaded_plugins = {};
+    this._loaded_routes = {};
 
     this.initializeRoutines();
     this.initializeAnnotations();
@@ -86,49 +86,49 @@ module.exports = class Sys {
 
   static initializePlugins() {
     var plugins = this.plugins('SysRoute', 'bin', 'mods');
-    var register = [];
+    var register = {};
+    var pluginsRegister = [];
 
     for (var p in plugins) {
       var routes = plugins[p].annotation.getDefinitions('SysRoute');
 
       for (var r in routes) {
         if (routes[r].register) {
-          register.push(routes[r]);
+          register[routes[r].register] = routes[r];
+          pluginsRegister.push(routes[r].register);
         } else {
           this.addRoute(routes[r].value, {
             path: plugins[p].path,
             description: routes[r].description,
             annotation: routes[r],
+            initFunction: routes[r].initFunction,
+            getFunction: routes[r].getFunction,
           });
         }
       }
     }
 
-    for (var i in register) {
-      var plugins = this.plugins(register[i].register, 'bin', 'mods');
-      var keys = TOOLS.String.match(register[i].value, /<([^\.]*)>/g);
-      keys = TOOLS.Array.run(keys, function(v) {
-        return v.substring(1, v.length - 1);
-      });
+    var plugins = this.plugins(pluginsRegister, 'bin', 'mods');
+    for (var p in plugins) {
+      var annots = plugins[p].annotation.getDefinitions(pluginsRegister);
 
-      for (var p in plugins) {
-        var annots = plugins[p].annotation.getDefinitions(register[i].register);
+      for (var a in annots) {
+        var regis = register[annots[a]._name()];
+        var value = regis.value;
+        var description = annots[a].description || regis.description;
 
-        for (var a in annots) {
-          var value = register[i].value;
-          var description = annots[a].description || register[i].description;
-
-          for (var k in keys) {
-            value = value.replace('<' + keys[k] + '>', annots[a][keys[k]]);
-            description = description.replace('<' + keys[k] + '>', annots[a][keys[k]]);
-          }
-          this.addRoute(value, {
-            path: plugins[p].path,
-            description: description,
-            annotation: annots[a],
-            register: register[i],
-          });
+        for (var k in regis.keys) {
+          value = value.replace('<' + regis.keys[k] + '>', annots[a][regis.keys[k]]);
+          description = description.replace('<' + regis.keys[k] + '>', annots[a][regis.keys[k]]);
         }
+        this.addRoute(value, {
+          path: plugins[p].path,
+          description: description,
+          annotation: annots[a],
+          register: regis,
+          initFunction: regis.initFunction,
+          getFunction: regis.getFunction,
+        });
       }
     }
   }
@@ -221,7 +221,8 @@ module.exports = class Sys {
     return result;
   }
 
-  static plugins(annotation) {
+  static plugins(annotations) {
+    if (!TOOLS.isArray(annotations)) annotations = [annotations];
     var dirs = TOOLS.args(arguments, 1);
 
     var result = [];
@@ -231,7 +232,7 @@ module.exports = class Sys {
       for (var path in paths) {
         var annot = new TOOLS.Annotation(paths[path]);
 
-        if (annot.hasDefinition(annotation)) {
+        if (annot.hasDefinition(annotations)) {
           result.push({
             path: paths[path],
             annotation: annot,
@@ -322,39 +323,28 @@ module.exports = class Sys {
     return routine.use(path, args);
   }
 
-  /**
-    * TODO
-    */
   static error(message) {
-    console.error(message);
+    var Logger = SYS.get('logger');
+
+    if (Logger === null) {
+      console.error(message);
+    } else {
+      Logger.error(message);
+    }
   }
 
-  static addRoute(route, data) {
-    if (this._loaded_plugins[route.toLowerCase()] !== undefined) {
-      SYS.error('SysRoute "' + route + '" is already in use! Use setRoute to override SysRoute!');
+  static createRoute(data, route = null) {
+    if (!route && !data.route) {
+      SYS.error('Create SysRoute: route is required!');
+      return;
+    }
+    route = (route || data.route).toLowerCase();
+    if (!data.path) {
+      SYS.error('Create SysRoute: "' + route + '" path is required!');
       return;
     }
 
-    this._loaded_plugins[route.toLowerCase()] = {
-      route: route.toLowerCase(),
-      description: data.description || '',
-      path: data.path,
-      params: data.params || [],
-      struct: data.struct || undefined,
-      annotation: data.annotation || null,
-      register: data.register || null,
-    };
-  }
-
-  static setRoute(data) {
-    var route = data.route.toLowerCase();
-
-    if (this._loaded_plugins[route] === undefined) {
-      SYS.error('SysRoute "' + route + '" don\'t exist! Use addRoute to add the SysRoute!');
-      return;
-    }
-
-    this._loaded_plugins[route] = {
+    return {
       route: route,
       description: data.description || '',
       path: data.path,
@@ -362,24 +352,56 @@ module.exports = class Sys {
       struct: data.struct || undefined,
       annotation: data.annotation || null,
       register: data.register || null,
+      initFunction: data.initFunction || 'initRoute',
+      getFunction: data.getFunction || 'getFunction',
     };
   }
 
+  static addRoute(route, data) {
+    if (this._loaded_routes[route.toLowerCase()] !== undefined) {
+      SYS.error('SysRoute "' + route + '" is already in use! Use setRoute to override SysRoute!');
+      return;
+    }
+
+    this._loaded_routes[route.toLowerCase()] = this.createRoute(data, route);
+  }
+
+  static setRoute(data) {
+    var route = data.route.toLowerCase();
+
+    if (this._loaded_routes[route] === undefined) {
+      SYS.error('SysRoute "' + route + '" don\'t exist! Use addRoute to add the SysRoute!');
+      return;
+    }
+
+    this._loaded_routes[route] = this.createRoute(data);
+  }
+
   static get(route) {
-    route = route.toLowerCase();
-    if (this._loaded_plugins[route].struct === undefined) {
-      this._loaded_plugins[route].struct = SYS.use(this._loaded_plugins[route].path);
-      if (TOOLS.isFunction(this._loaded_plugins[route].struct.initRoute)) {
-        this._loaded_plugins[route].struct.initRoute.call(this._loaded_plugins[route].struct, this._loaded_plugins[route]);
+    route = this._loaded_routes[route.toLowerCase()];
+
+    // give null when no route is known
+    if (route === undefined) return null;
+
+    // if no struct is loaded, load the struct and initiat it
+    if (route.struct === undefined) {
+      route.struct = SYS.use(route.path);
+
+      // init route if a function is givin
+      if (route.initFunction && TOOLS.isFunction(route.struct[route.initFunction])) {
+        route.struct[route.initFunction].call(route.struct, route);
       }
     }
-    if (TOOLS.isFunction(this._loaded_plugins[route].struct.getRoute)) {
+
+    // if a getter function is known than use it
+    if (route.getFunction && TOOLS.isFunction(route.struct[route.getFunction])) {
       var args = TOOLS.args(arguments, 1);
 
-      args.unshift(this._loaded_plugins[route]);
-      return this._loaded_plugins[route].struct.getRoute.apply(this._loaded_plugins[route].struct, args);
+      args.unshift(route);
+      return route.struct[route.getFunction].apply(route.struct, args);
     }
-    return this._loaded_plugins[route].struct;
+
+    return route.struct;
   }
 
   /**

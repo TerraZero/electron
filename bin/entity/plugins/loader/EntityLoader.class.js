@@ -8,12 +8,14 @@
   * @SysRoute(
   *   value="entity.<name>",
   *   register="Entity",
+  *   keys=["name"],
   *   description="Entity class for '<name>' entities",
   *   loader="entity:entity(name)"
   * )
   * @SysRoute(
   *   value="entity.<name>.controller",
   *   register="Controller",
+  *   keys=["name"],
   *   description="Controller for '<name>' entities",
   *   loader="entity:controller(name)"
   * )

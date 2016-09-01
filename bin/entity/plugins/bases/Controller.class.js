@@ -8,7 +8,6 @@ const Squel = SYS.use('bin/database/Squel.class');
 module.exports = class Controller {
 
   static getRoute(sysroute) {
-    if (sysroute.annotation._name() == 'Base') return this;
     if (!this._instance) this._instance = new this();
     return this._instance;
   }

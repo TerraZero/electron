@@ -6,8 +6,6 @@
 module.exports = class Logger {
 
   static getRoute(sysroute) {
-    if (sysroute.annotation._name() == 'Base') return this;
-
     if (!this.instance) {
       this.instance = new this();
     }

@@ -8,7 +8,6 @@
 module.exports = class Entity {
 
   static initRoute(sysroute) {
-    if (sysroute.annotation._name() == 'Base') return;
     this._routeController = sysroute.annotation.controller || 'entity.' + sysroute.annotation.name.toLowerCase() + '.controller';
   }
 

@@ -125,7 +125,7 @@ module.exports = class FindCommand extends CommandBase {
     */
   plugins(annotation, expression = null) {
     if (!annotation) annotation = this.input('Annotation: ');
-    var plugins = SYS.plugins(annotation, 'bin', 'mods');
+    var plugins = SYS.plugins(annotation, 'bin', 'mods')[annotation];
 
     plugins = TOOLS.Array.filter(plugins, expression, function(plugin) {
       return plugin.path.resolve();
@@ -144,7 +144,7 @@ module.exports = class FindCommand extends CommandBase {
     * )
     */
   ids(expression = null) {
-    var ids = SYS._loaded_plugins;
+    var ids = SYS._loaded_routes;
 
     ids = TOOLS.Array.filter(ids, expression, function(id) {
       return id.path.resolve();

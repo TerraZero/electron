@@ -13,6 +13,9 @@ module.exports = class SysRoute extends Annotation {
       params: [],
       description: '',
       loader: null,
+      getFunction: 'getRoute',
+      initFunction: 'initRoute',
+      keys: [],
     };
   }
 

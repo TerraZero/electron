@@ -23,7 +23,7 @@ module.exports = class Annotation extends AnnotationBase {
 
     var definition = this.definition();
     for (var field in definition) {
-      this[field] = data[field] || definition[field];
+      this[field] = (data[field] === undefined ? definition[field] : data[field]);
     }
     for (var field in data) {
       if (definition[field] === undefined) {

@@ -17,8 +17,8 @@ module.exports = class ListCommand extends Command {
     * )
     */
   routes(expression = null) {
-    var routes = TOOLS.Array.filter(SYS._loaded_plugins, expression, function(route) {
-      return route.id;
+    var routes = TOOLS.Array.filter(SYS._loaded_routes, expression, function(route) {
+      return route.route;
     });
 
     var rows = [];

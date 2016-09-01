@@ -9,7 +9,10 @@
   *   value="base.<value>",
   *   register="Base",
   *   description="Base class to build '<value>'s",
-  *   loader="base:load(name)"
+  *   loader="base:load(name)",
+  *   keys=["value"],
+  *   initFunction=false,
+  *   getFunction=false
   * )
   */
 module.exports = class BaseLoader {

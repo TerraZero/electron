@@ -121,7 +121,13 @@ module.exports = class CommandLoader {
   }
 
   static error(exception) {
-    SYS.get('logger').error(exception.toString());
+    var Logger = SYS.get('logger');
+
+    if (Logger === null) {
+      SYS.error(exception);
+    } else {
+      Logger.error(exception.toString());
+    }
   }
 
   static evaluation(execution) {

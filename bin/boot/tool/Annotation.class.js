@@ -41,6 +41,9 @@ module.exports = class Annotation {
     if (TOOLS.isString(index)) {
       return TOOLS.Array.filter(this._reader.definitionAnnotations, index);
     }
+    if (TOOLS.isArray(index)) {
+      return TOOLS.Array.filter(this._reader.definitionAnnotations, '(' + index.join('|') + ')');
+    }
     return this._reader.definitionAnnotations;
   }
 

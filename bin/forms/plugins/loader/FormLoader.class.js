@@ -8,11 +8,13 @@
   * @SysRoute(
   *   value="form.instance.<value>",
   *   register="Form",
+  *   keys=["value"],
   *   loader="form:form(name)"
   * )
   * @SysRoute(
   *   value="form.field.<value>",
   *   register="FieldType",
+  *   keys=["value"],
   *   loader="form:field(name)"
   * )
   */
