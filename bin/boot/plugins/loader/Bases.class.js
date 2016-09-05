@@ -18,7 +18,7 @@
 module.exports = class BaseLoader {
 
   static load(name) {
-    return SYS.get('bases.' + name);
+    return SYS.route('bases.' + name);
   }
 
 }

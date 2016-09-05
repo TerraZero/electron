@@ -324,7 +324,7 @@ module.exports = class Sys {
   }
 
   static error(message) {
-    var Logger = SYS.get('logger');
+    var Logger = SYS.route('logger');
 
     if (Logger === null) {
       console.error(message);
@@ -375,33 +375,6 @@ module.exports = class Sys {
     }
 
     this._loaded_routes[route] = this.createRoute(data);
-  }
-
-  static get(route) {
-    route = this._loaded_routes[route.toLowerCase()];
-
-    // give null when no route is known
-    if (route === undefined) return null;
-
-    // if no struct is loaded, load the struct and initiat it
-    if (route.struct === undefined) {
-      route.struct = SYS.use(route.path);
-
-      // init route if a function is givin
-      if (route.initFunction && TOOLS.isFunction(route.struct[route.initFunction])) {
-        route.struct[route.initFunction].call(route.struct, route);
-      }
-    }
-
-    // if a getter function is known than use it
-    if (route.getFunction && TOOLS.isFunction(route.struct[route.getFunction])) {
-      var args = TOOLS.args(arguments, 1);
-
-      args.unshift(route);
-      return route.struct[route.getFunction].apply(route.struct, args);
-    }
-
-    return route.struct;
   }
 
   /**
@@ -474,6 +447,33 @@ module.exports = class Sys {
     */
   static base() {
     return this._base;
+  }
+
+  static route(route) {
+    route = this._loaded_routes[route.toLowerCase()];
+
+    // give null when no route is known
+    if (route === undefined) return null;
+
+    // if no struct is loaded, load the struct and initiat it
+    if (route.struct === undefined) {
+      route.struct = SYS.use(route.path);
+
+      // init route if a function is givin
+      if (route.initFunction && TOOLS.isFunction(route.struct[route.initFunction])) {
+        route.struct[route.initFunction].call(route.struct, route);
+      }
+    }
+
+    // if a getter function is known than use it
+    if (route.getFunction && TOOLS.isFunction(route.struct[route.getFunction])) {
+      var args = TOOLS.args(arguments, 1);
+
+      args.unshift(route);
+      return route.struct[route.getFunction].apply(route.struct, args);
+    }
+
+    return route.struct;
   }
 
 }

@@ -1,6 +1,6 @@
 'use strict';
 
-const FieldType = SYS.get('base.fieldtype');
+const FieldType = SYS.route('base.fieldtype');
 
 /**
   * @FieldType("Textfield")

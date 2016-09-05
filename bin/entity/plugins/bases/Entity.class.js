@@ -12,7 +12,7 @@ module.exports = class Entity {
   }
 
   static controller() {
-    return SYS.get(this._routeController);
+    return SYS.route(this._routeController);
   }
 
   static save(struct = null) {
@@ -69,7 +69,7 @@ module.exports = class Entity {
 
     for (var i in fields) {
       if (fields[i].type().startsWith('VARCHAR') && !fields[i]._primary) {
-        row[fields[i].name()] = SYS.get('logger').input(fields[i].name() + ': ');
+        row[fields[i].name()] = SYS.route('logger').input(fields[i].name() + ': ');
       }
     }
     return row;

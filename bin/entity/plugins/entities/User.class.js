@@ -1,6 +1,6 @@
 'use strict';
 
-const Entity = SYS.get('base.entity');
+const Entity = SYS.route('base.entity');
 
 /**
   * @Entity(

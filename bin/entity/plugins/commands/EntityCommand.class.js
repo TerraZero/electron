@@ -19,7 +19,7 @@ module.exports = class EntityCommand extends Command {
   add(type) {
     if (!type) type = this.input('Type: ');
 
-    var Entity = SYS.get('entity.' + type);
+    var Entity = SYS.route('entity.' + type);
     var row = Entity.createRowCLI();
 
     var output = [];
@@ -37,7 +37,7 @@ module.exports = class EntityCommand extends Command {
         var rows = entities[0].log();
 
         rows.unshift(['Type', entities[0].type()]);
-        SYS.get('logger').table(rows);
+        SYS.route('logger').table(rows);
       });
     } else {
       this.error('Aborting');
@@ -58,7 +58,7 @@ module.exports = class EntityCommand extends Command {
     if (ids.length == 0) ids = null;
     if (!type) type = this.input('Type: ');
 
-    var Entity = SYS.get('entity.' + type);
+    var Entity = SYS.route('entity.' + type);
     var options = {};
 
     if (this.args().offset) {
@@ -68,7 +68,7 @@ module.exports = class EntityCommand extends Command {
       options.limit = this.args().limit;
     }
 
-    SYS.get('database').checkOptions(options);
+    SYS.route('database').checkOptions(options);
 
     Entity.controller().load(ids, Entity, function(entities) {
       var head = [];
@@ -88,7 +88,7 @@ module.exports = class EntityCommand extends Command {
         rows.push(row);
       }
 
-      SYS.get('logger').table({head: head, rows: rows});
+      SYS.route('logger').table({head: head, rows: rows});
     }, options);
   }
 
@@ -130,7 +130,7 @@ module.exports = class EntityCommand extends Command {
       return;
     }
 
-    var Entity = SYS.get('entity.' + type);
+    var Entity = SYS.route('entity.' + type);
     // TODO delete
   }
 

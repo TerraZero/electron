@@ -1,6 +1,6 @@
 'use strict';
 
-const Command = SYS.get('base.command');
+const Command = SYS.route('base.command');
 
 /**
   * @Command(

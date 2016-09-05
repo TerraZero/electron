@@ -1,6 +1,6 @@
 'use strict';
 
-const Command = SYS.get('base.command');
+const Command = SYS.route('base.command');
 
 /**
   * @Command(
@@ -19,7 +19,7 @@ module.exports = class TestCommand extends Command {
   entities(type) {
     if (!type) type = this.input('Type: ');
 
-    var loader = SYS.get('entity');
+    var loader = SYS.route('entity');
 
     var Entity = loader.entity(type);
     var Controller = Entity.controller();

@@ -1,6 +1,6 @@
 'use strict';
 
-const Controller = SYS.get('base.controller');
+const Controller = SYS.route('base.controller');
 const Field = SYS.use('bin/entity/fields/FieldInstance.class');
 
 /**

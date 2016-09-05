@@ -1,6 +1,6 @@
 'use strict';
 
-const Gettable = SYS.get('base.gettable');
+const Gettable = SYS.route('base.gettable');
 
 /**
   * @Base("Command")
@@ -67,29 +67,29 @@ module.exports = class Command extends Gettable {
   }
 
   log() {
-    SYS.get('logger').log.apply(SYS.get('logger'), TOOLS.args(arguments));
+    SYS.route('logger').log.apply(SYS.route('logger'), TOOLS.args(arguments));
   }
 
   out(item) {
-    SYS.get('logger').log(item);
+    SYS.route('logger').log(item);
     this._result.outs.push(item);
   }
 
   warn(message) {
-    SYS.get('logger').warn(message);
+    SYS.route('logger').warn(message);
   }
 
   error(message) {
-    SYS.get('logger').error(message);
+    SYS.route('logger').error(message);
     this._result.code = Command.ERROR;
   }
 
   input(message) {
-    return SYS.get('logger').input(message);
+    return SYS.route('logger').input(message);
   }
 
   table(data) {
-    return SYS.get('logger').table(data);
+    return SYS.route('logger').table(data);
   }
 
   getResult() {

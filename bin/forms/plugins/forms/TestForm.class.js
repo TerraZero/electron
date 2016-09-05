@@ -1,6 +1,6 @@
 'use strict';
 
-const Form = SYS.get('base.form');
+const Form = SYS.route('base.form');
 
 /**
   * @Form("Testform")

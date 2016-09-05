@@ -1,6 +1,6 @@
 'use strict';
 
-const Logger = SYS.get('base.logger');
+const Logger = SYS.route('base.logger');
 
 const colors = require('colors');
 const readlineSync = require('readline-sync');

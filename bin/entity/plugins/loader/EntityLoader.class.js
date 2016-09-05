@@ -23,11 +23,11 @@
 module.exports = class EntityLoader {
 
   static entity(name) {
-    return SYS.get('entity.' + name);
+    return SYS.route('entity.' + name);
   }
 
   static controller(name) {
-    return SYS.get('entity.' + name + '.controller');
+    return SYS.route('entity.' + name + '.controller');
   }
 
 }

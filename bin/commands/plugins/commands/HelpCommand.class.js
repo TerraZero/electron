@@ -1,7 +1,7 @@
 'use strict';
 
-const CommandBase = SYS.get('base.command');
-const Command = SYS.get('command');
+const CommandBase = SYS.route('base.command');
+const Command = SYS.route('command');
 
 /**
   * @Command(
@@ -106,7 +106,7 @@ module.exports = class HelpCommand extends CommandBase {
     * )
     */
   test(key) {
-    console.log(SYS.get(key));
+    console.log(SYS.route(key));
   }
 
 }

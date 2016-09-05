@@ -142,7 +142,7 @@ module.exports = class Controller {
 
     this.insertFields(entities, query);
 
-    SYS.get('database.connection').execute(query.toString(), function(err, rows) {
+    SYS.route('database.connection').execute(query.toString(), function(err, rows) {
       if (err) throw err;
       var id = rows.insertId;
 
@@ -203,7 +203,7 @@ module.exports = class Controller {
         query.limit(options.limit);
       }
     }
-    SYS.get('database.connection').execute(query.toString(), callback);
+    SYS.route('database.connection').execute(query.toString(), callback);
   }
 
 }

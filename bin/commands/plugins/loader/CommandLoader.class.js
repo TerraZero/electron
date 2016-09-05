@@ -62,7 +62,7 @@ module.exports = class CommandLoader {
 
     if (!ISDEF(command)) {
       execution.result.code = Command.FATAL;
-      SYS.get('logger').error('No commands to execute found!');
+      SYS.route('logger').error('No commands to execute found!');
       return execution;
     }
     var exe = command.split('.');
@@ -121,7 +121,7 @@ module.exports = class CommandLoader {
   }
 
   static error(exception) {
-    var Logger = SYS.get('logger');
+    var Logger = SYS.route('logger');
 
     if (Logger === null) {
       SYS.error(exception);
@@ -134,9 +134,9 @@ module.exports = class CommandLoader {
     if (execution.result.code === CommandBase.OK || execution.result.code === CommandBase.ERROR) {
       // OK or ERROR is handeled by command
     } else if (execution.result.code === undefined) {
-      SYS.get('logger').error('No command found with name "%s"', execution.exe[0]);
+      SYS.route('logger').error('No command found with name "%s"', execution.exe[0]);
     } else if (TOOLS.isInt(execution.result.code)) {
-      SYS.get('logger').error('Command terminated unexpectedly with exit code "' + execution.result.code + '"');
+      SYS.route('logger').error('Command terminated unexpectedly with exit code "' + execution.result.code + '"');
     }
 
     return execution;
