@@ -4,7 +4,7 @@ const CommandBase = SYS.use('Command.base');
 
 // load commands
 const commands = (function registerCommands() {
-  var plugins = SYS.plugins('Command', 'bin', 'mods');
+  var plugins = SYS.plugins('Command');
   var result = [];
 
   for (var i in plugins) {

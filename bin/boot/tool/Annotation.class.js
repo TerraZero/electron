@@ -14,7 +14,7 @@ module.exports = class Annotation {
   }
 
   static listAnnotations() {
-    return SYS.lookup('annotation', 'bin', 'mods');
+    return SYS.lookup('annotation');
   }
 
   constructor(path = null) {

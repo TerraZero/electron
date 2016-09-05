@@ -27,4 +27,34 @@ module.exports = class TestCommand extends Command {
     console.log(Controller.load);
   }
 
+  /**
+    * @Command(
+    *   params={
+    *     key: {type: "string"}
+    *   }
+    * )
+    */
+  test(key) {
+    var User = SYS.route('entity.user');
+    console.log(User.__route);
+    var u = new User();
+    console.log(u.constructor.__route);
+  }
+
+  /**
+    * @Command
+    */
+  builder() {
+    var User = SYS.route('entity.user');
+    var u = new User();
+    u.on('test').on('cool');
+  }
+
+  /**
+    * @Command
+    */
+  options() {
+    SYS.route('logger').options('Test: ', ['option 1', 'option 2', 'option 3']);
+  }
+
 }

@@ -7,8 +7,10 @@ module.exports = class Sys {
     this._cache = {};
     this._hooks = {};
     this._routines = {};
+    this._settings = {};
     this._loaded_routes = {};
 
+    this.initializeSettings();
     this.initializeRoutines();
     this.initializeAnnotations();
     this.initializeInfos();
@@ -21,11 +23,15 @@ module.exports = class Sys {
     TOOLS.Annotation.initialize();
   }
 
+  static initializeSettings() {
+    this._settings = require(this.base() + '/settings/base.json');
+  }
+
   /**
     * Read info files from mods directory ans save it
     */
   static initializeInfos() {
-    var files = this.lookup('info', 'mods');
+    var files = this.lookup('info');
 
     for (var index in files) {
       this._infos[index] = new (require(files[index].resolve()))();
@@ -43,7 +49,7 @@ module.exports = class Sys {
     this._routines['class'] = new (require('./routines/ClassRoutine.routine.js'))();
     this._routines['base'] = new (require('./routines/BaseRoutine.routine.js'))();
 
-    var paths = this.lookup('routine', 'mods');
+    var paths = this.lookup('routine', ['mods']);
 
     for (var index in paths) {
       var routine = new (require(paths[index].resolve()));
@@ -67,7 +73,7 @@ module.exports = class Sys {
     this._mods = [];
 
     // get all mod files in mods directory
-    var files = this.lookup('mod', 'mods');
+    var files = this.lookup('mod');
 
     for (var index in files) {
       var mod = require(files[index].resolve()).build();
@@ -85,7 +91,7 @@ module.exports = class Sys {
   }
 
   static initializePlugins() {
-    var plugins = this.plugins('SysRoute', 'bin', 'mods');
+    var plugins = this.plugins('SysRoute');
     var register = {};
     var pluginsRegister = [];
 
@@ -108,7 +114,7 @@ module.exports = class Sys {
       }
     }
 
-    var plugins = this.plugins(pluginsRegister, 'bin', 'mods');
+    var plugins = this.plugins(pluginsRegister);
     for (var p in plugins) {
       var annots = plugins[p].annotation.getDefinitions(pluginsRegister);
 
@@ -131,6 +137,10 @@ module.exports = class Sys {
         });
       }
     }
+  }
+
+  static setting(name) {
+    return this._settings[name];
   }
 
   /**
@@ -211,8 +221,8 @@ module.exports = class Sys {
     return this.cache('info', cid, results);
   }
 
-  static lookup(type) {
-    var dirs = TOOLS.args(arguments, 1);
+  static lookup(type, dirs = null) {
+    var dirs = dirs || this.setting('root');
 
     var result = [];
     for (var dir in dirs) {
@@ -221,9 +231,9 @@ module.exports = class Sys {
     return result;
   }
 
-  static plugins(annotations) {
+  static plugins(annotations, dirs = null) {
     if (!TOOLS.isArray(annotations)) annotations = [annotations];
-    var dirs = TOOLS.args(arguments, 1);
+    var dirs = dirs || this.setting('root');
 
     var result = [];
     for (var dir in dirs) {
@@ -352,8 +362,8 @@ module.exports = class Sys {
       struct: data.struct || undefined,
       annotation: data.annotation || null,
       register: data.register || null,
-      initFunction: data.initFunction || 'initRoute',
-      getFunction: data.getFunction || 'getFunction',
+      initFunction: (data.initFunction === undefined ? 'initRoute' : data.initFunction),
+      getFunction: (data.getFunction === undefined ? 'getFunction' : data.getFunction),
     };
   }
 
@@ -458,6 +468,9 @@ module.exports = class Sys {
     // if no struct is loaded, load the struct and initiat it
     if (route.struct === undefined) {
       route.struct = SYS.use(route.path);
+
+      // add magic route informations
+      route.struct.__route = route;
 
       // init route if a function is givin
       if (route.initFunction && TOOLS.isFunction(route.struct[route.initFunction])) {

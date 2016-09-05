@@ -5,6 +5,7 @@ const Logger = SYS.route('base.logger');
 const colors = require('colors');
 const readlineSync = require('readline-sync');
 const Table = require('cli-table2');
+const promptOptions = require('prompt-autocomplete');
 
 /**
   * @SysRoute(
@@ -37,6 +38,12 @@ module.exports = class CLILogger extends Logger {
   }
 
 
+
+  options(title, options) {
+    promptOptions(title, options, function(err, answer) {
+      console.log(answer);
+    });
+  }
 
   table(data) {
     if (TOOLS.isArray(data)) data = {rows: data};

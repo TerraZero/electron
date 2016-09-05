@@ -4,9 +4,9 @@ const args = require('yargs').argv;
 
 require('./head.js');
 // set default logger to cli logger
-SYS.get('logger.struct').setLogger('logger.cli');
+SYS.route('logger.struct').setLogger('logger.cli');
 
-const Command = SYS.get('command');
+const Command = SYS.route('command');
 
 // start script
 console.log();
@@ -19,4 +19,4 @@ Command.execute(command, args);
 console.log();
 
 // TODO
-SYS.get('database.connection').end();
+SYS.route('database.connection').end();

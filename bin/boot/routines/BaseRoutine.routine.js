@@ -2,7 +2,7 @@
 
 const UseRoutine = SYS.use('./UseRoutine.routine');
 const bases = (function() {
-  var paths = SYS.lookup('base', 'bin', 'mods');
+  var paths = SYS.lookup('base');
   var result = {};
 
   for (var i in paths) {

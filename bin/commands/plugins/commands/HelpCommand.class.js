@@ -98,15 +98,4 @@ module.exports = class HelpCommand extends CommandBase {
     }
   }
 
-  /**
-    * @Command(
-    *   params={
-    *     key: {type: "string"}
-    *   }
-    * )
-    */
-  test(key) {
-    console.log(SYS.route(key));
-  }
-
 }

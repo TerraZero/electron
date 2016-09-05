@@ -36,7 +36,7 @@ module.exports = class FindCommand extends CommandBase {
     * )
     */
   mods(expression = null) {
-    var mods = SYS.lookup('mod', 'mods');
+    var mods = SYS.lookup('mod');
 
     mods = TOOLS.Array.filter(mods, expression);
     for (var i in mods) {
@@ -52,7 +52,7 @@ module.exports = class FindCommand extends CommandBase {
     * )
     */
   routines(expression = null) {
-    var routines = SYS.lookup('routine', 'bin', 'mods');
+    var routines = SYS.lookup('routine');
 
     routines = TOOLS.Array.filter(routines, expression);
     for (var i in routines) {
@@ -69,7 +69,7 @@ module.exports = class FindCommand extends CommandBase {
     * )
     */
   classes(expression = null) {
-    var classes = SYS.lookup('class', 'bin', 'mods');
+    var classes = SYS.lookup('class');
 
     classes = TOOLS.Array.filter(classes, expression);
     for (var i in classes) {
@@ -104,7 +104,7 @@ module.exports = class FindCommand extends CommandBase {
     * )
     */
   base(expression = null) {
-    var bases = SYS.use(TOOLS.Array.filter(SYS.lookup('routine', 'bin', 'mods'), '.*BaseRoutine\.routine\.js$')[0]).bases();
+    var bases = SYS.use(TOOLS.Array.filter(SYS.lookup('routine'), '.*BaseRoutine\.routine\.js$')[0]).bases();
 
     bases = TOOLS.Array.filter(bases, expression, function(base) {
       return base.path.resolve();
@@ -125,7 +125,7 @@ module.exports = class FindCommand extends CommandBase {
     */
   plugins(annotation, expression = null) {
     if (!annotation) annotation = this.input('Annotation: ');
-    var plugins = SYS.plugins(annotation, 'bin', 'mods')[annotation];
+    var plugins = SYS.plugins(annotation)[annotation];
 
     plugins = TOOLS.Array.filter(plugins, expression, function(plugin) {
       return plugin.path.resolve();
