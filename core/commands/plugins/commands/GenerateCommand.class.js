@@ -16,7 +16,7 @@ module.exports = class GenerateCommand extends Command {
     this.out('Generate Module');
 
     var name = this.input('Name: ');
-    var path = this.input('Path (~mods/): ', '~mods/');
+    var path = this.input('Path (:mods/): ', ':mods/');
 
     var path = new TOOLS.Path(path);
 

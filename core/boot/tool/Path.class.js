@@ -30,7 +30,7 @@ module.exports = class Path {
   path(path) {
     if (!ISDEF(path)) return this._path;
 
-    if (path.startsWith('~')) {
+    if (path.startsWith(':')) {
       path = TOOLS.String.replace(path.substring(1), SYS.setting('paths'));
     }
 
