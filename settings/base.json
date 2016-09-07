@@ -1,6 +1,6 @@
 {
   "root": [
-    "bin",
+    "core",
     "mods"
   ]
 }

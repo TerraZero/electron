@@ -62,7 +62,7 @@ module.exports = class Sys {
     * Init errors
     */
   static initializeErrors() {
-    this._SysError = SYS.use('bin/sys/SysError.error');
+    this._SysError = SYS.use('core/sys/SysError.error');
   }
 
   /**

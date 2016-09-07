@@ -1,6 +1,6 @@
 'use strict';
 
-const FormContainer = SYS.use('bin/forms/FormContainer.class');
+const FormContainer = SYS.use('core/forms/FormContainer.class');
 
 /**
   * @Base("Form")

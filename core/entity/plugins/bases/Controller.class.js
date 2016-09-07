@@ -1,6 +1,6 @@
 'use strict';
 
-const Squel = SYS.use('bin/database/Squel.class');
+const Squel = SYS.use('core/database/Squel.class');
 
 /**
   * @Base("Controller")

@@ -2,7 +2,7 @@
 /* global SYS */
 'use strict';
 
-const EventHandler = SYS.use('bin/events/EventHandler.class');
+const EventHandler = SYS.use('core/events/EventHandler.class');
 const StreamLine = SYS.use('./StreamLine.class');
 
 module.exports = class Stream {
