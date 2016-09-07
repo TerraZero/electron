@@ -22,4 +22,11 @@ module.exports = class String {
     return splitted;
   }
 
+  static replace(string, replacings) {
+    for (var pattern in replacings) {
+      string = string.split(pattern).join(replacings[pattern]);
+    }
+    return string;
+  }
+
 }

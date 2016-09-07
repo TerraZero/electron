@@ -2,5 +2,16 @@
   "root": [
     "core",
     "mods"
-  ]
+  ],
+  "paths": {
+    "core": "core",
+    "mods": "mods",
+    "boot": "core/boot",
+    "settings": "settings",
+    "src": "src",
+    "tpl": "tpl",
+    "js": "src/js",
+    "css": "src/css",
+    "image": "src/img"
+  }
 }

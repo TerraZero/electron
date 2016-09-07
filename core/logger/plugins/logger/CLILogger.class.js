@@ -80,9 +80,14 @@ module.exports = class CLILogger extends Logger {
     this.console(table.toString());
   }
 
-  input(message) {
+  input(message, fallback = null) {
     if (TOOLS.isString(message)) {
-      return readlineSync.question('> ' + message);
+      var input = readlineSync.question('> ' + message);
+
+      if (input.length == 0) {
+        return fallback;
+      }
+      return input;
     }
   }
 

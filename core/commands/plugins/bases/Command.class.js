@@ -84,8 +84,8 @@ module.exports = class Command extends Gettable {
     this._result.code = Command.ERROR;
   }
 
-  input(message) {
-    return SYS.route('logger').input(message);
+  input(message, fallback = null) {
+    return SYS.route('logger').input(message, fallback);
   }
 
   table(data) {

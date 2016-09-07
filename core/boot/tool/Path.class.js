@@ -30,6 +30,10 @@ module.exports = class Path {
   path(path) {
     if (!ISDEF(path)) return this._path;
 
+    if (path.startsWith('~')) {
+      path = TOOLS.String.replace(path.substring(1), SYS.setting('paths'));
+    }
+
     this._final = path.startsWith('$');
 
     if (this._final) {
@@ -37,6 +41,7 @@ module.exports = class Path {
     } else {
       this._path = path;
     }
+
     return this;
   }
 
