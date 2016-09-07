@@ -124,7 +124,7 @@ module.exports = class FindCommand extends CommandBase {
     * )
     */
   plugins(annotation, expression = null) {
-    if (!annotation) annotation = this.input('Annotation: ');
+    if (!annotation) annotation = this.input('string', 'Annotation');
     var plugins = SYS.plugins(annotation)[annotation];
 
     plugins = TOOLS.Array.filter(plugins, expression, function(plugin) {

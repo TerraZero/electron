@@ -15,13 +15,14 @@ module.exports = class GenerateCommand extends Command {
   module() {
     this.out('Generate Module');
 
-    var name = this.input('Name: ');
-    var path = this.input('Path (:mods/): ', ':mods/');
+    // var name = this.input('string', 'Name');
+    // var path = this.input('string', 'Path ', ':mods/');
+    var t = this.options('Hallo', ['cool', 'hallo']);
 
-    var path = new TOOLS.Path(path);
+    // var path = new TOOLS.Path(path);
 
-    this.out(name);
-    this.out(path.resolve());
+    // this.out(name);
+    // this.out(path.resolve());
   }
 
 }

@@ -19,7 +19,7 @@ module.exports = class HelpCommand extends CommandBase {
     * )
     */
   command(name) {
-    if (!name) name = this.input('Command: ');
+    if (!name) name = this.input('string', 'Command');
 
     name = name.split('.');
     if (name.length == 1) {

@@ -17,7 +17,7 @@ module.exports = class TestCommand extends Command {
     * )
     */
   entities(type) {
-    if (!type) type = this.input('Type: ');
+    if (!type) type = this.input('string', 'Type');
 
     var loader = SYS.route('entity');
 
@@ -55,6 +55,13 @@ module.exports = class TestCommand extends Command {
     */
   options() {
     SYS.route('logger').options('Test: ', ['option 1', 'option 2', 'option 3']);
+  }
+
+  /**
+    * @Command
+    */
+  datatype() {
+    var name = this.input('int', 'Name');
   }
 
 }

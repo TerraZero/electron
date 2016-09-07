@@ -6,6 +6,7 @@ const colors = require('colors');
 const readlineSync = require('readline-sync');
 const Table = require('cli-table2');
 const promptOptions = require('prompt-autocomplete');
+const charm = require('charm')(process);
 
 /**
   * @SysRoute(
@@ -39,10 +40,9 @@ module.exports = class CLILogger extends Logger {
 
 
 
-  options(title, options) {
-    promptOptions(title, options, function(err, answer) {
-      console.log(answer);
-    });
+  options(message, options) {
+    var p = charm.position();
+    console.log(p);
   }
 
   table(data) {
@@ -80,15 +80,37 @@ module.exports = class CLILogger extends Logger {
     this.console(table.toString());
   }
 
-  input(message, fallback = null) {
-    if (TOOLS.isString(message)) {
-      var input = readlineSync.question('> ' + message);
+  input(types, message, fallback = null) {
+    if (TOOLS.isString(types)) types = [types];
+    const Validater = SYS.route('datatype');
+    var valid = false;
+    var input = null;
 
-      if (input.length == 0) {
-        return fallback;
-      }
-      return input;
+    if (fallback) {
+      do {
+        input = readlineSync.question('> ' + message + '(' + fallback + ')' + ': ');
+        if (input.length == 0) return fallback;
+        input = Validater.scanCheck(types, input);
+        valid = Validater.scanValid(types, input) !== false;
+        if (!valid) {
+          this.error(Validater.cli(types[0]));
+        }
+      } while (!valid);
+    } else {
+      do {
+        input = readlineSync.question('> ' + message + ': ');
+        if (input.length == 0) {
+          this.error('Value is required!');
+        } else {
+          input = Validater.scanCheck(types, input);
+        }
+        valid = Validater.scanValid(types, input) !== false;
+        if (!valid) {
+          this.error(Validater.cli(types[0]));
+        }
+      } while (!valid);
     }
+    return input;
   }
 
   cliWidth() {
