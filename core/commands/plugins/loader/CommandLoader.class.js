@@ -1,6 +1,6 @@
 'use strict';
 
-const CommandBase = SYS.use('Command.base');
+const CommandBase = SYS.route('base.command');
 
 // load commands
 const commands = (function registerCommands() {
