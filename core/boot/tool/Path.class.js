@@ -5,7 +5,8 @@ const NPath = require('path');
 module.exports = class Path {
 
   static list(dir, expression, recursive = null, offset = 0) {
-    var files = TOOLS.File.list(dir, expression, recursive);
+    if (!TOOLS.is(dir, Path)) dir = new TOOLS.Path(dir);
+    var files = TOOLS.File.list(dir.resolve(), expression, recursive);
 
     for (var index in files) {
       files[index] = new Path('$' + files[index], offset + 1);

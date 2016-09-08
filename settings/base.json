@@ -9,9 +9,13 @@
     "boot": "core/boot",
     "settings": "settings",
     "src": "src",
-    "tpl": "tpl",
+    "tpl": "src/tpl",
+    "pug": "pug",
     "js": "src/js",
     "css": "src/css",
     "image": "src/img"
+  },
+  "pug": {
+    "debug": true
   }
 }

@@ -72,7 +72,7 @@ module.exports = class Sys {
 
     var result = [];
     for (var dir in dirs) {
-      result = TOOLS.Array.merge(result, TOOLS.Path.list(this.base() + '/' + dirs[dir], '.*\.' + type + '\.js$'));
+      result = TOOLS.Array.merge(result, TOOLS.Path.list(dirs[dir], '.*\.' + type + '\.js$'));
     }
     return result;
   }
@@ -83,7 +83,7 @@ module.exports = class Sys {
 
     var result = [];
     for (var dir in dirs) {
-      var paths = TOOLS.Path.list(this.base() + '/' + dirs[dir], '.*plugins.*\.js$');
+      var paths = TOOLS.Path.list(dirs[dir], '.*plugins.*\.js$');
 
       for (var path in paths) {
         var annot = new TOOLS.Annotation(paths[path]);
@@ -102,9 +102,9 @@ module.exports = class Sys {
   /**
     * Invokes a class or object of a specific type
     */
-  static use(path, flush = false) {
+  static use(path, type = '.js', flush = false) {
     if (!TOOLS.is(path, TOOLS.Path)) path = new TOOLS.Path(path, 1);
-    var file = path.resolve('.js');
+    var file = path.resolve(type);
 
     if (flush) {
       delete require.cache[require.resolve(file)];
