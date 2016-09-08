@@ -1,5 +1,11 @@
 'use strict';
 
+/**
+  * @SysRoute(
+  *   value="dev.reflecter",
+  *   description="Reflecter class for dev"
+  * )
+  */
 class Reflecter {
 
   constructor(object, parent = null, strict = false) {

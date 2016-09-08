@@ -52,8 +52,6 @@
 // const User = SYS.use('bin/entity/User');
 // var u = new User();
 
-SYS.hook('init');
-
 const FrameMod = SYS.use('FrameMod.mod');
 
 var frame = FrameMod.resolve('core');

@@ -58,7 +58,7 @@ module.exports = class Annotation extends AnnotationBase {
   }
 
   /**
-    * MAGIC: gives the filter value
+    * @Magic
     */
   __filterValue(annotation) {
     return annotation._name();

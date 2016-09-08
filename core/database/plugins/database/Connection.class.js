@@ -1,6 +1,6 @@
 'use strict';
 
-const mysql = SYS.use('mysql.node');
+const mysql = SYS.node('mysql');
 
 /**
   * @SysRoute(

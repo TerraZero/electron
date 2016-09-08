@@ -4,22 +4,17 @@ module.exports = class Sys {
 
   static initialize() {
     this._infos = {};
-    this._cache = {};
-    this._hooks = {};
-    this._routines = {};
     this._settings = {};
-    this._loaded_routes = {};
 
     this.initializeSettings();
-    this.initializeRoutines();
     this.initializeAnnotations();
+    this.initializeRoutes();
     this.initializeInfos();
-    this.initializeErrors();
     this.initializeMods();
-    this.initializePlugins();
   }
 
   static initializeAnnotations() {
+    this._Annotation = require('./bases/Annotation.class.js');
     TOOLS.Annotation.initialize();
   }
 
@@ -28,7 +23,7 @@ module.exports = class Sys {
   }
 
   /**
-    * Read info files from mods directory ans save it
+    * Read info files from mods directory and save it
     */
   static initializeInfos() {
     var files = this.lookup('info');
@@ -40,36 +35,10 @@ module.exports = class Sys {
   }
 
   /**
-    * Load UseRoutines from system
-    */
-  static initializeRoutines() {
-    this._routines[null] = new (require('./routines/UseRoutine.routine.js'))();
-    this._routines['mod'] = new (require('./routines/ModRoutine.routine.js'))();
-    this._routines['node'] = new (require('./routines/NodeRoutine.routine.js'))();
-    this._routines['class'] = new (require('./routines/ClassRoutine.routine.js'))();
-    this._routines['base'] = new (require('./routines/BaseRoutine.routine.js'))();
-
-    var paths = this.lookup('routine', ['mods']);
-
-    for (var index in paths) {
-      var routine = new (require(paths[index].resolve()));
-
-      this._routines[index] = routine;
-    }
-  }
-
-  /**
-    * Init errors
-    */
-  static initializeErrors() {
-    this._SysError = SYS.use('core/sys/SysError.error');
-  }
-
-  /**
     * Loading mods from mods directory
     */
   static initializeMods() {
-    this._Mod = SYS.use('Mod.base');
+    this._Mod = SYS.route('base.mod');
     this._mods = [];
 
     // get all mod files in mods directory
@@ -90,135 +59,12 @@ module.exports = class Sys {
     }
   }
 
-  static initializePlugins() {
-    var plugins = this.plugins('SysRoute');
-    var register = {};
-    var pluginsRegister = [];
-
-    for (var p in plugins) {
-      var routes = plugins[p].annotation.getDefinitions('SysRoute');
-
-      for (var r in routes) {
-        if (routes[r].register) {
-          register[routes[r].register] = routes[r];
-          pluginsRegister.push(routes[r].register);
-        } else {
-          this.addRoute(routes[r].value, {
-            path: plugins[p].path,
-            description: routes[r].description,
-            annotation: routes[r],
-            initFunction: routes[r].initFunction,
-            getFunction: routes[r].getFunction,
-          });
-        }
-      }
-    }
-
-    var plugins = this.plugins(pluginsRegister);
-    for (var p in plugins) {
-      var annots = plugins[p].annotation.getDefinitions(pluginsRegister);
-
-      for (var a in annots) {
-        var regis = register[annots[a]._name()];
-        var value = regis.value;
-        var description = annots[a].description || regis.description;
-
-        for (var k in regis.keys) {
-          value = value.replace('<' + regis.keys[k] + '>', annots[a][regis.keys[k]]);
-          description = description.replace('<' + regis.keys[k] + '>', annots[a][regis.keys[k]]);
-        }
-        this.addRoute(value, {
-          path: plugins[p].path,
-          description: description,
-          annotation: annots[a],
-          register: regis,
-          initFunction: regis.initFunction,
-          getFunction: regis.getFunction,
-        });
-      }
-    }
+  static initializeRoutes() {
+    TOOLS.Route.initialize();
   }
 
   static setting(name) {
     return this._settings[name];
-  }
-
-  /**
-    * Executing a hook without caching
-    *
-    * @see Sys.cHook
-    *
-    * @param (string) hook  - the name (function name) of the hook
-    * @param ...            - arguments for the hook
-    * @return array - the results from hooks
-    */
-  static hook(hook) {
-    if (!this._hooks[hook]) {
-      this.generateHook(hook);
-    }
-    var args = TOOLS.args(arguments, 1);
-    var results = [];
-
-    for (var mod in this._hooks[hook]) {
-      var result = this._hooks[hook][mod][hook].apply(this._hooks[hook][mod], args);
-
-      if (result != undefined) {
-        results.push(result);
-      }
-    }
-    return results;
-  }
-
-  /**
-    * Executing a hook with caching and merge the result
-    *
-    * @see Sys.hook
-    * @see Tools.merge
-    *
-    * @param (string) hook  - the name (function name) of the hook
-    * @param ...            - arguments for the hook
-    * @return array - the merged results of an hook
-    */
-  static cHook(hook) {
-    var cid = hook;
-    var cache = this.cache('hook', cid);
-
-    if (cache) return cache;
-
-    var results = this.hook.apply(this, TOOLS.args(arguments, 1));
-    results.unshift([]);
-    // merge all arrays from result
-    var array = TOOLS.Array.merge.apply(TOOLS.Array, results);
-
-    return this.cache('hook', cid, array);
-  }
-
-  /**
-    * Executing a info hook with caching from info files
-    *
-    * @see Sys.cHook
-    *
-    * @param (string) hook  - the name (function name) of the hook
-    * @param ...            - arguments for the hook
-    * @return array - the merged results of an hook
-    */
-  static info(hook) {
-    var cid = hook;
-    var cache = this.cache('info', cid);
-
-    if (cache) return cache;
-
-    var args = TOOLS.args(arguments, 1);
-    var results = [];
-
-    for (var info in this._infos) {
-      if (this._infos[info][hook] && typeof this._infos[info][hook] == 'function') {
-        var result = this._infos[info][hook].apply(this._infos[info], args);
-
-        results = TOOLS.Array.merge(results, result);
-      }
-    }
-    return this.cache('info', cid, results);
   }
 
   static lookup(type, dirs = null) {
@@ -254,83 +100,20 @@ module.exports = class Sys {
   }
 
   /**
-    * Generate the hook array for the hook function
-    *
-    * @see Sys.hook
-    *
-    * @param hook - the hook name to generate
-    */
-  static generateHook(hook) {
-    this._hooks[hook] = [];
-
-    for (var mod in this._mods) {
-      if (this._mods[mod].mod[hook] && typeof this._mods[mod].mod[hook] == 'function') {
-        this._hooks[hook].push(this._mods[mod].mod);
-      }
-    }
-  }
-
-  /**
-    * Build a cache or get a cache build
-    *
-    * @param name - the name of the cache
-    * @param key - the name of the key in the cache
-    * @param set - the value to set for the defined cache
-    * @return the cache object or if set isset (not null) the value to set
-    */
-  static cache(name, key, set = null) {
-    this._cache[name] = this._cache[name] || {};
-
-    if (set == null) {
-      return this._cache[name][key];
-    } else {
-      this._cache[name][key] = set;
-      return set;
-    }
-  }
-
-  /**
-    * Clear the cache for a specific definition
-    *
-    * @param name - the name of the cache
-    * @param key - the key of the cache
-    */
-  static clear(name = null, key = null) {
-    if (name == null) {
-      this._cache = {};
-    } else if (this._cache[name]) {
-      if (key == null) {
-        this._cache[name] = {};
-      } else if (this._cache[name][key]) {
-        delete this._cache[name][key];
-      }
-    }
-  }
-
-  /**
     * Invokes a class or object of a specific type
-    *
-    * @param path     - the path to look up
-    * @param type     - the type of the object
-    *         options - class (default)
-    *                 - null
-    *                 - module
-    *                 - mod
-    *                 - node (load the node module directly)
-    *                 - remote (load the node module directly over remote)
-    * @param options  - Object for the use routine
-    * @param args...  - Arguments for Module classes
     */
-  static use(path, args = []) {
+  static use(path, flush = false) {
     if (!TOOLS.is(path, TOOLS.Path)) path = new TOOLS.Path(path, 1);
+    var file = path.resolve('.js');
 
-    var cid = path.path();
-    var cache = this.cache('use', cid);
+    if (flush) {
+      delete require.cache[require.resolve(file)];
+    }
+    return require(file);
+  }
 
-    if (cache) return cache;
-
-    var routine = this.getRoutine(path);
-    return routine.use(path, args);
+  static node(name) {
+    return require(name);
   }
 
   static error(message) {
@@ -341,65 +124,6 @@ module.exports = class Sys {
     } else {
       Logger.error(message);
     }
-  }
-
-  static createRoute(data, route = null) {
-    if (!route && !data.route) {
-      SYS.error('Create SysRoute: route is required!');
-      return;
-    }
-    route = (route || data.route).toLowerCase();
-    if (!data.path) {
-      SYS.error('Create SysRoute: "' + route + '" path is required!');
-      return;
-    }
-
-    return {
-      route: route,
-      description: data.description || '',
-      path: data.path,
-      params: data.params || [],
-      struct: data.struct || undefined,
-      annotation: data.annotation || null,
-      register: data.register || null,
-      initFunction: (data.initFunction === undefined ? 'initRoute' : data.initFunction),
-      getFunction: (data.getFunction === undefined ? 'getFunction' : data.getFunction),
-    };
-  }
-
-  static addRoute(route, data) {
-    if (this._loaded_routes[route.toLowerCase()] !== undefined) {
-      SYS.error('SysRoute "' + route + '" is already in use! Use setRoute to override SysRoute!');
-      return;
-    }
-
-    this._loaded_routes[route.toLowerCase()] = this.createRoute(data, route);
-  }
-
-  static setRoute(data) {
-    var route = data.route.toLowerCase();
-
-    if (this._loaded_routes[route] === undefined) {
-      SYS.error('SysRoute "' + route + '" don\'t exist! Use addRoute to add the SysRoute!');
-      return;
-    }
-
-    this._loaded_routes[route] = this.createRoute(data);
-  }
-
-  /**
-    * Get the defined use routine for a givin type
-    *
-    * @param (Path) path - the type of the routine
-    * @return UseRoutine - the use routine for the type
-    */
-  static getRoutine(path) {
-    for (var index in this._routines) {
-      if (this._routines[index].isRoutine(path)) {
-        return this._routines[index];
-      }
-    }
-    return this._routines[null];
   }
 
   /**
@@ -425,32 +149,6 @@ module.exports = class Sys {
   }
 
   /**
-    * Create an contextual error object
-    * TODO comment - and syserror rework
-    */
-  static context(subject, method = null, message = null) {
-    var context = {
-      subject: null,
-      object: null,
-      type: null,
-      method: method,
-      message: message,
-    };
-
-    if (subject === true) {
-      return new this._SysError(method);
-    }
-
-    if (subject && subject.constructor && subject.constructor.name && typeof subject != 'string') {
-      context.object = subject;
-    } else if (subject) {
-      context.subject = subject;
-    }
-    return new this._SysError(context);
-  }
-
-
-  /**
     * Get the base path of project
     *
     * @return string - path to root of project
@@ -460,33 +158,11 @@ module.exports = class Sys {
   }
 
   static route(route) {
-    route = this._loaded_routes[route.toLowerCase()];
+    return TOOLS.Route.load(route, TOOLS.args(arguments, 1));
+  }
 
-    // give null when no route is known
-    if (route === undefined) return null;
-
-    // if no struct is loaded, load the struct and initiat it
-    if (route.struct === undefined) {
-      route.struct = SYS.use(route.path);
-
-      // add magic route informations
-      route.struct.__route = route;
-
-      // init route if a function is givin
-      if (route.initFunction && TOOLS.isFunction(route.struct[route.initFunction])) {
-        route.struct[route.initFunction].call(route.struct, route);
-      }
-    }
-
-    // if a getter function is known than use it
-    if (route.getFunction && TOOLS.isFunction(route.struct[route.getFunction])) {
-      var args = TOOLS.args(arguments, 1);
-
-      args.unshift(route);
-      return route.struct[route.getFunction].apply(route.struct, args);
-    }
-
-    return route.struct;
+  static get Annotation() {
+    return this._Annotation;
   }
 
 }

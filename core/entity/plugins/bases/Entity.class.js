@@ -76,7 +76,7 @@ module.exports = class Entity {
   }
 
   static type() {
-    SYS.context('Entity', 'static:type').abstract();
+    SYS.error('type is an abstract method');
   }
 
   constructor(row = null) {

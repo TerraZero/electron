@@ -85,7 +85,7 @@ module.exports = class Path {
   }
 
   /**
-    * MAGIC: gives the filter value
+    * @Magic
     */
   __filterValue(path) {
     return path.resolve();

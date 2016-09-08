@@ -97,6 +97,12 @@ module.exports = class Array {
     return array;
   }
 
+  /**
+    * @Magic(
+    *   value="__filterValue",
+    *   description="give string value to filter objects with regex"
+    * )
+    */
   static filter(array, expression = null, value = null) {
     if (!expression) return array;
     if (TOOLS.isFunction(expression)) return Array.filterFunc(array, expression);

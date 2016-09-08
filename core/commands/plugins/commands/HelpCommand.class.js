@@ -90,6 +90,15 @@ module.exports = class HelpCommand extends CommandBase {
             rows.push(['', '(' + (founds[i].params[param].value === undefined ? '' : 'optional:') + founds[i].params[param].type + ') ' + param + ': ' + (founds[i].params[param].value == null ? 'null' : founds[i].params[param].value)])
           }
         }
+
+        rows.push(['Options:', '']);
+        for (var option in founds[i].options) {
+          if (founds[i].options[option].type == 'boolean') {
+            rows.push(['  -' + option, '(' + founds[i].options[option].type + ') ' + founds[i].options[option].description]);
+          } else {
+            rows.push(['  --' + option, '(' + founds[i].options[option].type + ') ' + founds[i].options[option].description]);
+          }
+        }
       }
 
       this.table(rows);

@@ -144,14 +144,14 @@ module.exports = class FindCommand extends CommandBase {
     * )
     */
   ids(expression = null) {
-    var ids = SYS._loaded_routes;
+    var ids = TOOLS.Route.routes;
 
     ids = TOOLS.Array.filter(ids, expression, function(id) {
-      return id.path.resolve();
+      return id.path().resolve();
     });
 
     for (var i in ids) {
-      this.out(ids[i].path.resolve());
+      this.out(ids[i].path().resolve());
     }
   }
 

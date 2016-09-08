@@ -1,6 +1,6 @@
 'use strict';
 
-const Gettable = SYS.route('base.gettable');
+const Gettable = SYS.route('interface.gettable');
 
 /**
   * @Base("Command")
@@ -106,6 +106,10 @@ module.exports = class Command extends Gettable {
 
   args() {
     return this._args;
+  }
+
+  arg(name, fallback = null) {
+    return (this.args()[name] === undefined ? fallback : this.args()[name]);
   }
 
   path() {

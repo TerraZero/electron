@@ -1,6 +1,6 @@
 'use strict';
 
-const Mod = SYS.use('Mod.base');
+const Mod = SYS.route('base.mod');
 
 module.exports = class FrameMod extends Mod {
 

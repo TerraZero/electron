@@ -1,5 +1,8 @@
 'use strict';
 
+/**
+  * @Base("Info")
+  */
 module.exports = class Info {
 
   constructor() {

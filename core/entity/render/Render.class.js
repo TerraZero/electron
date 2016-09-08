@@ -1,8 +1,8 @@
 'use strict';
 
-const Module = SYS.use('Module.base');
-const pug = SYS.use('pug.node');
-const fs = SYS.use('graceful-fs.node');
+const Module = SYS.route('base.module');
+const pug = SYS.node('pug');
+const fs = SYS.node('graceful-fs');
 
 module.exports = class Render extends Module {
 

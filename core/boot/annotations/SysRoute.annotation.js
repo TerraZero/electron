@@ -1,10 +1,8 @@
 'use strict'
 
-const Annotation = SYS.use('Annotation.base');
+module.exports = class SysRoute extends SYS.Annotation {
 
-module.exports = class SysRoute extends Annotation {
-
-  static get targets() { return [Annotation.DEFINITION] }
+  static get targets() { return [this.DEFINITION] }
 
   definition() {
     return {
@@ -13,8 +11,8 @@ module.exports = class SysRoute extends Annotation {
       params: [],
       description: '',
       loader: null,
-      getFunction: 'getRoute',
-      initFunction: 'initRoute',
+      getter: 'getRoute',
+      init: 'initRoute',
       keys: [],
     };
   }

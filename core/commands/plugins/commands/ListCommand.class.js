@@ -13,34 +13,50 @@ module.exports = class ListCommand extends Command {
     * @Command(
     *   params={
     *     expression: {type: "string", value: null}
+    *   },
+    *   options={
+    *     a: {type: "boolean", description: "Print all infos"},
+    *     m: {type: "boolean", description: "Print more infos about route"},
+    *     d: {type: "boolean", description: "Print with description"}
     *   }
     * )
     */
   routes(expression = null) {
-    var routes = TOOLS.Array.filter(SYS._loaded_routes, expression, function(route) {
-      return route.route;
+    var printAll = this.arg('a', false);
+    var printMore = printAll || this.arg('m', false);
+    var printDescription = printAll || this.arg('d', false);
+
+    var routes = TOOLS.Array.filter(TOOLS.Route.routes, expression, function(route) {
+      return route.route();
     });
 
     var rows = [];
 
     for (var i in routes) {
-      var route = [routes[i].route];
+      var route = [routes[i].route()];
 
-      if (routes[i].register) {
-        route.push('-> {DynRoute} ' + routes[i].register.value);
+      if (printMore && routes[i].register()) {
+        route.push('-> {DynRoute} ' + routes[i].register().value);
 
-        if (routes[i].register.loader) {
-          route.push('-> {Loader} ' + routes[i].register.loader);
+        if (routes[i].register().loader) {
+          route.push('-> {Loader} ' + routes[i].register().loader);
         }
       }
-
-      rows.push([
-        routes[i].annotation._name(),
+      var row = [
+        routes[i].annotation()._name(),
         route,
-        routes[i].description,
-      ]);
+      ];
+
+      if (printDescription) {
+        row.push(routes[i].description());
+      }
+      rows.push(row);
     }
-    this.table({head: ['TYPE', 'ROUTE', 'DESCRIPTION'], rows: rows});
+    var head = ['TYPE', 'ROUTE'];
+
+    if (printDescription) head.push('DESCRIPTION');
+
+    this.table({head: head, rows: rows});
   }
 
 }

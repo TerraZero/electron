@@ -1,7 +1,7 @@
 'use strict'
 
 /**
-  * @Base("Gettable")
+  * @Interface("Gettable")
   */
 module.exports = class Gettable {
 

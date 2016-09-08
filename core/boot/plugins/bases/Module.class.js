@@ -1,5 +1,8 @@
 'use strict';
 
+/**
+  * @Base("Module")
+  */
 module.exports = class Module {
 
   static build() {

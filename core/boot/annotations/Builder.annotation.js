@@ -1,10 +1,8 @@
 'use strict'
 
-const Annotation = SYS.use('Annotation.base');
+module.exports = class Builder extends SYS.Annotation {
 
-module.exports = class Builder extends Annotation {
-
-  static get targets() { return [Annotation.DEFINITION] }
+  static get targets() { return [this.DEFINITION] }
 
   definition() {
     return {
