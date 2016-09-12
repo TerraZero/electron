@@ -1,15 +1,27 @@
 'use strict';
 
 const NPath = require('path');
+const glob = SYS.node('glob');
 
 module.exports = class Path {
 
   static list(dir, expression, recursive = null, offset = 0) {
-    if (!TOOLS.is(dir, Path)) dir = new TOOLS.Path(dir);
+    if (!TOOLS.is(dir, Path)) dir = new Path(dir);
     var files = TOOLS.File.list(dir.resolve(), expression, recursive);
 
     for (var index in files) {
       files[index] = new Path('$' + files[index], offset + 1);
+    }
+    return files;
+  }
+
+  static glob(dir, pattern, offset = 0) {
+    if (!TOOLS.is(dir, Path)) dir = new Path(dir);
+    var files = glob.sync(pattern, {
+      cwd: dir.resolve(),
+    });
+    for (var index in files) {
+      files[index] = new Path('$' + dir.resolve() + '/' + files[index], offset + 1);
     }
     return files;
   }

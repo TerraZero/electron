@@ -72,4 +72,14 @@ module.exports = class TestCommand extends Command {
     console.log(func({cool: 'hallo', test: ['hier', 'und', 'das']}));
   }
 
+   /**
+    * @Command
+    */
+  glob() {
+    var paths = TOOLS.Path.glob('core', '**/plugins/**/*.class.js');
+    for (var path in paths) {
+      this.out(paths[path].resolve());
+    }
+  }
+
 }
