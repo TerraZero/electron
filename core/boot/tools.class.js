@@ -218,6 +218,11 @@ module.exports = class Tools {
     };
   }
 
+  static path(path, offset = 0) {
+    if (!TOOLS.is(path, TOOLS.Path)) path = new TOOLS.Path(path, offset + 1);
+    return path;
+  }
+
 }
 
 module.exports.Path = require('./tool/Path.class.js');
@@ -227,3 +232,4 @@ module.exports.File = require('./tool/File.class.js');
 module.exports.Reflection = require('./tool/Reflection.class.js');
 module.exports.Annotation = require('./tool/Annotation.class.js');
 module.exports.Route = require('./tool/Route.class.js');
+module.exports.Settings = require('./tool/Settings.class.js');

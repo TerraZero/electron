@@ -18,13 +18,13 @@ module.exports = class Annotation {
   }
 
   constructor(path = null) {
-    if (!TOOLS.is(path, TOOLS.Path)) path = new TOOLS.Path(path);
+    path = TOOLS.path(path);
     this._reader = new AnnotationBase.Reader(AnnotationRegistry);
     if (path) this.parse(path, 1);
   }
 
   parse(path) {
-    if (!TOOLS.is(path, TOOLS.Path)) path = new TOOLS.Path(path);
+    path = TOOLS.path(path);
     this._path = path;
     this._reader.parse(path.resolve('.js'));
     return this;

@@ -4,9 +4,7 @@ module.exports = class Sys {
 
   static initialize() {
     this._infos = {};
-    this._settings = {};
 
-    this.initializeSettings();
     this.initializeAnnotations();
     this.initializeRoutes();
     this.initializeInfos();
@@ -16,10 +14,6 @@ module.exports = class Sys {
   static initializeAnnotations() {
     this._Annotation = require('./bases/Annotation.class.js');
     TOOLS.Annotation.initialize();
-  }
-
-  static initializeSettings() {
-    this._settings = require(this.base() + '/settings/base.json');
   }
 
   /**
@@ -63,12 +57,32 @@ module.exports = class Sys {
     TOOLS.Route.initialize();
   }
 
-  static setting(name) {
-    return this._settings[name];
+  static config(name) {
+    var parts = name.split(':');
+    var keys = [];
+
+    if (parts.length == 2) {
+      keys = parts[1].split('.');
+    }
+
+    var config = require(SYS.base() + '/settings/' + parts[0] + '.json');
+
+    config = new TOOLS.Settings(config);
+
+    for (var key in keys) {
+      config = config.g(keys[key]);
+    }
+
+    return config.get();
+  }
+
+  static settings(name) {
+    var config = require(SYS.base() + '/settings/' + name + '.json');
+    return new TOOLS.Settings(config);
   }
 
   static lookup(type, dirs = null) {
-    var dirs = dirs || this.setting('root');
+    var dirs = dirs || this.config('base:root');
 
     var result = [];
     for (var dir in dirs) {
@@ -79,7 +93,7 @@ module.exports = class Sys {
 
   static plugins(annotations, dirs = null) {
     if (!TOOLS.isArray(annotations)) annotations = [annotations];
-    var dirs = dirs || this.setting('root');
+    var dirs = dirs || this.config('base:root');
 
     var result = [];
     for (var dir in dirs) {
@@ -103,7 +117,7 @@ module.exports = class Sys {
     * Invokes a class or object of a specific type
     */
   static use(path, type = '.js', flush = false) {
-    if (!TOOLS.is(path, TOOLS.Path)) path = new TOOLS.Path(path, 1);
+    path = TOOLS.path(path, 1);
     var file = path.resolve(type);
 
     if (flush) {

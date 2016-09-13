@@ -27,4 +27,56 @@ module.exports = class File {
     }
   }
 
+  constructor(path, offset = 0) {
+    this._path = TOOLS.path(path, 1 + offset);
+    this._content = undefined;
+  }
+
+  exist() {
+    return FS.existsSync(this.file());
+  }
+
+  path() {
+    return this._path;
+  }
+
+  file(extending = null) {
+    return this._path.resolve((extending === null ? '.js' : extending));
+  }
+
+  stat(extending = null) {
+    return FS.statSync(this.file(extending));
+  }
+
+  isDir() {
+    return this.stat('').isDirectory();
+  }
+
+  isFile() {
+    return this.stat().isFile();
+  }
+
+  list() {
+    var list = FS.readdirSync(this.file(''));
+
+    for (var i in list) {
+      list[i] = new File('$' + this.file('') + '/' + list[i]);
+    }
+    return list;
+  }
+
+  content(extending = null, flush = false) {
+    if (this._content === undefined || flush) {
+      this._content = FS.readFileSync(this.file(extending));
+    }
+    return this._content;
+  }
+
+  /**
+    * @Magic
+    */
+  __filterValue(file) {
+    return file.file();
+  }
+
 }

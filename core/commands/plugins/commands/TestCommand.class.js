@@ -82,4 +82,22 @@ module.exports = class TestCommand extends Command {
     }
   }
 
+  /**
+    * @Command
+    */
+  file() {
+    var file = new TOOLS.File(':boot');
+    console.log(file.file(''));
+    this.print(file.list());
+  }
+
+  print(files, deep = '--') {
+    for (var i in files) {
+      console.log(deep + ' ' + files[i].path().parse().base);
+      if (files[i].isDir()) {
+        this.print(files[i].list(), deep + '--');
+      }
+    }
+  }
+
 }

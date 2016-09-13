@@ -1,6 +1,6 @@
 'use strict';
 
-const NPath = require('path');
+const NPath = SYS.node('path');
 const glob = SYS.node('glob');
 
 module.exports = class Path {
@@ -47,7 +47,7 @@ module.exports = class Path {
     if (!ISDEF(path)) return this._path;
 
     if (path.startsWith(':')) {
-      path = TOOLS.String.replace(path.substring(1), SYS.setting('paths'));
+      path = TOOLS.String.replace(path.substring(1), SYS.config('base:paths'));
     }
 
     this._final = path.startsWith('$');
