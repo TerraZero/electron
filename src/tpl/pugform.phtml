@@ -7,39 +7,36 @@ function pug_escape(e){var a=""+e,t=pug_match_html.exec(a);if(!t)return e;var r,
 var pug_has_own_property=Object.prototype.hasOwnProperty;
 var pug_match_html=/["&<>]/;
 function pug_rethrow(n,e,r,t){if(!(n instanceof Error))throw n;if(!("undefined"==typeof window&&e||t))throw n.message+=" on line "+r,n;try{t=t||require("fs").readFileSync(e,"utf8")}catch(e){pug_rethrow(n,null,r)}var i=3,a=t.split("\n"),o=Math.max(r-i,0),h=Math.min(a.length,r+i),i=a.slice(o,h).map(function(n,e){var t=e+o+1;return(t==r?"  > ":"    ")+t+"| "+n}).join("\n");throw n.path=e,n.message=(e||"Pug")+":"+r+"\n"+i+"\n\n"+n.message,n}
-function pug_style(r){if(!r)return"";if("object"==typeof r){var e="",t="";for(var n in r)pug_has_own_property.call(r,n)&&(e=e+t+n+":"+r[n],t=";");return e}return r=""+r,";"===r[r.length-1]?r.slice(0,-1):r}function pugform(locals) {var pug_html = "", pug_mixins = {}, pug_interp;var pug_debug_filename, pug_debug_line;try {var pug_debug_sources = {"T:\\electron\\pug\\forms\\form.pug":"#{tag}&attributes(attr)\r\n  if content\r\n    | !{content}\r\n  else if childs\r\n    each child in childs\r\n      | !{child}"};
-;var locals_for_with = (locals || {});(function (attr, childs, content, tag) {;pug_debug_line = 1;pug_debug_filename = "T:\\electron\\pug\\forms\\form.pug";
+function pug_style(r){if(!r)return"";if("object"==typeof r){var e="",t="";for(var n in r)pug_has_own_property.call(r,n)&&(e=e+t+n+":"+r[n],t=";");return e}return r=""+r,";"===r[r.length-1]?r.slice(0,-1):r}function pugform(locals) {var pug_html = "", pug_mixins = {}, pug_interp;var pug_debug_filename, pug_debug_line;try {var pug_debug_sources = {"\u002Fvar\u002Fwww\u002Fhtml\u002Felectron\u002Fpug\u002Fforms\u002Fform.pug":"#{tag}&attributes(attr)\n  if content\n    | !{content}\n  else if childs\n    each child in childs\n      | !{child}"};
+;var locals_for_with = (locals || {});(function (attr, childs, content, tag) {;pug_debug_line = 1;pug_debug_filename = "\u002Fvar\u002Fwww\u002Fhtml\u002Felectron\u002Fpug\u002Fforms\u002Fform.pug";
 pug_html = pug_html + "\u003C" + (tag) + (pug_attrs(attr, false)) + "\u003E";
-;pug_debug_line = 2;pug_debug_filename = "T:\\electron\\pug\\forms\\form.pug";
+;pug_debug_line = 2;pug_debug_filename = "\u002Fvar\u002Fwww\u002Fhtml\u002Felectron\u002Fpug\u002Fforms\u002Fform.pug";
 if (content) {
-;pug_debug_line = 3;pug_debug_filename = "T:\\electron\\pug\\forms\\form.pug";
+;pug_debug_line = 3;pug_debug_filename = "\u002Fvar\u002Fwww\u002Fhtml\u002Felectron\u002Fpug\u002Fforms\u002Fform.pug";
 pug_html = pug_html + (null == (pug_interp = content) ? "" : pug_interp);
 }
 else
 if (childs) {
-;pug_debug_line = 5;pug_debug_filename = "T:\\electron\\pug\\forms\\form.pug";
+;pug_debug_line = 5;pug_debug_filename = "\u002Fvar\u002Fwww\u002Fhtml\u002Felectron\u002Fpug\u002Fforms\u002Fform.pug";
 // iterate childs
-var pug_obj0 = childs;
-if ('number' == typeof pug_obj0.length) {
-
-  for (var pug_index0 = 0, pug_length0 = pug_obj0.length; pug_index0 < pug_length0; pug_index0++) {
-    var child = pug_obj0[pug_index0];
-
-;pug_debug_line = 6;pug_debug_filename = "T:\\electron\\pug\\forms\\form.pug";
+;(function(){
+  var $$obj = childs;
+  if ('number' == typeof $$obj.length) {
+      for (var pug_index0 = 0, $$l = $$obj.length; pug_index0 < $$l; pug_index0++) {
+        var child = $$obj[pug_index0];
+;pug_debug_line = 6;pug_debug_filename = "\u002Fvar\u002Fwww\u002Fhtml\u002Felectron\u002Fpug\u002Fforms\u002Fform.pug";
 pug_html = pug_html + (null == (pug_interp = child) ? "" : pug_interp);
-  }
-
-} else {
-  var pug_length0 = 0;
-  for (var pug_index0 in pug_obj0) {
-    pug_length0++;
-    var child = pug_obj0[pug_index0];
-
-;pug_debug_line = 6;pug_debug_filename = "T:\\electron\\pug\\forms\\form.pug";
+      }
+  } else {
+    var $$l = 0;
+    for (var pug_index0 in $$obj) {
+      $$l++;
+      var child = $$obj[pug_index0];
+;pug_debug_line = 6;pug_debug_filename = "\u002Fvar\u002Fwww\u002Fhtml\u002Felectron\u002Fpug\u002Fforms\u002Fform.pug";
 pug_html = pug_html + (null == (pug_interp = child) ? "" : pug_interp);
+    }
   }
-
-}
+}).call(this);
 
 }
 pug_html = pug_html + "\u003C\u002F" + (tag) + "\u003E";}.call(this,"attr" in locals_for_with?locals_for_with.attr:typeof attr!=="undefined"?attr:undefined,"childs" in locals_for_with?locals_for_with.childs:typeof childs!=="undefined"?childs:undefined,"content" in locals_for_with?locals_for_with.content:typeof content!=="undefined"?content:undefined,"tag" in locals_for_with?locals_for_with.tag:typeof tag!=="undefined"?tag:undefined));} catch (err) {pug_rethrow(err, pug_debug_filename, pug_debug_line, pug_debug_sources[pug_debug_filename]);};return pug_html;};

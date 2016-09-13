@@ -20,11 +20,14 @@ module.exports = class Path {
     var files = glob.sync(pattern, {
       cwd: dir.resolve(),
     });
+
     for (var index in files) {
       files[index] = new Path('$' + dir.resolve() + '/' + files[index], offset + 1);
     }
     return files;
   }
+
+
 
   constructor(path, offset = 0) {
     this.path(path);

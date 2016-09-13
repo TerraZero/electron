@@ -1,7 +1,7 @@
 'use strict';
 
-const FS = require('graceful-fs');
-const NPath = require('path');
+const FS = SYS.node('graceful-fs');
+const NPath = SYS.node('path');
 
 module.exports = class File {
 

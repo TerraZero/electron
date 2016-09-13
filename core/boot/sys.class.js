@@ -72,7 +72,7 @@ module.exports = class Sys {
 
     var result = [];
     for (var dir in dirs) {
-      result = TOOLS.Array.merge(result, TOOLS.Path.list(dirs[dir], '.*\.' + type + '\.js$'));
+      result = TOOLS.Array.merge(result, TOOLS.Path.glob(dirs[dir], '**/*.' + type + '.js'));
     }
     return result;
   }
@@ -83,7 +83,7 @@ module.exports = class Sys {
 
     var result = [];
     for (var dir in dirs) {
-      var paths = TOOLS.Path.list(dirs[dir], '.*plugins.*\.js$');
+      var paths = TOOLS.Path.glob(dirs[dir], '**/plugins/**/*.js');
 
       for (var path in paths) {
         var annot = new TOOLS.Annotation(paths[path]);

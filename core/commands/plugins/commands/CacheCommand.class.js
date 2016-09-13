@@ -19,7 +19,7 @@ module.exports = class CacheCommand extends Command {
     */
   build() {
     const pug = SYS.node('pug');
-    const files = TOOLS.Path.list(':pug', '.*\.pug');
+    const files = TOOLS.Path.glob(':pug', '**/*.pug');
     const fs = SYS.node('graceful-fs');
     const debug = SYS.setting('pug').debug;
     const verbose = this.arg('v', false);
