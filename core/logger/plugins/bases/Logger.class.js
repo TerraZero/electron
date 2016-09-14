@@ -28,4 +28,8 @@ module.exports = class Logger {
     console.error('Not Implement');
   }
 
+  success() {
+    console.error('Not Implement');
+  }
+
 }

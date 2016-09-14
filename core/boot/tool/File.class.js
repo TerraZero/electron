@@ -56,6 +56,18 @@ module.exports = class File {
     return this.stat().isFile();
   }
 
+  mkdir(quiet = false) {
+    if (this.exist()) {
+      if (!quiet) {
+        SYS.error('Error: File "' + this.file() + '" already exist!');
+      }
+      return false;
+    } else {
+      FS.mkdir(this.file());
+      return true;
+    }
+  }
+
   list() {
     var list = FS.readdirSync(this.file(''));
 

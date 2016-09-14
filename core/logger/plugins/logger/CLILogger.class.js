@@ -38,6 +38,13 @@ module.exports = class CLILogger extends Logger {
     console.log.apply(console, TOOLS.args(arguments));
   }
 
+  success() {
+    var args = TOOLS.args(arguments);
+
+    args[0] = ('SUCCESS: ' + args[0]).input;
+    TOOLS.award(this, 'console', args);
+  }
+
 
 
   // options(message, options) {
@@ -111,6 +118,15 @@ module.exports = class CLILogger extends Logger {
       } while (!valid);
     }
     return input;
+  }
+
+  confirm(message) {
+    var confirmed = null;
+
+    while (confirmed !== 'y' && confirmed !== 'n') {
+      confirmed = this.input('string', message + ' (y/n)?');
+    }
+    return confirmed === 'y';
   }
 
   cliWidth() {
