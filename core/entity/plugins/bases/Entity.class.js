@@ -76,7 +76,7 @@ module.exports = class Entity {
   }
 
   static type() {
-    SYS.throw('AbstractError', 'method', 'instanceInfo', 'Entity');
+    SYS.throw('AbstractError', 'method', 'type', 'Entity');
   }
 
   constructor(row = null) {

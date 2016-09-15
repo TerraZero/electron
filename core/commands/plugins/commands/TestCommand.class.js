@@ -103,7 +103,7 @@ module.exports = class TestCommand extends Command {
   /**
     * @Command
     */
-  error() {
+  errorCommand() {
     try {
       var e = SYS.getError('BootError');
       e = new e();
@@ -120,6 +120,14 @@ module.exports = class TestCommand extends Command {
         SYS.throw('RequiredFieldError', 'TestCommand', 'error');
       }
     }
+  }
+
+  /**
+    * @Command
+    */
+  abstract() {
+    const Entity = SYS.route('base.entity');
+    console.log(Entity.type());
   }
 
 }
