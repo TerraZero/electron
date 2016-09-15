@@ -4,11 +4,26 @@ module.exports = class Sys {
 
   static initialize() {
     this._infos = {};
+    this._errors = {};
 
+    this.initializeErrors();
     this.initializeAnnotations();
     this.initializeRoutes();
     this.initializeInfos();
     this.initializeMods();
+  }
+
+  static initializeErrors() {
+    const errors = SYS.lookup('error');
+
+    for (var i in errors) {
+      var parse = errors[i].parseSys();
+
+      this._errors[parse.name] = {
+        path: errors[i],
+        struct: undefined,
+      };
+    }
   }
 
   static initializeAnnotations() {
@@ -130,14 +145,16 @@ module.exports = class Sys {
     return require(name);
   }
 
-  static error(message) {
-    var Logger = SYS.route('logger');
+  static error(type, message) {
+    var args = TOOLS.args(arguments, 1);
 
-    if (Logger === null) {
-      console.error(message);
-    } else {
-      Logger.error(message);
-    }
+    var error = new (SYS.getError(type))();
+    error.create.apply(error, args);
+    return error;
+  }
+
+  static throw(type, message) {
+    throw SYS.error.apply(SYS, TOOLS.args(arguments));
   }
 
   /**
@@ -177,6 +194,13 @@ module.exports = class Sys {
 
   static get Annotation() {
     return this._Annotation;
+  }
+
+  static getError(type) {
+    if (this._errors[type].struct === undefined) {
+      this._errors[type].struct = SYS.use(this._errors[type].path);
+    }
+    return this._errors[type].struct;
   }
 
 }

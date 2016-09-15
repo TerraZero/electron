@@ -65,7 +65,7 @@ module.exports = class Controller {
   }
 
   instanceInfo() {
-    SYS.error('instanceInfo is an abstract method');
+    SYS.throw('AbstractError', 'method', 'instanceInfo', this);
   }
 
   idCondition(entity, query, id = null) {

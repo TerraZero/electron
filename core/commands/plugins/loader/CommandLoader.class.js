@@ -121,13 +121,7 @@ module.exports = class CommandLoader {
   }
 
   static error(exception) {
-    var Logger = SYS.route('logger');
-
-    if (Logger === null) {
-      SYS.error(exception);
-    } else {
-      Logger.error(exception.toString());
-    }
+    SYS.throw('CommandError', null, exception);
   }
 
   static evaluation(execution) {

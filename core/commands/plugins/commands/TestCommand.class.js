@@ -100,4 +100,26 @@ module.exports = class TestCommand extends Command {
     }
   }
 
+  /**
+    * @Command
+    */
+  error() {
+    try {
+      var e = SYS.getError('BootError');
+      e = new e();
+      throw e;
+    } catch (e1) {
+      try {
+        console.log('boot');
+        console.log(e1);
+        console.log('boot end');
+      } catch (e2) {
+        console.log('internal');
+        console.log(e2);
+        console.log('internal end');
+        SYS.throw('RequiredFieldError', 'TestCommand', 'error');
+      }
+    }
+  }
+
 }

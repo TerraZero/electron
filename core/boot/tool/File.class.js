@@ -59,7 +59,7 @@ module.exports = class File {
   mkdir(quiet = false) {
     if (this.exist()) {
       if (!quiet) {
-        SYS.error('Error: File "' + this.file() + '" already exist!');
+        SYS.throw('FileExistError', file);
       }
       return false;
     } else {

@@ -54,21 +54,20 @@ module.exports = class Route {
   }
 
   static addRoute(route, data) {
-    if (this.routes[route.toLowerCase()] !== undefined) {
-      SYS.error('SysRoute "' + route + '" is already in use! Use setRoute to override SysRoute!');
-      return;
+    route = route.toLowerCase();
+    if (this.routes[route] !== undefined) {
+      SYS.throw('SysRouteExistError', this.routes[route]);
     }
 
     data.route = route;
-    this.routes[route.toLowerCase()] = new Route(data);
+    this.routes[route] = new Route(data);
   }
 
   static setRoute(data) {
     var route = data.route.toLowerCase();
 
     if (this.routes[route] === undefined) {
-      SYS.error('SysRoute "' + route + '" don\'t exist! Use addRoute to add the SysRoute!');
-      return;
+      SYS.throw('SysRouteNotExistError', route);
     }
 
     this.routes[route] = new Route(data);
@@ -85,13 +84,11 @@ module.exports = class Route {
 
   constructor(data) {
     if (!data.route) {
-      SYS.error('Create SysRoute: route is required!');
-      return this;
+      SYS.throw('RequiredFieldError', 'Route', 'data.route');
     }
     data.route = data.route.toLowerCase();
     if (!data.path) {
-      SYS.error('Create SysRoute: "' + data.route + '" path is required!');
-      return this;
+      SYS.throw('RequiredFieldError', 'Route', 'data.path');
     }
 
     this._route = data.route;
