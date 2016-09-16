@@ -84,9 +84,8 @@ module.exports = class CommandLoader {
         execution.result.code = code;
       }
     } catch (e) {
-      CommandLoader.error(e);
       execution.result.code = CommandBase.FATAL;
-      console.log(e);
+      CommandLoader.error(e);
     }
 
     return CommandLoader.evaluation(execution);

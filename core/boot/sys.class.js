@@ -145,16 +145,20 @@ module.exports = class Sys {
     return require(name);
   }
 
-  static error(type, message) {
+  static error(deep, type, message) {
     var args = TOOLS.args(arguments, 1);
 
     var error = new (SYS.getError(type))();
+    error.deep(deep);
     error.create.apply(error, args);
     return error;
   }
 
   static throw(type, message) {
-    throw SYS.error.apply(SYS, TOOLS.args(arguments));
+    var args = TOOLS.args(arguments);
+
+    args.unshift(1);
+    throw SYS.error.apply(SYS, args);
   }
 
   /**

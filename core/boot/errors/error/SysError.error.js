@@ -2,15 +2,30 @@
 
 module.exports = class SysError {
 
-  constructor(deep = 0) {
+  static subtractStack(stack, deep = 0) {
+    var subtract = [];
+    var ignore = true;
+    var count = 0;
+
+    for (var i in stack) {
+      if (ignore && (!stack[i].getFileName().endsWith('.error.js') && !stack[i].getFileName().endsWith('Reflection.class.js'))) ignore = false;
+      if (!ignore) {
+        if (count++ > deep) subtract.push(stack[i]);
+      }
+    }
+    return subtract;
+  }
+
+  constructor() {
     this.name = this.type();
     this._deep = 0;
-    this._stack = TOOLS.Reflection.getStack();
     this.created = false;
   }
 
   create(message) {
+    this._stack = TOOLS.Reflection.getStack();
     this.created = true;
+    this.stack = this.toString() + '\n' + this.getStack();
     this.message = message;
     return this;
   }
@@ -30,7 +45,7 @@ module.exports = class SysError {
 
   inspect() {
     this.checkCreated();
-    return this.getStack(SYS.config('base:debug', 'full') == 'full').join('\n');
+    return this.toString() + '\n' + this.stack;
   }
 
   checkCreated() {
@@ -41,9 +56,14 @@ module.exports = class SysError {
     }
   }
 
-  getStack(native = true) {
+  getStack(native, subtract = true) {
+    native = native || SYS.config('base:debug', 'full') == 'full';
     var stack = this.stack();
     var prints = [];
+
+    if (subtract) {
+      stack = SysError.subtractStack(stack);
+    }
 
     for (var i in stack) {
       var print = '';
@@ -72,15 +92,15 @@ module.exports = class SysError {
 
       prints.push(print);
     }
-    return prints;
+    return prints.join('\n');
   }
 
   stack() {
     return this._stack;
   }
 
-  deep() {
-    return this._deep;
+  deep(deep) {
+    return SETGET(this, deep, '_deep');
   }
 
 }
