@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const dialog = SYS.node('electron').remote.require('electron').dialog;
 

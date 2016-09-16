@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 module.exports = class RouteExistError extends SYS.getError('SysRouteError') {
 

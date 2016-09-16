@@ -117,7 +117,6 @@ module.exports = class TestCommand extends Command {
         console.log('internal');
         console.log(e2);
         console.log('internal end');
-        SYS.throw('RequiredFieldError', 'TestCommand', 'error');
       }
     }
   }

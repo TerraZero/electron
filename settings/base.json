@@ -13,5 +13,6 @@
     "js": "src/js",
     "css": "src/css",
     "image": "src/img"
-  }
+  },
+  "debug": "full"
 }

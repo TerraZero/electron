@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 module.exports = class FieldType extends SYS.Annotation {
 

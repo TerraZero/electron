@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 module.exports = class FileExistError extends SYS.getError('FileError') {
 
