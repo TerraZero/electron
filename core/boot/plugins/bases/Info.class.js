@@ -26,8 +26,4 @@ module.exports = class Info {
     return path;
   }
 
-  list(dir, expression, recursive = null) {
-    return TOOLS.Path.list(dir, expression, recursive, 1);
-  }
-
 }

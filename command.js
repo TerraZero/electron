@@ -13,7 +13,11 @@ console.log();
 
 var command = args._[0];
 
-Command.execute(command, args);
+try {
+  Command.execute(command, args);
+} catch (e) {
+  console.error(e);
+}
 
 // end script
 console.log();

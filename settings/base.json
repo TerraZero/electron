@@ -1,4 +1,5 @@
 {
+  "mode": "dev",
   "root": [
     "core",
     "mods"

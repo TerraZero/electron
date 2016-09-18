@@ -126,6 +126,14 @@ module.exports = class Route {
     return this._annotation;
   }
 
+  name() {
+    if (this._annotation) {
+      return this._annotation._name();
+    } else {
+      return 'None';
+    }
+  }
+
   register() {
     return this._register;
   }

@@ -3,7 +3,8 @@
 module.exports = class WrapperError extends SYS.getError('SysError') {
 
   create(message, error) {
-    super.create(message || error.type() + ': ' + error.message);
+    super.create(message || error.message);
+    this.stack = error.stack;
     this._error = error;
   }
 

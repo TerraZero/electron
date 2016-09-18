@@ -43,7 +43,7 @@ module.exports = class ListCommand extends Command {
         }
       }
       var row = [
-        routes[i].annotation()._name(),
+        routes[i].name(),
         route,
       ];
 

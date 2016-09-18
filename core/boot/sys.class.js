@@ -10,6 +10,7 @@ module.exports = class Sys {
     this.initializeAnnotations();
     this.initializeRoutes();
     this.initializeInfos();
+    this.initializeLibs();
     this.initializeMods();
   }
 
@@ -35,11 +36,24 @@ module.exports = class Sys {
     * Read info files from mods directory and save it
     */
   static initializeInfos() {
-    var files = this.lookup('info');
+    var dirs = this.config('base:root');
+    dirs.push('lib');
+    var files = this.lookup('info', dirs);
 
     for (var index in files) {
       this._infos[index] = new (require(files[index].resolve()))();
       this._infos[index]._base = files[index].parse().dir;
+    }
+  }
+
+  static initializeLibs() {
+    var libs = SYS.info('libs');
+
+    for (var lib in libs) {
+      TOOLS.Route.addRoute('lib.' + libs[lib].name, {
+        path: libs[lib].paths[SYS.config('base:mode')] || libs[lib].paths.def,
+        description: libs[lib].description || null,
+      });
     }
   }
 
@@ -146,7 +160,7 @@ module.exports = class Sys {
   }
 
   static error(deep, type, message) {
-    var args = TOOLS.args(arguments, 1);
+    var args = TOOLS.args(arguments, 2);
 
     var error = new (SYS.getError(type))();
     error.deep(deep);
@@ -205,6 +219,18 @@ module.exports = class Sys {
       this._errors[type].struct = SYS.use(this._errors[type].path);
     }
     return this._errors[type].struct;
+  }
+
+  static info(name) {
+    var infos = [];
+    var args = TOOLS.args(arguments, 1);
+
+    for (var i in this._infos) {
+      if (TOOLS.isFunction(this._infos[i][name])) {
+        infos = TOOLS.Array.merge(infos, this._infos[i][name].apply(this._infos[i], args));
+      }
+    }
+    return infos;
   }
 
 }
