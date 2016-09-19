@@ -56,6 +56,8 @@ module.exports = class Route {
   static addRoute(route, data) {
     route = route.toLowerCase();
     if (this.routes[route] !== undefined) {
+      console.log(route);
+      console.log(data);
       SYS.throw('RouteExistError', this.routes[route]);
     }
 

@@ -14,6 +14,7 @@ module.exports = class SysRoute extends SYS.Annotation {
       getter: 'getRoute',
       init: 'initRoute',
       keys: [],
+      dir: '',
     };
   }
 

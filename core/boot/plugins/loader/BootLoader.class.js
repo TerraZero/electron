@@ -12,21 +12,24 @@
   *   loader="boot:base(name)",
   *   keys=["value"],
   *   init=false,
-  *   getter=false
+  *   getter=false,
+  *   dir="bases"
   * )
   * @SysRoute(
   *   value="builder.<value>",
   *   register="Builder",
   *   description="Builder for '<value>'",
   *   loader="boot:builder(name)",
-  *   keys=["value"]
+  *   keys=["value"],
+  *   dir="builders"
   * )
   * @SysRoute(
   *   value="interface.<value>",
   *   register="Interface",
   *   description="Interface <value>",
   *   loader="boot:inter(name)",
-  *   keys=["value"]
+  *   keys=["value"],
+  *   dir="interfaces"
   * )
   */
 module.exports = class BootLoader {

@@ -1,9 +1,9 @@
 'use strict';
 
 /**
-  * @Base("FieldType")
+  * @Base("FormField")
   */
-module.exports = class FieldType {
+module.exports = class FormField {
 
   static build(component) {
 

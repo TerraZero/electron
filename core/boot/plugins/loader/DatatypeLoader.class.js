@@ -10,7 +10,8 @@
   *   register="Datatype",
   *   description="Datatype handler for '<value>'",
   *   loader="datatype:type(type)",
-  *   keys=["value"]
+  *   keys=["value"],
+  *   dir="datatypes"
   * )
   */
 module.exports = class DatatypeLoader {

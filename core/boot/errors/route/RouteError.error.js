@@ -1,6 +1,8 @@
 'use strict';
 
-module.exports = class RouteError extends SYS.getError('SysError') {
+const SysError = SYS.getError('SysError');
+
+module.exports = class RouteError extends SysError {
 
   create(route, message) {
     super.create(message);

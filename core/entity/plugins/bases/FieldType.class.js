@@ -1,9 +1,21 @@
 'use strict';
 
 /**
-  * @Base("DBField")
+  * @Base("FieldType")
+  * @SysRoute(
+  *   value="entity.field.<value>",
+  *   register="FieldType",
+  *   keys=["value"],
+  *   description="FieldType class for '<value>' fields",
+  *   loader="base.entityfield:field(value)",
+  *   dir="fieldtypes"
+  * )
   */
-module.exports = class DBField {
+module.exports = class FieldType {
+
+  static type(value) {
+    return SYS.route('entity.field.' + value);
+  }
 
   constructor(name, db, field, data = null) {
     this._name = name;
@@ -42,7 +54,7 @@ module.exports = class DBField {
   }
 
   definition() {
-    SYS.throw('AbstractError', 'method', 'definition', 'DBField');
+    SYS.throw('AbstractError', 'method', 'definition', 'EntityField');
   }
 
 }

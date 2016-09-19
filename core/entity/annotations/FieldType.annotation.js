@@ -6,8 +6,7 @@ module.exports = class FieldType extends SYS.Annotation {
 
   definition() {
     return {
-      id: null,
-      value: null,
+      value: '',
       description: '',
     };
   }

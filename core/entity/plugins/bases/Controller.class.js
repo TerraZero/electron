@@ -1,22 +1,18 @@
 'use strict';
 
 /**
-  * @SysRoute(
-  *   value="base.controller",
-  *   description="Base Controller class for extend or loading",
-  *   init=false,
-  *   getter=false
-  * )
+  * @Base("Controller")
   * @SysRoute(
   *   value="entity.controller",
   *   description="Default Controller Entity handle"
   * )
   * @SysRoute(
-  *   value="entity.controller.<name>",
+  *   value="entity.controller.<value>",
   *   register="Controller",
-  *   keys=["name"],
-  *   description="Controller for '<name>' entities",
-  *   loader="base.controller:controller(name)"
+  *   keys=["value"],
+  *   description="Controller for '<value>' entities",
+  *   loader="base.controller:controller(value)",
+  *   dir="controllers"
   * )
   */
 module.exports = class Controller {
@@ -29,8 +25,8 @@ module.exports = class Controller {
     return this._instance;
   }
 
-  static controller(name) {
-    return SYS.route('entity.controller.' + name);
+  static controller(value) {
+    return SYS.route('entity.controller.' + value);
   }
 
   create(entity) {
@@ -45,7 +41,13 @@ module.exports = class Controller {
   }
 
   init(entity, data) {
+    var fields = entity.fields();
 
+    for (var i in fields) {
+      if (data[fields[i].field()] !== undefined) {
+        entity[fields[i].field()] = data[fields[i].field()];
+      }
+    }
   }
 
   save(entities = []) {

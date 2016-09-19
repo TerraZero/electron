@@ -10,21 +10,17 @@ const Command = SYS.route('base.command');
 module.exports = class TestCommand extends Command {
 
   /**
-    * @Command(
-    *   params={
-    *     type: {type: "string"}
-    *   }
-    * )
+    * @Command
     */
-  entities(type) {
-    if (!type) type = this.input('string', 'Type');
+  entity() {
+    const Node = SYS.route('entity.node');
+    const User = SYS.route('entity.user');
 
-    var loader = SYS.route('entity');
+    var n = new Node({user: 'TerraZero', title: 'Node Title'});
+    var u = new User({firstname: 'Terra', lastname: 'Zero'});
 
-    var Entity = loader.entity(type);
-    var Controller = Entity.controller();
-
-    console.log(Controller.load);
+    var ud = u.display('full');
+    console.log(ud);
   }
 
   /**

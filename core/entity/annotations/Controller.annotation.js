@@ -7,7 +7,7 @@ module.exports = class Controller extends SYS.Annotation {
   definition() {
     return {
       id: null,
-      name: '',
+      value: '',
       description: '',
     };
   }
