@@ -1,11 +1,6 @@
-/* global __dirname */
-/* global global */
-/* global SYS */
-/* global TOOLS */
 'use strict';
 
 // Invoke Sys and make it global
-
 global.SYS = require('./core/boot/sys.class.js');
 SYS._base = __dirname;
 
