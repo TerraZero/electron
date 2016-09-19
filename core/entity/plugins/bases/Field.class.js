@@ -28,6 +28,19 @@ module.exports = class DBField {
     return this._data;
   }
 
+  handler(entity) {
+    const field = this.field();
+
+    return {
+      get: function() {
+        return entity._data[field];
+      },
+      set: function(value) {
+        entity._data[field] = value;
+      },
+    };
+  }
+
   definition() {
     SYS.throw('AbstractError', 'method', 'definition', 'DBField');
   }

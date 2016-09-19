@@ -1,142 +1,53 @@
 'use strict';
 
-// const Render = SYS.use('./render/Render.class');
-
 /**
   * @Base("Entity")
   */
 module.exports = class Entity {
 
-  static initRoute(sysroute) {
-    this._routeController = sysroute.annotation.controller || 'entity.' + sysroute.annotation.name.toLowerCase() + '.controller';
+  static table() {
+    SYS.throw('AbstractError', 'method', 'table', 'Entity');
+  }
+
+  static fields() {
+    SYS.throw('AbstractError', 'method', 'fields', 'Entity');
   }
 
   static controller() {
-    return SYS.route(this._routeController);
+    return SYS.route('entity.controller');
   }
 
-  static save(struct = null) {
-    struct = struct || this;
-
-    return function pipeSave(vars) {
-      vars.entities = vars.entities || {};
-      var entities = vars.entities[struct.type()];
-
-      if (!ISDEF(entities)) {
-        this.next();
-        return;
-      }
-
-      struct.controller().save(entities, this.callback(function pipeSaveCallback() {
-        this.next();
-      }));
-    };
+  constructor(data = null) {
+    this._data = {};
+    this.controller().create(this);
+    this.controller().init(this, data);
   }
 
-  static load(ids, struct = null) {
-    struct = struct || this;
-
-    return function pipeLoad(vars) {
-      struct.controller().load(ids, struct, this.callback(function pipeLoadCallback(entities) {
-        vars.entities = vars.entities || {};
-        vars.entities[struct.type()] = vars.entities[struct.type()] || [];
-
-        for (var index in entities) {
-          vars.entities[struct.type()].push(entities[index]);
-        }
-        this.next();
-      }));
-    };
+  table() {
+    return this.constructor.table();
   }
 
-  static create(entities) {
-    var struct = this;
-
-    return function pipeCreate(vars) {
-      vars.entities = vars.entities || {};
-      vars.entities[struct.type()] = vars.entities[struct.type()] || [];
-
-      for (var index in entities) {
-        vars.entities[struct.type()].push(entities[index]);
-      }
-      this.next();
-    };
-  }
-
-  static createRowCLI() {
-    var fields = this.controller().fields();
-    var row = {};
-
-    for (var i in fields) {
-      if (fields[i].type().startsWith('VARCHAR') && !fields[i]._primary) {
-        row[fields[i].name()] = SYS.route('logger').input(fields[i].name() + ': ');
-      }
-    }
-    return row;
-  }
-
-  static type() {
-    SYS.throw('AbstractError', 'method', 'type', 'Entity');
-  }
-
-  constructor(row = null) {
-    this._fields = {};
-    this._view = {};
-
-    this.controller().build(this, row);
-  }
-
-  type() {
-    return this.constructor.type();
+  fields() {
+    return this.constructor.fields();
   }
 
   controller() {
     return this.constructor.controller();
   }
 
-  unique() {
-    return this.id;
+  data() {
+    return this._data;
   }
 
-  fields() {
-    return this._fields;
+  computed(mode) {
+    return {};
   }
 
-  isNew() {
-    return this.id == null;
-  }
-
-  save(callback) {
-    this.controller().save(this, callback);
-    return this;
-  }
-
-  view(mode, flush = false) {
-    Render.view(this, mode, flush);
-    return this;
-  }
-
-  render(mode, flush = false) {
-    return Render.render(this, mode, flush);
-  }
-
-  flush() {
-    this._view = {};
-    return this;
-  }
-
-  data(row) {
-    this.controller().data(this, row);
-  }
-
-  log() {
-    var rows = [];
-    var fields = this.fields();
-
-    for (var i in fields) {
-      rows.push([i, fields[i]]);
-    }
-    return rows;
+  display(mode) {
+    return {
+      data: this.data(),
+      computed: this.computed(mode),
+    };
   }
 
 }
