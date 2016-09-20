@@ -1,5 +1,7 @@
 'use strict';
 
+const VueElement = SYS.route('interface.vueelement');
+
 /**
   * @Base("Entity")
   * @SysRoute(
@@ -11,7 +13,7 @@
   *   dir="entities"
   * )
   */
-module.exports = class Entity {
+module.exports = class Entity extends VueElement {
 
   static load(type, id) {
     const E = Entity.entity(type);
@@ -51,6 +53,7 @@ module.exports = class Entity {
   }
 
   constructor(data = null) {
+    super();
     this._data = {};
     this.controller().create(this);
     this.controller().init(this, data);
@@ -87,12 +90,8 @@ module.exports = class Entity {
     };
   }
 
-  render(mode) {
-    var view = this.view();
-
-    view.vue = 'base.entity:load:' + this.type() + ':' + this.id;
-
-    return SYS.route('render').render(mode, view);
+  loadID() {
+    return 'base.entity:load:' + this.type() + ':' + this.id;
   }
 
 }
