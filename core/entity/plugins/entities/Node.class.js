@@ -12,14 +12,18 @@ module.exports = class Node extends Entity {
     return {
       table: 'node',
       fields: [
-        new Field('User', 'user', 'user'),
+        new Field('ID', 'id', 'id'),
         new Field('Title', 'title', 'title'),
       ],
     };
   }
 
   computed(mode) {
-    return {};
+    return {
+      test: function() {
+        return this.id + this.title + this.id;
+      }
+    };
   }
 
 }

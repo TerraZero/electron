@@ -13,6 +13,18 @@
   */
 module.exports = class Entity {
 
+  static load(type, id, mode) {
+    const E = Entity.entity(type);
+
+    // Test
+    var e = new E({id: id, title: 'test'});
+
+    if (mode) {
+      return e.view(mode);
+    }
+    return e;
+  }
+
   static entity(value) {
     return SYS.route('entity.' + value);
   }
@@ -71,7 +83,7 @@ module.exports = class Entity {
     return {};
   }
 
-  display(mode) {
+  view(mode) {
     return {
       data: this.data(),
       computed: this.computed(mode),

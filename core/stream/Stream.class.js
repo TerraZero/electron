@@ -1,5 +1,3 @@
-/* global TOOLS */
-/* global SYS */
 'use strict';
 
 const EventHandler = SYS.use('core/events/EventHandler.class');

@@ -68,3 +68,5 @@
 //   console.log(arguments);
 // });
 // s.run();
+
+SYS.route('elements').init();
