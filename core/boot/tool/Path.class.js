@@ -46,16 +46,16 @@ module.exports = class Path {
   path(path) {
     if (!ISDEF(path)) return this._path;
 
-    if (path.startsWith(':')) {
-      path = TOOLS.String.replace(path.substring(1), SYS.config('base:paths'));
-    }
-
     this._final = path.startsWith('$');
 
     if (this._final) {
       this._path = path.substring(1);
     } else {
       this._path = path;
+    }
+
+    if (this._path.startsWith(':')) {
+      this._path = TOOLS.String.replace(this._path.substring(1), SYS.config('base:paths'));
     }
 
     return this;

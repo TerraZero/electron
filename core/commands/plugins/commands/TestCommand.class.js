@@ -60,14 +60,6 @@ module.exports = class TestCommand extends Command {
     var name = this.input('int', 'Name');
   }
 
-  /**
-    * @Command
-    */
-  render() {
-    var func = SYS.use(':tpl/pugtest.phtml', '');
-    console.log(func({cool: 'hallo', test: ['hier', 'und', 'das']}));
-  }
-
    /**
     * @Command
     */

@@ -13,16 +13,13 @@
   */
 module.exports = class Entity {
 
-  static load(type, id, mode) {
+  static load(type, id) {
     const E = Entity.entity(type);
 
     // Test
     var e = new E({id: id, title: 'test'});
 
-    if (mode) {
-      return e.view(mode);
-    }
-    return e;
+    return e.view();
   }
 
   static entity(value) {
@@ -79,23 +76,23 @@ module.exports = class Entity {
     return this._data;
   }
 
-  computed(mode) {
+  computed() {
     return {};
   }
 
-  view(mode) {
+  view() {
     return {
       data: this.data(),
-      computed: this.computed(mode),
-      mode: mode,
-      field: function getField(name, fallback = '') {
-        if (this.data[name] !== undefined) return this.data[name];
-        if (typeof this.computed[name] === 'function') {
-          return this.computed[name].apply(this.data);
-        }
-        return fallback;
-      },
+      computed: this.computed(),
     };
+  }
+
+  render(mode) {
+    var view = this.view();
+
+    view.vue = 'base.entity:load:' + this.type() + ':' + this.id;
+
+    return SYS.route('render').render(mode, view);
   }
 
 }

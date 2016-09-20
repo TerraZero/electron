@@ -69,4 +69,9 @@
 // });
 // s.run();
 
+const $ = SYS.route('lib.jquery');
+const Node = SYS.route('entity.node');
+
+$('#root').append(new Node({id: 5, title: 'Hallo'}).render('test'));
+
 SYS.route('elements').init();
