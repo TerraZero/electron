@@ -27,56 +27,6 @@ module.exports = class File {
     }
   }
 
-  static clearDir(path, recursive = true, logger = null, deep = 0) {
-    if (logger === true) logger = SYS.route('logger');
-
-    if (FS.existsSync(path)) {
-      FS.readdirSync(path).forEach(function(file, index) {
-        var filePath = path + '/' + file;
-
-        if (FS.lstatSync(filePath).isDirectory() && recursive) {
-          File.clearDir(filePath, recursive, logger, deep + 1);
-        } else {
-          FS.unlinkSync(filePath);
-          if (logger) {
-            logger.log('Delete File: ' + filePath);
-          }
-        }
-      });
-      if (deep !== 0) {
-        FS.rmdirSync(path);
-        if (logger) {
-          logger.log('Delete Directory: ' + path);
-        }
-      }
-    }
-  }
-
-  static content(path) {
-    return FS.readFileSync(path).toString();
-  }
-
-  static cp(source, destination) {
-    const BUF_LENGTH = 64*1024;
-    const buff = new Buffer(BUF_LENGTH);
-    const fdr = FS.openSync(source, 'r');
-    const fdw = FS.openSync(destination, 'w');
-
-    var bytesRead = 1;
-    var pos = 0;
-    while (bytesRead > 0) {
-      bytesRead = FS.readSync(fdr, buff, 0, BUF_LENGTH, pos);
-      FS.writeSync(fdw, buff, 0, bytesRead);
-      pos += bytesRead;
-    }
-    FS.closeSync(fdr);
-    FS.closeSync(fdw);
-  }
-
-  static mkdir(path) {
-    return FS.mkdirSync(path);
-  }
-
   constructor(path, offset = 0) {
     this._path = TOOLS.path(path, 1 + offset);
     this._content = undefined;

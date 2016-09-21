@@ -13,7 +13,7 @@ module.exports = class Render {
   }
 
   static getTemplate(template) {
-    return SYS.use(':tpl/pug' + template, '.phtml');
+    return SYS.use(':tpl/' + template);
   }
 
 }

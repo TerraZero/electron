@@ -1,0 +1,27 @@
+{
+  "base": "ignore/",
+  "default": "watch",
+  "sass": {
+    "watch": "**/*.sass",
+    "source": "templates/register.sass",
+    "destination": "src/css",
+    "clean": "src/css/**/*.css"
+  },
+  "pug": {
+    "watch": "templates/**/*.pug",
+    "source": "templates/**/*.pug",
+    "destination": "src/tpl",
+    "options": {
+      "client": true,
+      "basedir": "ignore",
+      "name": "template",
+      "compileDebug": true
+    },
+    "clean": "src/tpl/**/*.js"
+  },
+  "index": {
+    "watch": "index.pug",
+    "source": "index.pug",
+    "destination": "./"
+  }
+}
