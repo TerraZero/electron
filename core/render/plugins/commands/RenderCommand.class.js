@@ -197,50 +197,6 @@ module.exports = class RenderCommand extends Command {
     }
   }
 
-  getExtendNames(content) {
-    const extending = {
-      path: null,
-      context: null,
-      name: null,
-      has: false,
-    };
-    var extend = content.match(/^\/\/\- extend (.*)$/m);
-
-    if (extend) {
-      extending.has = true;
-
-      extending.path = extend[1];
-
-      extend = extend[1].split('/');
-
-      if (extend.length === 2) {
-        extending.context = extend[0];
-        extending.name = extend[1];
-      } else {
-        extending.context = 'main';
-        extending.name =extend[0];
-      }
-    }
-    return extending;
-  }
-
-  replaceExtend(register, content) {
-    const all = this.arg('a', false);
-    const error = all || this.arg('e', false);
-
-    const extending = this.getExtendNames(content);
-    if (!extending.has) return content;
-    var extend = null;
-
-    if (register[extending.context] && register[extending.context][extending.name]) {
-      extend = register[extending.context][extending.name];
-    } else {
-      if (error) this.log('[WARNING]: Extend path "' + extending.path + '" not found!');
-    }
-
-    return 'extend ' + extend.resolveSub() + '\n' + content;
-  }
-
   copyForCompile(register, target) {
     const all = this.arg('a', false);
     const verbose = all || this.arg('v', false);
