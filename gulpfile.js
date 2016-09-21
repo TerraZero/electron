@@ -2,6 +2,7 @@
 var gulp = require('gulp');
 
 var pug = require('gulp-pug');
+var rename = require("gulp-rename");
 var sass = require('gulp-sass');
 var sourcemaps = require('gulp-sourcemaps');
 
@@ -28,6 +29,20 @@ gulp.task('index', function() {
   return gulp.src(options.index)
     .pipe(pug())
     .pipe(gulp.dest(options.indexDest));
+});
+
+gulp.task('templates', function() {
+  return gulp.src('core/**/*.pug')
+    .pipe(pug({
+      client: true,
+      name: 'template',
+      compileDebug: true,
+    }))
+    .pipe(rename(function(path) {
+      path.dirname = '';
+    }))
+    .pipe(insert.append('\nmodule.exports = template;'))
+    .pipe(gulp.dest('src/tpl'));
 });
 
 gulp.task('sass', function() {
