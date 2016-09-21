@@ -15,13 +15,14 @@ const VueElement = SYS.route('interface.vueelement');
   */
 module.exports = class Entity extends VueElement {
 
-  static load(type, id) {
-    const E = Entity.entity(type);
+  static vue(id) {
+    return new this({id: id, title: 'test'}).view();
+  }
 
-    // Test
-    var e = new E({id: id, title: 'test'});
-
-    return e.view();
+  static load(id) {
+    return this.render('entity.' + this.type(), {
+      vue: 'entity.' + this.type() + ':vue:' + id,
+    });
   }
 
   static entity(value) {
@@ -50,6 +51,10 @@ module.exports = class Entity extends VueElement {
 
   static controller() {
     return SYS.route(this._controller);
+  }
+
+  static type() {
+    return this.name.toLowerCase();
   }
 
   constructor(data = null) {

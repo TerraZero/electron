@@ -72,6 +72,6 @@
 const $ = SYS.route('lib.jquery');
 const Node = SYS.route('entity.node');
 
-$('#root').append(new Node({id: 5, title: 'Hallo'}).render('test'));
+$('#root').append(Node.load(5));
 
 SYS.route('elements').init();
