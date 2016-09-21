@@ -1,0 +1,17 @@
+{
+  "debug": true,
+  "lookup": [
+    {
+      "name": "core",
+      "path": ":core"
+    },
+    {
+      "name": "mods",
+      "path": ":mods"
+    },
+    {
+      "name": "theme",
+      "path": ":theme"
+    }
+  ]
+}

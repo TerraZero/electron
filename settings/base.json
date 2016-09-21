@@ -10,10 +10,10 @@
     "boot": "core/boot",
     "src": "src",
     "tpl": "src/tpl",
-    "pug": "pug",
     "js": "src/js",
     "css": "src/css",
-    "image": "src/img"
+    "image": "src/img",
+    "theme": "theme"
   },
   "debug": "full"
 }

@@ -82,6 +82,12 @@ module.exports = class Path {
     return path + extend;
   }
 
+  resolveSub(extend = '', sub = null) {
+    sub = sub || SYS.base();
+
+    return this.resolve(extend).substring(sub.length);
+  }
+
   parse() {
     return NPath.parse(this.resolve());
   }
