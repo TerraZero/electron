@@ -5,12 +5,5 @@
     "user": "root",
     "password": "",
     "database": "electron"
-  },
-  "hallo": {
-    "driver": "mysql-d",
-    "host": "localhost",
-    "user": "root",
-    "password": "",
-    "database": "electron"
   }
 }

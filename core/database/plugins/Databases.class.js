@@ -21,7 +21,7 @@ module.exports = class Databases {
       SYS.throw('DBError', 'No database definition found for "' + name + '"');
     }
 
-    const Driver = SYS.route('db.' + setting.driver);
+    const Driver = SYS.route('db.driver.' + setting.driver);
 
     if (Driver === null) {
       SYS.throw('DBError', 'No database driver found for "' + name + '" with driver "' + setting.driver + '"');

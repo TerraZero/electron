@@ -117,4 +117,37 @@ module.exports = class TestCommand extends Command {
     console.log(Entity.type());
   }
 
+  /**
+    * @Command
+    */
+  database() {
+    const Stream = use('stream');
+
+    new Stream(this)
+      .pipe(this.dbCon)
+      .pipe(this.dbQuery)
+      .pipe(this.dbExecute)
+      .pipe(this.dbRows)
+      .execute('default');
+  }
+
+  dbCon(stream, name) {
+    stream.next(use('db').con(name));
+  }
+
+  dbQuery(stream, con) {
+    stream.next(con, con.select().from('node', 'n').field('n.id').field('n.name'));
+  }
+
+  dbExecute(stream, con, query) {
+    con.execute(query, function(err, rows) {
+      stream.error(err);
+      stream.next(rows);
+    });
+  }
+
+  dbRows(stream, rows) {
+    log(rows);
+  }
+
 }

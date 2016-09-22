@@ -1,12 +1,9 @@
 'use strict';
 
-const squel = require('squel').useFlavour('mysql');
+const squel = SYS.node('squel').useFlavour('mysql');
 
 /**
-  * @SysRoute(
-  *   value="db.mysql.builder",
-  *   description="MySQL builder class"
-  * )
+  * @DBBuilder('MySQL')
   */
 class CreateTableBlock extends squel.cls.Block {
   /** The method exposed by the query builder */

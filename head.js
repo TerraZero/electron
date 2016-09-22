@@ -12,5 +12,8 @@ global.LOG = TOOLS.log;
 global.log = function() {
   console.log.apply(console, TOOLS.args(arguments));
 };
+global.use = function() {
+  return SYS.route.apply(SYS, TOOLS.args(arguments));
+};
 
 SYS.initialize();

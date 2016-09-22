@@ -2,12 +2,10 @@
 
 const DBDriver = SYS.route('base.dbdriver');
 const mysql = SYS.node('mysql');
+const DBBuilder = SYS.route('db.builder.mysql');
 
 /**
-  * @SysRoute(
-  *   value="db.mysql",
-  *   description="MySQL driver class"
-  * )
+  * @DBDriver("MySQL")
   */
 module.exports = class MySQLDriver extends DBDriver {
 
@@ -37,6 +35,7 @@ module.exports = class MySQLDriver extends DBDriver {
   }
 
   execute(query, callback) {
+    if (!TOOLS.isString(query)) query = query.toString();
     this.connect();
     this._connection.query(query, callback);
     return this;
@@ -50,9 +49,24 @@ module.exports = class MySQLDriver extends DBDriver {
     return this;
   }
 
-  // TMP
+  builder() {
+    return DBBuilder;
+  }
+
   select() {
-    return SYS.route('db.mysql.builder').select();
+    return DBBuilder.select();
+  }
+
+  insert() {
+    return DBBuilder.insert();
+  }
+
+  update() {
+    return DBBuilder.update();
+  }
+
+  delete() {
+    return DBBuilder.delete();
   }
 
 };
