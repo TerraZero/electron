@@ -23,4 +23,4 @@ try {
 console.log();
 
 // TODO
-SYS.route('database.connection').end();
+SYS.route('db').end();
