@@ -44,7 +44,7 @@ module.exports = class Path {
   }
 
   path(path) {
-    if (!ISDEF(path)) return this._path;
+    if (path === undefined) return this._path;
 
     this._final = path.startsWith('$');
 

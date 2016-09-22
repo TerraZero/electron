@@ -61,7 +61,7 @@ module.exports = class Sys {
     * Loading mods from mods directory
     */
   static initializeMods() {
-    this._Mod = SYS.route('base.mod');
+    this._Mod = use('base.mod');
     this._mods = [];
 
     // get all mod files in mods directory

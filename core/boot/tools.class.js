@@ -108,16 +108,6 @@ module.exports = class Tools {
   }
 
   /**
-    * Determine if the object is defined
-    *
-    * @param object   - the object to test
-    * @return boolean - if object is defined
-    */
-  static isDef(object) {
-    return object !== undefined;
-  }
-
-  /**
     * Define a default getter setter function for fields
     *
     * @param object           - the object of the field (mostly 'this')
@@ -127,7 +117,7 @@ module.exports = class Tools {
     *         [object[name]]  - if the getter will call
     */
   static setGet(object, variable, name) {
-    if (ISDEF(variable)) {
+    if (variable !== undefined) {
       object[name] = variable;
       return object;
     } else {

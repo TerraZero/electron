@@ -1,6 +1,6 @@
 'use strict';
 
-const CommandBase = SYS.route('base.command');
+const CommandBase = use('base.command');
 
 // load commands
 const commands = (function registerCommands() {
@@ -60,9 +60,9 @@ module.exports = class CommandLoader {
       exe: null,
     };
 
-    if (!ISDEF(command)) {
+    if (command === undefined) {
       execution.result.code = Command.FATAL;
-      SYS.route('logger').error('No commands to execute found!');
+      use('logger').error('No commands to execute found!');
       return execution;
     }
     var exe = command.split('.');
@@ -127,9 +127,9 @@ module.exports = class CommandLoader {
     if (execution.result.code === CommandBase.OK || execution.result.code === CommandBase.ERROR) {
       // OK or ERROR is handeled by command
     } else if (execution.result.code === undefined) {
-      SYS.route('logger').error('No command found with name "%s"', execution.exe[0]);
+      use('logger').error('No command found with name "%s"', execution.exe[0]);
     } else if (TOOLS.isInt(execution.result.code)) {
-      SYS.route('logger').error('Command terminated unexpectedly with exit code "' + execution.result.code + '"');
+      use('logger').error('Command terminated unexpectedly with exit code "' + execution.result.code + '"');
     }
 
     return execution;

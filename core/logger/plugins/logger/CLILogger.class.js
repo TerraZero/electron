@@ -1,6 +1,6 @@
 'use strict';
 
-const Logger = SYS.route('base.logger');
+const Logger = use('base.logger');
 
 const colors = require('colors');
 const readlineSync = require('readline-sync');
@@ -89,7 +89,7 @@ module.exports = class CLILogger extends Logger {
 
   input(types, message, fallback = null) {
     if (TOOLS.isString(types)) types = [types];
-    const Validater = SYS.route('datatype');
+    const Validater = use('datatype');
     var valid = false;
     var input = null;
 

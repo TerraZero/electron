@@ -14,7 +14,7 @@
 module.exports = class FieldType {
 
   static type(value) {
-    return SYS.route('entity.field.' + value);
+    return use('entity.field.' + value);
   }
 
   constructor(name, db, field, data = null) {

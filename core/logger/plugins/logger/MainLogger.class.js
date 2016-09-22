@@ -1,6 +1,6 @@
 'use strict';
 
-const Logger = SYS.route('base.logger');
+const Logger = use('base.logger');
 
 /**
   * @SysRoute(

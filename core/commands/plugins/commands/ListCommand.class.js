@@ -1,6 +1,6 @@
 'use strict';
 
-const Command = SYS.route('base.command');
+const Command = use('base.command');
 
 /**
   * @Command(

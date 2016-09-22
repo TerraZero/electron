@@ -1,6 +1,6 @@
 'use strict';
 
-const Command = SYS.route('base.command');
+const Command = use('base.command');
 
 /**
   * @Command(
@@ -13,8 +13,8 @@ module.exports = class TestCommand extends Command {
     * @Command
     */
   entity() {
-    const Node = SYS.route('entity.node');
-    const User = SYS.route('entity.user');
+    const Node = use('entity.node');
+    const User = use('entity.user');
 
     var n = new Node({user: 'TerraZero', title: 'Node Title'});
     var u = new User({firstname: 'Terra', lastname: 'Zero'});
@@ -31,7 +31,7 @@ module.exports = class TestCommand extends Command {
     * )
     */
   test(key) {
-    var User = SYS.route('entity.user');
+    var User = use('entity.user');
     console.log(User.__route);
     var u = new User();
     console.log(u.constructor.__route);
@@ -41,7 +41,7 @@ module.exports = class TestCommand extends Command {
     * @Command
     */
   builder() {
-    var User = SYS.route('entity.user');
+    var User = use('entity.user');
     var u = new User();
     u.on('test').on('cool');
   }
@@ -50,7 +50,7 @@ module.exports = class TestCommand extends Command {
     * @Command
     */
   options() {
-    SYS.route('logger').options('Test: ', ['option 1', 'option 2', 'option 3']);
+    use('logger').options('Test: ', ['option 1', 'option 2', 'option 3']);
   }
 
   /**
@@ -113,7 +113,7 @@ module.exports = class TestCommand extends Command {
     * @Command
     */
   abstract() {
-    const Entity = SYS.route('base.entity');
+    const Entity = use('base.entity');
     console.log(Entity.type());
   }
 

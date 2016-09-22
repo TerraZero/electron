@@ -1,7 +1,7 @@
 'use strict';
 
-const Entity = SYS.route('base.entity');
-const Field = SYS.route('base.fieldtype');
+const Entity = use('base.entity');
+const Field = use('base.fieldtype');
 
 /**
   * @Entity("Node")

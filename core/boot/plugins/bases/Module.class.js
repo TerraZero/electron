@@ -6,7 +6,7 @@
 module.exports = class Module {
 
   static build() {
-    if (!ISDEF(this._build)) {
+    if (this._build === undefined) {
       this._build = new this();
     }
     return this._build;

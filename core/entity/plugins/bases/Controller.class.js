@@ -26,7 +26,7 @@ module.exports = class Controller {
   }
 
   static controller(value) {
-    return SYS.route('entity.controller.' + value);
+    return use('entity.controller.' + value);
   }
 
   create(entity) {

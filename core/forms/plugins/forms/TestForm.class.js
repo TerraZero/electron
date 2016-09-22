@@ -1,6 +1,6 @@
 'use strict';
 
-const Form = SYS.route('base.form');
+const Form = use('base.form');
 
 /**
   * @Form("Testform")

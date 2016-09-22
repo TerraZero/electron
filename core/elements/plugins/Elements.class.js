@@ -1,7 +1,7 @@
 'use strict';
 
-const $ = SYS.route('lib.jquery');
-const Vue = SYS.route('lib.vue');
+const $ = use('lib.jquery');
+const Vue = use('lib.vue');
 
 /**
   * @SysRoute(
@@ -43,7 +43,7 @@ module.exports = class Elements {
 
   static loading(route, func) {
     var args = TOOLS.args(arguments, 2);
-    const loader = SYS.route(route);
+    const loader = use(route);
 
     return loader[func].apply(loader, args);
   }

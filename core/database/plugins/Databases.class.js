@@ -21,7 +21,7 @@ module.exports = class Databases {
       SYS.throw('DBError', 'No database definition found for "' + name + '"');
     }
 
-    const Driver = SYS.route('db.driver.' + setting.driver);
+    const Driver = use('db.driver.' + setting.driver);
 
     if (Driver === null) {
       SYS.throw('DBError', 'No database driver found for "' + name + '" with driver "' + setting.driver + '"');
@@ -45,7 +45,7 @@ module.exports = class Databases {
   static checkOptions(options) {
     if (options.offset !== undefined && options.limit === undefined) {
       options.offset = undefined;
-      SYS.route('logger').warn('You need to set the "--limit" value to use the "--offset" value!');
+      use('logger').warn('You need to set the "--limit" value to use the "--offset" value!');
     }
   }
 

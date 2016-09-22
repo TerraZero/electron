@@ -14,7 +14,7 @@ module.exports = class LoggerLoader {
 
   static getRoute(sysroute) {
     if (sysroute.route() == 'logger') {
-      return SYS.route(this.route || 'logger.main');
+      return use(this.route || 'logger.main');
     } else if (sysroute.route() == 'logger.struct') {
       return this;
     }

@@ -1,6 +1,6 @@
 'use strict';
 
-const Render = SYS.route('render');
+const Render = use('render');
 
 /**
   * @Interface("VueElement")
@@ -31,7 +31,7 @@ module.exports = class VueElement {
     var view = this.view();
 
     view.vue = this.loadID();
-    return SYS.route('render').render(mode, view);
+    return use('render').render(mode, view);
   }
 
 };

@@ -35,15 +35,15 @@
 module.exports = class BootLoader {
 
   static base(name) {
-    return SYS.route('base.' + name);
+    return use('base.' + name);
   }
 
   static builder(name) {
-    return SYS.route('builder.' + name);
+    return use('builder.' + name);
   }
 
   static inter(name) {
-    return SYS.route('inter.' + name);
+    return use('inter.' + name);
   }
 
 }

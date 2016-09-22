@@ -1,8 +1,8 @@
 'use strict';
 
-const DBDriver = SYS.route('base.dbdriver');
+const DBDriver = use('base.dbdriver');
 const mysql = SYS.node('mysql');
-const DBBuilder = SYS.route('db.builder.mysql');
+const DBBuilder = use('db.builder.mysql');
 
 /**
   * @DBDriver("MySQL")

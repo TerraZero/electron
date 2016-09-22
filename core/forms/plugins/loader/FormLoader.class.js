@@ -23,11 +23,11 @@
 module.exports = class FormLoader {
 
   static field(name) {
-    return SYS.route('form.field.' + name);
+    return use('form.field.' + name);
   }
 
   static form(name) {
-    return SYS.route('form.instance.' + name);
+    return use('form.instance.' + name);
   }
 
 }

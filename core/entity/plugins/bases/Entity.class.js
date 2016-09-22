@@ -1,6 +1,6 @@
 'use strict';
 
-const VueElement = SYS.route('interface.vueelement');
+const VueElement = use('interface.vueelement');
 
 /**
   * @Base("Entity")
@@ -26,7 +26,7 @@ module.exports = class Entity extends VueElement {
   }
 
   static entity(value) {
-    return SYS.route('entity.' + value);
+    return use('entity.' + value);
   }
 
   static initRoute() {
@@ -50,7 +50,7 @@ module.exports = class Entity extends VueElement {
   }
 
   static controller() {
-    return SYS.route(this._controller);
+    return use(this._controller);
   }
 
   static type() {

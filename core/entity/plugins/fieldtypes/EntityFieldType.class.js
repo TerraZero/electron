@@ -1,6 +1,6 @@
 'use strict';
 
-const FieldType = SYS.route('base.fieldtype');
+const FieldType = use('base.fieldtype');
 
 /**
   * @FieldType("Entity")

@@ -1,6 +1,6 @@
 'use strict';
 
-const Gettable = SYS.route('interface.gettable');
+const Gettable = use('interface.gettable');
 
 module.exports = class FormComponent extends Gettable {
 

@@ -1,6 +1,6 @@
 'use strict';
 
-const FormField = SYS.route('base.formfield');
+const FormField = use('base.formfield');
 
 /**
   * @FormField("Textfield")

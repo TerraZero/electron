@@ -17,7 +17,7 @@
 module.exports = class DatatypeLoader {
 
   static type(type) {
-    return SYS.route('datatype.' + type);
+    return use('datatype.' + type);
   }
 
   static scanValid(types, value) {
