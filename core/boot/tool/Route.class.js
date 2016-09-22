@@ -171,7 +171,7 @@ module.exports = class Route {
   getting(args) {
     // if no struct is loaded, load the struct and initiat it
     if (this.struct() === undefined) {
-      this._struct = SYS.use(this.path());
+      this._struct = SYS.load(this.path());
       this.initialize();
     }
 

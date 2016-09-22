@@ -69,9 +69,9 @@
 // });
 // s.run();
 
-const $ = SYS.route('lib.jquery');
-const Node = SYS.route('entity.node');
+const $ = use('lib.jquery');
+const Node = use('entity.node');
 
 $('#root').append(Node.load(5));
 
-SYS.route('elements').init();
+use('elements').init();
