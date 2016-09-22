@@ -1,6 +1,6 @@
 'use strict';
 
-const FormContainer = SYS.load('core/forms/FormContainer.class');
+const FormContainer = inc('core/forms/FormContainer.class');
 
 /**
   * @Base("Form")

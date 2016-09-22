@@ -14,5 +14,8 @@ global.log = function() {
 global.use = function() {
   return SYS.route.apply(SYS, TOOLS.args(arguments));
 };
+global.inc = function() {
+  return SYS.inc.apply(SYS, TOOLS.args(arguments));
+};
 
 SYS.initialize();

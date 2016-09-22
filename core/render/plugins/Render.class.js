@@ -13,7 +13,7 @@ module.exports = class Render {
   }
 
   static getTemplate(template) {
-    return SYS.load(':tpl/' + template);
+    return inc(':tpl/' + template);
   }
 
 }

@@ -42,7 +42,7 @@ module.exports = class CommandLoader {
     var info = CommandLoader.getCommandInfo(name);
     if (!info) return null;
 
-    var struct = SYS.load(info.path);
+    var struct = inc(info.path);
     var command = struct.build.apply(struct, [{args: args, info: info}]);
     return {
       info: info,

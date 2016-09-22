@@ -1,6 +1,6 @@
 'use strict';
 
-const FormComponent = SYS.load('./FormComponent.class');
+const FormComponent = inc('./FormComponent.class');
 
 module.exports = class FormContainer extends FormComponent {
 

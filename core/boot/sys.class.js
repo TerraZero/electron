@@ -145,7 +145,7 @@ module.exports = class Sys {
   /**
     * Invokes a class or object of a specific type
     */
-  static load(path, type = '.js', flush = false) {
+  static inc(path, type = '.js', flush = false) {
     path = TOOLS.path(path, 1);
     var file = path.resolve(type);
 
@@ -216,7 +216,7 @@ module.exports = class Sys {
 
   static getError(type) {
     if (this._errors[type].struct === undefined) {
-      this._errors[type].struct = SYS.load(this._errors[type].path);
+      this._errors[type].struct = inc(this._errors[type].path);
     }
     return this._errors[type].struct;
   }
