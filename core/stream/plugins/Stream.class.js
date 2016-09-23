@@ -16,8 +16,12 @@ module.exports = class Stream {
     this._args = {};
   }
 
-  pipe(func) {
-    this._pipe.push(func);
+  pipe(func, first = false) {
+    if (first) {
+      this._pipe.unshift(func);
+    } else {
+      this._pipe.push(func);
+    }
     return this;
   }
 

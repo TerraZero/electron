@@ -2,58 +2,41 @@
 
 module.exports = class SysError {
 
-  static subtractStack(stack, deep = 0) {
-    var subtract = [];
-    var ignore = true;
-    var count = 0;
+  getArgs(args, offset = 0) {
+    var _args = [];
 
-    for (var i in stack) {
-      if (ignore && (!stack[i].getFileName().endsWith('.error.js') && !stack[i].getFileName().endsWith('Reflection.class.js'))) ignore = false;
-      if (!ignore) {
-        if (count++ > deep) subtract.push(stack[i]);
-      }
+    for (var i = offset; i < args.length; i++) {
+      _args.push(args[i]);
     }
-    return subtract;
+    return _args;
   }
 
   constructor() {
-    this.name = this.type();
-    this._deep = 0;
-    this.created = false;
-  }
+    this._args = this.getArgs(arguments);
 
-  create(message) {
-    this._stack = TOOLS.Reflection.getStack();
-    this.created = true;
-    this.stack = this.toString() + '\n' + this.getStack();
-    this.message = message;
-    return this;
+    this.name = this.createName();
+    this.stack = this.createStack();
+    this.message = this.createMessage();
   }
 
   type() {
     return this.constructor.name;
   }
 
-  toString() {
-    this.checkCreated();
-    if (this.message) {
-      return this.name + ' "' + this.message + '"';
-    } else {
-      return this.name;
-    }
+  args() {
+    return this._args;
   }
 
-  inspect() {
-    this.checkCreated();
-    return this.toString() + '\n' + this.stack;
+  createName() {
+    return this.type();
   }
 
-  checkCreated() {
-    if (!this.created) {
-      const e = new (SYS.getError('InternalError'))();
-      e.create('Error wasn`t created before throwing! Use method create to set Error params!');
-      throw e;
-    }
+  createStack() {
+
+  }
+
+  createMessage() {
+    return this._args[0];
   }
 
   getStack(native, subtract = true) {
