@@ -20,33 +20,33 @@
 module.exports = class DBDriver {
 
   connect() {
-    SYS.throw('AbstractError', 'method', 'connect', this);
+    throw err('AbstractError', this, 'connect');
   }
 
   end() {
-    SYS.throw('AbstractError', 'method', 'end', this);
+    throw err('AbstractError', this, 'end');
   }
 
 
 
   builder() {
-    SYS.throw('AbstractError', 'method', 'builder', this);
+    throw err('AbstractError', this, 'builder');
   }
 
   select() {
-    SYS.throw('AbstractError', 'method', 'select', this);
+    throw err('AbstractError', this, 'select');
   }
 
   insert() {
-    SYS.throw('AbstractError', 'method', 'insert', this);
+    throw err('AbstractError', this, 'insert');
   }
 
   update() {
-    SYS.throw('AbstractError', 'method', 'update', this);
+    throw err('AbstractError', this, 'update');
   }
 
   delete() {
-    SYS.throw('AbstractError', 'method', 'delete', this);
+    throw err('AbstractError', this, 'delete');
   }
 
 }

@@ -120,7 +120,7 @@ module.exports = class CommandLoader {
   }
 
   static error(exception) {
-    SYS.throw('CommandError', null, exception);
+    throw err('CommandError', null, exception);
   }
 
   static evaluation(execution) {

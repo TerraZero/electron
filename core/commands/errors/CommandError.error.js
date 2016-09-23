@@ -1,5 +1,7 @@
 'use strict';
 
-module.exports = class CommandError extends SYS.getError('WrapperError') {
+const WrapperError = SYS.getError('WrapperError');
+
+module.exports = class CommandError extends WrapperError {
 
 }

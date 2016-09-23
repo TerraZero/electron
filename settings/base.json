@@ -11,5 +11,5 @@
     "css": "src/css",
     "image": "src/img"
   },
-  "debug": "full"
+  "debug": "normal"
 }

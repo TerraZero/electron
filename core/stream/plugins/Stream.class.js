@@ -44,7 +44,7 @@ module.exports = class Stream {
         this.context()[current].apply(this.context(), args);
         return this;
       } else {
-        SYS.throw('StreamError', 'String "' + current + '" was found in stream pipe, but is not a function in context "' + this.context().constructor.name + '"');
+        throw err('StreamError', 'String "' + current + '" was found in stream pipe, but is not a function in context "' + this.context().constructor.name + '"');
       }
     }
 
@@ -58,7 +58,7 @@ module.exports = class Stream {
       return this;
     }
 
-    SYS.throw('StreamError', 'The type of pipe is neither string, function nor Stream! Left ' + this.pipes().length + ' pipe\'s in stream!');
+    throw err('StreamError', 'The type of pipe is neither string, function nor Stream! Left ' + this.pipes().length + ' pipe\'s in stream!');
     return this;
   }
 

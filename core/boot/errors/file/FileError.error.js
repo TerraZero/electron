@@ -1,15 +1,18 @@
 'use strict';
 
-module.exports = class FileError extends SYS.getError('SysError') {
+const SysError = SYS.getError('SysError');
 
-  create(file, message) {
-    super.create(message);
-    this._file = file;
-    return this;
+module.exports = class FileError extends SysError {
+
+  define() {
+    return [
+      'message',
+      'file',
+    ];
   }
 
-  file() {
-    return this._file;
+  fileString() {
+    return this.args('file').resolveSub();
   }
 
 }

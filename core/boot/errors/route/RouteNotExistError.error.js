@@ -1,9 +1,11 @@
 'use strict';
 
-module.exports = class RouteNotExistError extends SYS.getError('SysRouteError') {
+const RouteError = SYS.getError('RouteError');
 
-  create(route) {
-    return super.create(null, 'SysRoute "' + route + '" don\'t exist! Use addRoute to add the SysRoute!');
+module.exports = class RouteNotExistError extends RouteError {
+
+  createMessage() {
+    return this.args('message') || 'SysRoute "<route>" don\'t exist! Use addRoute to add the SysRoute!';
   }
 
 }

@@ -1,9 +1,11 @@
 'use strict';
 
-module.exports = class FileExistError extends SYS.getError('FileError') {
+const FileError = SYS.getError('FileError');
 
-  create(file) {
-    return super.create(file, 'File "' + file.file() + '" already exist!');
+module.exports = class FileExistError extends FileError {
+
+  createMessage() {
+    return this.args('message') || 'File "<file>" already exist!';
   }
 
 }

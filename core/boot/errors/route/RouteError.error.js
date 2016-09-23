@@ -4,14 +4,21 @@ const SysError = SYS.getError('SysError');
 
 module.exports = class RouteError extends SysError {
 
-  create(route, message) {
-    super.create(message);
-    this._route = route;
-    return this;
+  define() {
+    return [
+      'route',
+      'message',
+    ];
   }
 
-  route() {
-    return this._route;
+  routeString() {
+    const route = this.args('route');
+
+    if (typeof route === 'string') {
+      return route;
+    } else {
+      return route.route();
+    }
   }
 
 }

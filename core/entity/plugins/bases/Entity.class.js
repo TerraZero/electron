@@ -38,7 +38,7 @@ module.exports = class Entity extends VueElement {
   }
 
   static info() {
-    SYS.throw('AbstractError', 'method', 'info', 'Entity');
+    throw err('AbstractError', this, 'info');
   }
 
   static table() {

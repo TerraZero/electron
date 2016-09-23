@@ -8,11 +8,11 @@ const Render = use('render');
 module.exports = class VueElement {
 
   static load(id) {
-    SYS.throw('AbstractError', 'method', 'load', 'VueElement');
+    throw err('AbstractError', this, 'load');
   }
 
   static vue(type, id) {
-    SYS.throw('AbstractError', 'method', 'vue', 'VueElement');
+    throw err('AbstractError', this, 'vue');
   }
 
   static render(template, data) {
@@ -20,11 +20,11 @@ module.exports = class VueElement {
   }
 
   loadID() {
-    SYS.throw('AbstractError', 'method', 'loadID', this);
+    throw err('AbstractError', this, 'loadID');
   }
 
   view() {
-    SYS.throw('AbstractError', 'method', 'view', this);
+    throw err('AbstractError', this, 'view');
   }
 
   render(mode) {

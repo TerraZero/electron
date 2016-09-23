@@ -56,9 +56,7 @@ module.exports = class Route {
   static addRoute(route, data) {
     route = route.toLowerCase();
     if (this.routes[route] !== undefined) {
-      console.log(route);
-      console.log(data);
-      SYS.throw('RouteExistError', this.routes[route]);
+      throw err('RouteExistError', this.routes[route]);
     }
 
     data.route = route;
@@ -66,31 +64,30 @@ module.exports = class Route {
   }
 
   static setRoute(data) {
+    if (data.route === undefined) throw err('RequiredFieldError', this, 'setRoute', 'data.route');
     var route = data.route.toLowerCase();
 
     if (this.routes[route] === undefined) {
-      SYS.throw('RouteNotExistError', route);
+      throw err('RouteNotExistError', route);
     }
 
     this.routes[route] = new Route(data);
   }
 
   static load(route, args) {
-    route = this.routes[route.toLowerCase()];
+    const loadRoute = this.routes[route.toLowerCase()];
 
-    // give null when no route is known
-    if (route === undefined) return null;
-
-    return route.getting(args);
+    if (loadRoute === undefined) throw err('RouteNotExistError', route);
+    return loadRoute.getting(args);
   }
 
   constructor(data) {
     if (!data.route) {
-      SYS.throw('RequiredFieldError', 'Route', 'data.route');
+      throw err('RequiredFieldError', this, 'constructor', 'data.route');
     }
     data.route = data.route.toLowerCase();
     if (!data.path) {
-      SYS.throw('RequiredFieldError', 'Route', 'data.path');
+      throw err('RequiredFieldError', this, 'constructor', 'data.path');
     }
 
     this._route = data.route;

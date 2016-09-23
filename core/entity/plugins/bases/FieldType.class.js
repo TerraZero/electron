@@ -54,7 +54,7 @@ module.exports = class FieldType {
   }
 
   definition() {
-    SYS.throw('AbstractError', 'method', 'definition', 'EntityField');
+    throw err('AbstractError', this, 'definition');
   }
 
 }

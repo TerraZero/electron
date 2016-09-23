@@ -18,13 +18,13 @@ module.exports = class Databases {
     const setting = SYS.config('database:' + name);
 
     if (setting === undefined) {
-      SYS.throw('DBError', 'No database definition found for "' + name + '"');
+      throw err('DBError', 'No database definition found for "' + name + '"');
     }
 
     const Driver = use('db.driver.' + setting.driver);
 
     if (Driver === null) {
-      SYS.throw('DBError', 'No database driver found for "' + name + '" with driver "' + setting.driver + '"');
+      throw err('DBError', 'No database driver found for "' + name + '" with driver "' + setting.driver + '"');
     }
 
     this._connections[name] = new Driver(setting);

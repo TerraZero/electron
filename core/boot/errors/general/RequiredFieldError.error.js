@@ -1,20 +1,23 @@
 'use strict';
 
-module.exports = class RequiredFieldError extends SYS.getError('SysError') {
+const ContextError = SYS.getError('ContextError');
 
-  create(struct, field) {
-    super.create('The field "' + field + '" of class "' + struct + '" is required!');
-    this._struct = struct;
-    this._field = field;
-    return this;
+module.exports = class RequiredFieldError extends ContextError {
+
+  createMessage() {
+    if (this.isStatic()) {
+      return 'The static method "<func>" of class "<struct>" has a required field "<field>"!';
+    } else {
+      return 'The method "<func>" of class "<struct>" has a required field "<field>"!';
+    }
   }
 
-  struct() {
-    return this._struct;
-  }
-
-  field() {
-    return this._field;
+  define() {
+    return [
+      'struct',
+      'func',
+      'field',
+    ];
   }
 
 }
