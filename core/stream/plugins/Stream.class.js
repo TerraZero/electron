@@ -13,6 +13,7 @@ module.exports = class Stream {
   constructor(context) {
     this._context = context;
     this._pipe = [];
+    this._args = {};
   }
 
   pipe(func) {
@@ -77,6 +78,18 @@ module.exports = class Stream {
 
   context() {
     return this._context;
+  }
+
+  args() {
+    return this._args;
+  }
+
+  arg(name, fallback = null) {
+    return this._args[name] || fallback;
+  }
+
+  setArg(name, value) {
+    this._args[name] = value;
   }
 
 }
