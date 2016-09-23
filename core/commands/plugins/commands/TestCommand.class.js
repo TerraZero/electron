@@ -24,20 +24,6 @@ module.exports = class TestCommand extends Command {
   }
 
   /**
-    * @Command(
-    *   params={
-    *     key: {type: "string"}
-    *   }
-    * )
-    */
-  test(key) {
-    var User = use('entity.user');
-    console.log(User.__route);
-    var u = new User();
-    console.log(u.constructor.__route);
-  }
-
-  /**
     * @Command
     */
   builder() {
@@ -148,6 +134,14 @@ module.exports = class TestCommand extends Command {
 
   dbRows(stream, rows) {
     log(rows);
+  }
+
+  /**
+    * @Command
+    */
+  test() {
+    // const e = err('SysError', 'my message');
+    // throw e;
   }
 
 }

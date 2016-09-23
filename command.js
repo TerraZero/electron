@@ -19,6 +19,12 @@ try {
   console.error(e);
 }
 
+try {
+  throw err('SysError', 'base massage');
+} catch (e) {
+  throw err('WrapperError', 'wrapper message', e);
+}
+
 // end script
 console.log();
 

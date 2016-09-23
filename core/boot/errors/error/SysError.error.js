@@ -1,22 +1,17 @@
 'use strict';
 
+const Stack = require('stack-trace');
+
 module.exports = class SysError {
 
-  getArgs(args, offset = 0) {
-    var _args = [];
-
-    for (var i = offset; i < args.length; i++) {
-      _args.push(args[i]);
-    }
-    return _args;
-  }
-
-  constructor() {
-    this._args = this.getArgs(arguments);
+  constructor(args) {
+    this._args = args;
+    this._relevant = this.getRelevantStack();
 
     this.name = this.createName();
-    this.stack = this.createStack();
     this.message = this.createMessage();
+    this.stack = this.createStack();
+    this.alterError();
   }
 
   type() {
@@ -27,63 +22,97 @@ module.exports = class SysError {
     return this._args;
   }
 
+  relevant() {
+    return this._relevant;
+  }
+
   createName() {
     return this.type();
   }
 
   createStack() {
+    const s = [];
+    const relevant = this.relevant();
+    const base = SYS.base();
+    const debug = SYS.config('base:debug', 'all') === 'all';
 
+    for (var i in relevant) {
+      var print = [];
+      var type = relevant[i].getTypeName();
+      var file = relevant[i].getFileName();
+      var line = relevant[i].getLineNumber();
+      var func = relevant[i].getFunctionName() || relevant[i].getMethodName();
+      //   var that = stack[i].getThis();
+      var isNode = !file.startsWith(base);
+
+      if (!isNode) {
+        file = file.substring(SYS.base().length);
+      }
+
+      if (!debug && isNode) continue;
+
+      print.push(file + ':' + line);
+
+      if (isNode) {
+        if (type && func) {
+          print.push('[Class ' + func + '()]');
+        } else if (type) {
+          print.push('[Class ' + type + ']');
+        } else if (func) {
+          print.push('[' + func + '()]');
+        }
+      } else {
+        if (type && func) {
+          print.push('[Class ' + type + '.' + func + '()]');
+        } else if (type) {
+          print.push('[Class ' + type + ']');
+        } else if (func) {
+          print.push('[' + func + '()]');
+        }
+      }
+
+      s.push(print.join(' '));
+    }
+    return  this.name + ': "' +  this.message + '"\n\t' + s.join('\n\t');
   }
 
   createMessage() {
     return this._args[0];
   }
 
-  getStack(native, subtract = true) {
-    native = native || SYS.config('base:debug', 'full') == 'full';
-    var stack = this.stack();
-    var prints = [];
+  stackIgnore() {
+    return [
+      'SysError.error.js:getRelevantStack',
+      'SysError.error.js:SysError',
+      'sys.class.js:err',
+      'head.js:global.err',
+    ];
+  }
 
-    if (subtract) {
-      stack = SysError.subtractStack(stack);
-    }
+  getRelevantStack() {
+    const stack = Stack.get();
+    const ignore = this.stackIgnore();
+    const relevant = [];
 
     for (var i in stack) {
-      var print = '';
-      var type = stack[i].getTypeName();
       var file = stack[i].getFileName();
       var line = stack[i].getLineNumber();
       var func = stack[i].getFunctionName() || stack[i].getMethodName();
-      var that = stack[i].getThis();
-      var isNode = !file.startsWith(SYS.base());
 
-      if (!isNode) {
-        file = file.substring(SYS.base().length);
-      }
+      if ((file + ':' + func).endsWith(ignore[i])) continue;
 
-      if (isNode) {
-        if (!native) continue;
-        print += 'Native ' + (type ? '[' + type + '] ' : '');
-      } else if (type !== null) {
-        print += 'Class [' + type + '] ';
-      }
-
-      if (func) {
-        print += func + '() ';
-      }
-      print += '(' + file + ':' + line + ')';
-
-      prints.push(print);
+      relevant.push(stack[i]);
     }
-    return prints.join('\n');
+    return relevant;
   }
 
-  stack() {
-    return this._stack;
+  alterError() {
+
   }
 
-  deep(deep) {
-    return SETGET(this, deep, '_deep');
+  // for the log function
+  inspect() {
+    return this.stack;
   }
 
 }

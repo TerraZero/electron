@@ -175,6 +175,10 @@ module.exports = class Sys {
     throw SYS.error.apply(SYS, args);
   }
 
+  static err(name) {
+    return new (SYS.getError(name))(TOOLS.args(arguments, 1));
+  }
+
   /**
     * Get a mod
     *

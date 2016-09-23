@@ -17,5 +17,8 @@ global.use = function() {
 global.inc = function() {
   return SYS.inc.apply(SYS, TOOLS.args(arguments));
 };
+global.err = function() {
+  return SYS.err.apply(SYS, TOOLS.args(arguments));
+};
 
 SYS.initialize();
