@@ -15,14 +15,16 @@ const VueElement = use('interface.vueelement');
   */
 module.exports = class Entity extends VueElement {
 
-  static vue(id) {
-    return new this({id: id, title: 'test'}).view();
+  static vue(stream, id) {
+    stream.next(new this({id: id, title: 'test'}));
   }
 
-  static load(id) {
-    return this.render('entity.' + this.type(), {
-      vue: 'entity.' + this.type() + ':vue:' + id,
-    });
+  static renderTemplate(id, mode) {
+    return 'entity.' + this.type() + '.' + mode;
+  }
+
+  static renderID(id, mode) {
+    return 'entity.' + this.type() + ':vue:' + id;
   }
 
   static entity(value) {
@@ -93,10 +95,6 @@ module.exports = class Entity extends VueElement {
       data: this.data(),
       computed: this.computed(),
     };
-  }
-
-  loadID() {
-    return 'base.entity:load:' + this.type() + ':' + this.id;
   }
 
 }

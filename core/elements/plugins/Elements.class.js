@@ -2,6 +2,7 @@
 
 const $ = use('lib.jquery');
 const Vue = use('lib.vue');
+const Stream = use('stream');
 
 /**
   * @SysRoute(
@@ -13,6 +14,7 @@ module.exports = class Elements {
 
   static initRoute() {
     this._count = 0;
+    this._register = {};
   }
 
   static getID() {
@@ -20,32 +22,77 @@ module.exports = class Elements {
   }
 
   static init() {
-    $('.vue').each(this.eachVue);
+    $('.vue:not(.e-inited)').each(this.eachVue);
   }
 
   static eachVue() {
-    const element = $(this);
-    const id = 'v-' + Elements.getID();
-    var vue = Elements.vueData(element);
+    const element = new Elements($(this).addClass('e-inited'));
 
-    element.attr('id', id);
-    vue.el = '#' + id;
-    new Vue(vue);
+    element.init();
+    Elements._register[element.loadID()] = element;
   }
 
-  static vueData(element) {
-    return Elements.load(element.data('vue'));
+  static element(id) {
+    return this._register[id];
   }
 
-  static load(string) {
-    return Elements.loading.apply(Elements, string.split(':'));
+  static getLoading(element) {
+    const data = element.data('vue').split(':');
+
+    return {
+      route: data[0],
+      func: data[1],
+      args: TOOLS.args(data, 2),
+      load: data.join(':'),
+    };
   }
 
-  static loading(route, func) {
-    var args = TOOLS.args(arguments, 2);
-    const loader = use(route);
+  constructor(element) {
+    this._element = element;
+    this._id = Elements.getID();
+    this._loading = null;
+    this._object = null;
+    this._vue = null;
+  }
 
-    return loader[func].apply(loader, args);
+  init() {
+    this._loading = Elements.getLoading(this.element());
+
+    new Stream(this)
+      .pipe(this._loading.func, this._loading.route)
+      .pipe(this.receiveData)
+      .pipe(this.createVue)
+      .executeArgs(this._loading.args);
+  }
+
+  receiveData(stream, object) {
+    this._object = object;
+    stream.next();
+  }
+
+  createVue(stream) {
+    this.element().attr('id', 'v-' + this.id());
+    const data = this.object().view();
+
+    data.el = '#v-' + this.id();
+    this._vue = new Vue(data);
+    stream.next();
+  }
+
+  element() {
+    return this._element;
+  }
+
+  loadID() {
+    return this._loading.load;
+  }
+
+  id() {
+    return this._id;
+  }
+
+  object() {
+    return this._object;
   }
 
 }

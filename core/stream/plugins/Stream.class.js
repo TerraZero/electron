@@ -10,17 +10,23 @@
   */
 module.exports = class Stream {
 
+  static getContext(stream, pipe) {
+    return pipe.context || stream.context();
+  }
+
   constructor(context) {
     this._context = context;
     this._pipe = [];
     this._args = {};
   }
 
-  pipe(func, first = false) {
+  pipe(func, context = null, first = false) {
+    if (TOOLS.isString(context)) context = use(context);
+
     if (first) {
-      this._pipe.unshift(func);
+      this._pipe.unshift({func: func, context: context});
     } else {
-      this._pipe.push(func);
+      this._pipe.push({func: func, context: context});
     }
     return this;
   }
@@ -32,29 +38,31 @@ module.exports = class Stream {
     // stream is closed
     if (current === undefined) return this.close();
 
-    if (TOOLS.isFunction(current)) {
+    const context = Stream.getContext(this, current);
+
+    if (TOOLS.isFunction(current.func)) {
       args.unshift(this);
-      current.apply(this.context(), args);
+      current.func.apply(context, args);
       return this;
     }
 
-    if (TOOLS.isString(current)) {
-      if (TOOLS.isFunction(this.context()[current])) {
+    if (TOOLS.isString(current.func)) {
+      if (TOOLS.isFunction(context[current.func])) {
         args.unshift(this);
-        this.context()[current].apply(this.context(), args);
+        context[current.func].apply(context, args);
         return this;
       } else {
-        throw err('StreamError', 'String "' + current + '" was found in stream pipe, but is not a function in context "' + this.context().constructor.name + '"');
+        throw err('StreamError', 'String "' + current + '" was found in stream pipe, but is not a function in context "' + context.constructor.name + '"');
       }
     }
 
-    if (TOOLS.is(current, Stream)) {
+    if (TOOLS.is(current.func, Stream)) {
       const that = this;
 
-      current.pipe(function streamPipe(stream) {
+      current.func.pipe(function streamPipe(stream) {
         that.next.apply(that, TOOLS.args(arguments, 1));
       });
-      current.execute.apply(current, args);
+      current.func.execute.apply(current.func, args);
       return this;
     }
 
@@ -70,6 +78,10 @@ module.exports = class Stream {
 
   execute() {
     return this.next.apply(this, TOOLS.args(arguments));
+  }
+
+  executeArgs(args) {
+    return this.next.apply(this, args);
   }
 
   close() {

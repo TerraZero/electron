@@ -69,9 +69,13 @@
 // });
 // s.run();
 
-const $ = use('lib.jquery');
-const Node = use('entity.node');
+try {
+  const $ = use('lib.jquery');
+  const Node = use('entity.node');
 
-$('#root').append(Node.load(5));
+  $('#root').append(Node.view(5, 'full'));
 
-use('elements').init();
+  use('elements').init();
+} catch (e) {
+  log(e.stack);
+}

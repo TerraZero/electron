@@ -7,31 +7,37 @@ const Render = use('render');
   */
 module.exports = class VueElement {
 
-  static load(id) {
-    throw err('AbstractError', this, 'load');
+  static view() {
+    return this.render.apply(this, TOOLS.args(arguments));
   }
 
-  static vue(type, id) {
+  static vue(stream) {
     throw err('AbstractError', this, 'vue');
   }
 
-  static render(template, data) {
-    return Render.render(template, data);
+  static renderID() {
+    throw err('AbstractError', this, 'renderID');
   }
 
-  loadID() {
-    throw err('AbstractError', this, 'loadID');
+  static renderTemplate() {
+    throw err('AbstractError', this, 'renderTemplates');
+  }
+
+  static renderData() {
+    return {};
+  }
+
+  static render() {
+    const args = TOOLS.args(arguments);
+    const data = this.renderData.apply(this, args);
+
+    data.vue = this.renderID.apply(this, args);
+    data.template = this.renderTemplate.apply(this, args);
+    return Render.render(data.template, data);
   }
 
   view() {
     throw err('AbstractError', this, 'view');
-  }
-
-  render(mode) {
-    var view = this.view();
-
-    view.vue = this.loadID();
-    return use('render').render(mode, view);
   }
 
 };
