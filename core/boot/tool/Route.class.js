@@ -81,6 +81,10 @@ module.exports = class Route {
     return loadRoute.getting(args);
   }
 
+  static getRouteForm(object) {
+    return object.__route || null;
+  }
+
   constructor(data) {
     if (!data.route) {
       throw err('RequiredFieldError', this, 'constructor', 'data.route');

@@ -140,8 +140,10 @@ module.exports = class TestCommand extends Command {
     * @Command
     */
   test() {
-    // const e = err('SysError', 'my message');
-    // throw e;
+    const RE = use('element.render');
+    const Node = use('entity.node');
+
+    new RE(Node);
   }
 
 }

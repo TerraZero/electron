@@ -75,7 +75,7 @@ try {
 
   $('#root').append(Node.view(5, 'full'));
 
-  use('elements').init();
+  use('element').init();
 } catch (e) {
   log(e.stack);
 }
