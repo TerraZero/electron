@@ -72,7 +72,7 @@ if (option('pug', 'name', false)) {
       .pipe(pug(options('pug')))
       .on('error', errorHandler('pug'))
       .pipe(rename(function(path) {
-        path.basename = path.dirname.split('\\').join('.');
+        path.basename = path.dirname.split('\/').join('.');
         path.dirname = '';
       }))
       .pipe(insert.append('\nmodule.exports = ' + option('pug', 'name') + ';'))
