@@ -67,7 +67,6 @@ module.exports = class Stream {
     }
 
     throw err('StreamError', 'The type of pipe is neither string, function nor Stream! Left ' + this.pipes().length + ' pipe\'s in stream!');
-    return this;
   }
 
   error(error) {
