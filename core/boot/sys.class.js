@@ -111,7 +111,7 @@ module.exports = class Sys {
   }
 
   static lookup(type, dirs = null) {
-    let dirs = dirs || this.config('base:root');
+    dirs = dirs || this.config('base:root');
 
     let result = [];
     for (let dir in dirs) {
@@ -122,7 +122,7 @@ module.exports = class Sys {
 
   static plugins(annotations, dirs = null) {
     if (!TOOLS.isArray(annotations)) annotations = [annotations];
-    let dirs = dirs || this.config('base:root');
+    dirs = dirs || this.config('base:root');
 
     let result = [];
     for (let dir in dirs) {

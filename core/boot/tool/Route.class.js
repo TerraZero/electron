@@ -28,7 +28,7 @@ module.exports = class Route {
       }
     }
 
-    let plugins = SYS.plugins(pluginsRegister);
+    plugins = SYS.plugins(pluginsRegister);
     for (let p in plugins) {
       let annots = plugins[p].annotation.getDefinitions(pluginsRegister);
 

@@ -20,13 +20,13 @@ module.exports = class Stream {
     this._args = {};
   }
 
-  pipe(func, context = null, first = false) {
+  pipe(func, context = null, first = false, args = null) {
     if (TOOLS.isString(context)) context = use(context);
 
     if (first) {
-      this._pipe.unshift({func: func, context: context});
+      this._pipe.unshift({func: func, context: context, args: args});
     } else {
-      this._pipe.push({func: func, context: context});
+      this._pipe.push({func: func, context: context, args: args});
     }
     return this;
   }
