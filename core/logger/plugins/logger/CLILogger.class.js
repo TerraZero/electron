@@ -17,14 +17,14 @@ const Table = require('cli-table2');
 module.exports = class CLILogger extends Logger {
 
   error() {
-    var args = TOOLS.args(arguments);
+    let args = TOOLS.args(arguments);
 
     args[0] = args[0].error;
     TOOLS.award(this, 'console', args);
   }
 
   warn() {
-    var args = TOOLS.args(arguments);
+    let args = TOOLS.args(arguments);
 
     args[0] = ('WARNING: ' + args[0]).warn;
     TOOLS.award(this, 'console', args);
@@ -39,7 +39,7 @@ module.exports = class CLILogger extends Logger {
   }
 
   success() {
-    var args = TOOLS.args(arguments);
+    let args = TOOLS.args(arguments);
 
     args[0] = ('SUCCESS: ' + args[0]).input;
     TOOLS.award(this, 'console', args);
@@ -48,14 +48,14 @@ module.exports = class CLILogger extends Logger {
 
 
   // options(message, options) {
-  //   var p = charm.position();
+  //   let p = charm.position();
   //   console.log(p);
   // }
 
   table(data) {
     if (TOOLS.isArray(data)) data = {rows: data};
 
-    var options = {
+    let options = {
       head: data.head,
     };
 
@@ -63,11 +63,11 @@ module.exports = class CLILogger extends Logger {
 
     // merge fields
     if (data.head && data.noMerge !== true) {
-      var splitting = TOOLS.truncInt((this.cliWidth() - data.head.length * 3 + 2) / data.head.length);
+      let splitting = TOOLS.truncInt((this.cliWidth() - data.head.length * 3 + 2) / data.head.length);
       if (!options.colWidths) options.colWidths = TOOLS.Array.generate(data.head.length, function() {return splitting});
 
-      for (var r in data.rows) {
-        for (var c in data.rows[r]) {
+      for (let r in data.rows) {
+        for (let c in data.rows[r]) {
           if (TOOLS.isString(data.rows[r][c])) {
             // TODO make recursive
             data.rows[r][c] = TOOLS.String.splitByLength(data.rows[r][c], splitting - 2).join('\n');
@@ -78,9 +78,9 @@ module.exports = class CLILogger extends Logger {
       }
     }
 
-    var table = new Table(options);
+    let table = new Table(options);
 
-    for (var r in data.rows) {
+    for (let r in data.rows) {
       table.push(data.rows[r]);
     }
 
@@ -90,8 +90,8 @@ module.exports = class CLILogger extends Logger {
   input(types, message, fallback = null) {
     if (TOOLS.isString(types)) types = [types];
     const Validater = use('datatype');
-    var valid = false;
-    var input = null;
+    let valid = false;
+    let input = null;
 
     if (fallback) {
       do {
@@ -121,7 +121,7 @@ module.exports = class CLILogger extends Logger {
   }
 
   confirm(message) {
-    var confirmed = null;
+    let confirmed = null;
 
     while (confirmed !== 'y' && confirmed !== 'n') {
       confirmed = this.input('string', message + ' (y/n)?');

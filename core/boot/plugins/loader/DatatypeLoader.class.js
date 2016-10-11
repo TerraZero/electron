@@ -23,7 +23,7 @@ module.exports = class DatatypeLoader {
   static scanValid(types, value) {
     if (TOOLS.isString(types)) types = [types];
 
-    for (var type in types) {
+    for (let type in types) {
       if (DatatypeLoader.valid(types[type], value)) return types[type];
     }
     return false;
@@ -32,8 +32,8 @@ module.exports = class DatatypeLoader {
   static scanCheck(types, value) {
     if (TOOLS.isString(types)) types = [types];
 
-    for (var type in types) {
-      var check = DatatypeLoader.check(types[type], value);
+    for (let type in types) {
+      let check = DatatypeLoader.check(types[type], value);
 
       if (check !== null && check !== undefined) {
         return check;
@@ -42,7 +42,7 @@ module.exports = class DatatypeLoader {
   }
 
   static valid(type, value) {
-    var response = DatatypeLoader.call('valid', type, value);
+    let response = DatatypeLoader.call('valid', type, value);
 
     return (response === null || response === undefined ? false : response);
   }
@@ -56,8 +56,8 @@ module.exports = class DatatypeLoader {
   }
 
   static call(func, type) {
-    var args = TOOLS.args(arguments, 1);
-    var object = DatatypeLoader.type(type);
+    let args = TOOLS.args(arguments, 1);
+    let object = DatatypeLoader.type(type);
 
     if (object === null) return null;
 

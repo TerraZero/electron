@@ -17,7 +17,7 @@ module.exports = class Info {
     if (TOOLS.is(path, TOOLS.Path)) return path;
 
     if (TOOLS.isArray(path)) {
-      for (var index in path) {
+      for (let index in path) {
         path[index] = this.path(path[index]);
       }
     } else {

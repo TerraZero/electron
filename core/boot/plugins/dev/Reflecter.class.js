@@ -31,7 +31,7 @@ class Reflecter {
   }
 
   call() {
-    var parent = this._parent && this._parent._object || null;
+    let parent = this._parent && this._parent._object || null;
     return build(this._object.call(parent, SYS.args(arguments)), this._parent, this._strict);
   }
 

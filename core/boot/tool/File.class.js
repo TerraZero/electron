@@ -6,18 +6,18 @@ const NPath = SYS.node('path');
 module.exports = class File {
 
   static list(dir, expression, recursive = null) {
-    var results = [];
+    let results = [];
 
     File.walk(dir, results, recursive);
     return TOOLS.Array.filter(results, expression);
   }
 
   static walk(dir, results, recursive = null, deep = 0) {
-    var list = FS.readdirSync(dir);
+    let list = FS.readdirSync(dir);
 
-    for (var i in list) {
-      var file = NPath.resolve(dir, list[i]);
-      var stat = FS.statSync(file);
+    for (let i in list) {
+      let file = NPath.resolve(dir, list[i]);
+      let stat = FS.statSync(file);
 
       if (stat && stat.isDirectory()) {
         if (recursive == null || recursive > deep) File.walk(file, results, recursive, deep + 1);
@@ -69,9 +69,9 @@ module.exports = class File {
   }
 
   list() {
-    var list = FS.readdirSync(this.file(''));
+    let list = FS.readdirSync(this.file(''));
 
-    for (var i in list) {
+    for (let i in list) {
       list[i] = new File('$' + this.file('') + '/' + list[i]);
     }
     return list;

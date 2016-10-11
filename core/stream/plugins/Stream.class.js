@@ -32,8 +32,8 @@ module.exports = class Stream {
   }
 
   next() {
-    var args = TOOLS.args(arguments);
-    var current = this._pipe.shift();
+    let args = TOOLS.args(arguments);
+    let current = this._pipe.shift();
 
     // stream is closed
     if (current === undefined) return this.close();

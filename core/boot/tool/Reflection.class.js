@@ -1,11 +1,11 @@
 'use strict';
 
-var Stack = require('stack-trace');
+let Stack = require('stack-trace');
 
 module.exports = class Reflection {
 
   static getCaller(offset = 0) {
-    var stack = Reflection.getStack();
+    let stack = Reflection.getStack();
 
     // add a empty string as offset to avoid recursion
     return new TOOLS.Path('$' + stack[offset + 2].getFileName(), '').parse();
@@ -16,10 +16,10 @@ module.exports = class Reflection {
   }
 
   static getStackArray() {
-    var stack = Reflection.getStack();
-    var array = [];
+    let stack = Reflection.getStack();
+    let array = [];
 
-    for (var i in stack) {
+    for (let i in stack) {
       array.push(stack[i].getFileName() + ':' + stack[i].getLineNumber());
     }
     return array;

@@ -9,7 +9,7 @@ module.exports = class Event {
     this._apply = [this];
     this._hander = handler;
 
-    for (var i in this._args) {
+    for (let i in this._args) {
       this._apply.push(this._args[i]);
     }
   }

@@ -6,9 +6,9 @@ const AnnotationRegistry = new AnnotationBase.Registry();
 module.exports = class Annotation {
 
   static initialize() {
-    var files = Annotation.listAnnotations();
+    let files = Annotation.listAnnotations();
 
-    for (var index in files) {
+    for (let index in files) {
       AnnotationRegistry.registerAnnotation(files[index].resolve());
     }
   }

@@ -4,10 +4,10 @@ const CommandBase = use('base.command');
 
 // load commands
 const commands = (function registerCommands() {
-  var plugins = SYS.plugins('Command');
-  var result = [];
+  let plugins = SYS.plugins('Command');
+  let result = [];
 
-  for (var i in plugins) {
+  for (let i in plugins) {
     result.push({
       path: plugins[i].path,
       annotation: plugins[i].annotation,
@@ -30,7 +30,7 @@ module.exports = class CommandLoader {
   }
 
   static getCommandInfo(name) {
-    for (var index in commands) {
+    for (let index in commands) {
       if (TOOLS.Array.inArray(commands[index].alias, name)) {
         return commands[index];
       }
@@ -39,11 +39,11 @@ module.exports = class CommandLoader {
   }
 
   static getCommand(name, args = null) {
-    var info = CommandLoader.getCommandInfo(name);
+    let info = CommandLoader.getCommandInfo(name);
     if (!info) return null;
 
-    var struct = inc(info.path);
-    var command = struct.build.apply(struct, [{args: args, info: info}]);
+    let struct = inc(info.path);
+    let command = struct.build.apply(struct, [{args: args, info: info}]);
     return {
       info: info,
       struct: struct,
@@ -52,7 +52,7 @@ module.exports = class CommandLoader {
   }
 
   static execute(command, args = []) {
-    var execution = {
+    let execution = {
       command: null,
       info: null,
       result: {},
@@ -65,19 +65,19 @@ module.exports = class CommandLoader {
       use('logger').error('No commands to execute found!');
       return execution;
     }
-    var exe = command.split('.');
+    let exe = command.split('.');
     execution.exe = exe;
 
-    var data = CommandLoader.getCommand(exe[0], args);
+    let data = CommandLoader.getCommand(exe[0], args);
 
     execution.info = data.info;
     execution.command = data.command;
 
-    var applyArgs = TOOLS.args(args._, 1);
+    let applyArgs = TOOLS.args(args._, 1);
 
     try {
-      var func = CommandLoader.getCallFunctionData(data, exe[1]);
-      var code = func.apply(execution.command, applyArgs);
+      let func = CommandLoader.getCallFunctionData(data, exe[1]);
+      let code = func.apply(execution.command, applyArgs);
 
       execution.result = execution.command.getResult();
       if (code) {
@@ -96,10 +96,10 @@ module.exports = class CommandLoader {
   }
 
   static getFunction(annotation, name = null) {
-    var methods = annotation.getMethods('Command');
-    var found = [];
+    let methods = annotation.getMethods('Command');
+    let found = [];
 
-    for (var i in methods) {
+    for (let i in methods) {
       if (!name || methods[i].target.startsWith(name) || TOOLS.Array.startsWith(methods[i].alias, name)) {
         found.push(methods[i]);
       }
@@ -113,7 +113,7 @@ module.exports = class CommandLoader {
   }
 
   static getCallFunction(command, annotation, name = null) {
-    var found = CommandLoader.getFunction(annotation, name);
+    let found = CommandLoader.getFunction(annotation, name);
 
     if (found.length == 1) return command[found[0].target];
     return command.def;

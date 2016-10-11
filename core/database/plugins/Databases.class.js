@@ -33,7 +33,7 @@ module.exports = class Databases {
 
   static end(name = null) {
     if (name === null) {
-      for (var con in this._connections) {
+      for (let con in this._connections) {
         Databases.end(con);
       }
     } else if (this._connections[name] !== undefined) {

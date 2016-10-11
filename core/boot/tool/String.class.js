@@ -6,7 +6,7 @@ module.exports = class String {
     if (value == null) {
       return string.match(expression);
     } else {
-      var matches = string.match(expression);
+      let matches = string.match(expression);
 
       if (matches.length > value) return matches[value];
       return null;
@@ -14,16 +14,16 @@ module.exports = class String {
   }
 
   static splitByLength(string, length) {
-    var splitted = [];
+    let splitted = [];
 
-    for (var i = 0; i * length < string.length; i++) {
+    for (let i = 0; i * length < string.length; i++) {
       splitted.push(string.substring(i * length, Math.min((i + 1) * length, string.length)));
     }
     return splitted;
   }
 
   static replace(string, replacings) {
-    for (var pattern in replacings) {
+    for (let pattern in replacings) {
       string = string.split(pattern).join(replacings[pattern]);
     }
     return string;

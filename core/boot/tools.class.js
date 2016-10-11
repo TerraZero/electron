@@ -10,9 +10,9 @@ module.exports = class Tools {
     * @return array                   - the arguments as array
     */
   static args(args, offset = 0) {
-    var _args = [];
+    let _args = [];
 
-    for (var i = offset; i < args.length; i++) {
+    for (let i = offset; i < args.length; i++) {
       _args.push(args[i]);
     }
     return _args;
@@ -126,8 +126,8 @@ module.exports = class Tools {
   }
 
   static log() {
-    var args = TOOLS.args(arguments);
-    var caller = TOOLS.Reflection.getCaller(1);
+    let args = TOOLS.args(arguments);
+    let caller = TOOLS.Reflection.getCaller(1);
 
     console.log('FILE: ' + caller.dir + '/' + caller.base);
     console.log.apply(console, args);
@@ -137,11 +137,11 @@ module.exports = class Tools {
     * Get Debug Callstack
     */
   static getDebug(filter = null, offset = 0) {
-    var stack = TOOLS.Reflection.getStack();
-    var fullstack = [];
+    let stack = TOOLS.Reflection.getStack();
+    let fullstack = [];
 
-    for (var index = offset + 2; index < stack.length; index++) {
-      var line = [];
+    for (let index = offset + 2; index < stack.length; index++) {
+      let line = [];
       if (stack[index].getTypeName()) {
         line.push(stack[index].getTypeName() + ':');
       }
@@ -172,10 +172,10 @@ module.exports = class Tools {
         return order_value == object_index;
       };
     }
-    var ordered = [];
+    let ordered = [];
 
-    for (var index in order) {
-      for (var o in objects) {
+    for (let index in order) {
+      for (let o in objects) {
         if (sorting(order[index], objects[o], index, o)) {
           ordered.push(objects[o]);
         }
@@ -196,7 +196,7 @@ module.exports = class Tools {
       number: 0,
       index: 0,
       sync: function() {
-        var that = this;
+        let that = this;
         that.number++;
         return function() {
           that.index++;

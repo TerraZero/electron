@@ -37,19 +37,19 @@ module.exports = class Command extends Gettable {
   }
 
   def() {
-    var exe = this.args()._[0].split('.');
-    var annotations = new TOOLS.Annotation(this.path());
-    var methods = annotations.getMethods('Command');
-    var found = [];
+    let exe = this.args()._[0].split('.');
+    let annotations = new TOOLS.Annotation(this.path());
+    let methods = annotations.getMethods('Command');
+    let found = [];
 
-    for (var i in methods) {
+    for (let i in methods) {
       if (!exe[1] || methods[i].target.startsWith(exe[1]) || TOOLS.Array.startsWith(methods[i].alias, exe[1])) {
         found.push(methods[i]);
       }
     }
 
     if (found.length == 0) {
-      for (var i in methods) {
+      for (let i in methods) {
         found.push(methods[i]);
       }
     }
@@ -58,7 +58,7 @@ module.exports = class Command extends Gettable {
 
     this.log('Command "' + this.name() + '" (alias: [' + this.alias().join(', ') + '])');
     this.log('Try one of the following commands:');
-    for (var i in found) {
+    for (let i in found) {
       this.log('  ' + i + ': ' + exe[0] + '.' + found[i].target);
       if (found[i].alias.length) {
         this.log('       alias: [' + found[i].alias.join(', ') + ']');

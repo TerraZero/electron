@@ -30,10 +30,10 @@ module.exports = class Controller {
   }
 
   create(entity) {
-    var fields = entity.fields();
+    let fields = entity.fields();
 
-    for (var i in fields) {
-      var field = fields[i];
+    for (let i in fields) {
+      let field = fields[i];
 
       entity._data[field.field()] = field.data();
       Object.defineProperty(entity, field.field(), field.handler(entity));
@@ -41,9 +41,9 @@ module.exports = class Controller {
   }
 
   init(entity, data) {
-    var fields = entity.fields();
+    let fields = entity.fields();
 
-    for (var i in fields) {
+    for (let i in fields) {
       if (data[fields[i].field()] !== undefined) {
         entity[fields[i].field()] = data[fields[i].field()];
       }

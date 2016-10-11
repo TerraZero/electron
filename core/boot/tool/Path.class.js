@@ -7,9 +7,9 @@ module.exports = class Path {
 
   static list(dir, expression, recursive = null, offset = 0) {
     if (!TOOLS.is(dir, Path)) dir = new Path(dir);
-    var files = TOOLS.File.list(dir.resolve(), expression, recursive);
+    let files = TOOLS.File.list(dir.resolve(), expression, recursive);
 
-    for (var index in files) {
+    for (let index in files) {
       files[index] = new Path('$' + files[index], offset + 1);
     }
     return files;
@@ -17,11 +17,11 @@ module.exports = class Path {
 
   static glob(dir, pattern, offset = 0) {
     if (!TOOLS.is(dir, Path)) dir = new Path(dir);
-    var files = glob.sync(pattern, {
+    let files = glob.sync(pattern, {
       cwd: dir.resolve(),
     });
 
-    for (var index in files) {
+    for (let index in files) {
       files[index] = new Path('$' + dir.resolve() + '/' + files[index], offset + 1);
     }
     return files;
@@ -70,7 +70,7 @@ module.exports = class Path {
   }
 
   resolve(extend = '') {
-    var path = this.path();
+    let path = this.path();
 
     if (this._final) return path;
 
@@ -93,8 +93,8 @@ module.exports = class Path {
   }
 
   parseSys() {
-    var parse = this.parse();
-    var sysparse = {};
+    let parse = this.parse();
+    let sysparse = {};
 
     sysparse.path = parse.dir + '/' + TOOLS.String.match(parse.name, '^([^\.]*)', 0);
     sysparse.name = TOOLS.String.match(parse.name, '^([^\.]*)', 0);

@@ -3,26 +3,26 @@
 module.exports = class Array {
 
   static generate(number, func) {
-    var array = [];
+    let array = [];
 
-    for (var i = 0; i < number; i++) {
+    for (let i = 0; i < number; i++) {
       array.push(func.call(undefined, i, number, array));
     }
     return array;
   }
 
   static run(array, f) {
-    for (var i in array) {
+    for (let i in array) {
       array[i] = f.call(undefined, array[i], i, array);
     }
     return array;
   }
 
   static maxLength() {
-    var args = TOOLS.args(arguments);
+    let args = TOOLS.args(arguments);
 
-    var max = 0;
-    for (var index in args) {
+    let max = 0;
+    for (let index in args) {
       if (TOOLS.isArray(args[index]) && max < args[index].length) {
         max = args[index].length;
       }
@@ -32,14 +32,14 @@ module.exports = class Array {
 
   static startsWithKey(array, string, value = null) {
     value = value || function(value) { return value; };
-    for (var index in array) {
+    for (let index in array) {
       if ((array[index].__stringValue || value)(array[index]).startsWith(string)) return index;
     }
     return null;
   }
 
   static startsWith(array, string, value = null) {
-    var key = Array.startsWithKey(array, string, value);
+    let key = Array.startsWithKey(array, string, value);
 
     if (key) return array[key];
     return null;
@@ -47,24 +47,24 @@ module.exports = class Array {
 
   static inArrayKey(array, string, value = null) {
     value = value || function(value) { return value; };
-    for (var index in array) {
+    for (let index in array) {
       if ((array[index].__stringValue || value)(array[index]) == string) return index;
     }
     return null;
   }
 
   static inArray(array, string, value = null) {
-    var key = Array.inArrayKey(array, string, value);
+    let key = Array.inArrayKey(array, string, value);
 
     if (key) return array[key];
     return null;
   }
 
   static split(array, explode) {
-    var splited = [[]];
-    var index = 0;
+    let splited = [[]];
+    let index = 0;
 
-    for (var i in array) {
+    for (let i in array) {
       if (array[i] == explode) {
         splited.push([]);
         index++;
@@ -83,11 +83,11 @@ module.exports = class Array {
    * @return (param:array) - the merged array
    */
   static merge(array) {
-    var args = TOOLS.args(arguments, 1);
+    let args = TOOLS.args(arguments, 1);
 
-    for (var arg in args) {
+    for (let arg in args) {
       if (TOOLS.isArray(args[arg])) {
-        for (var a in args[arg]) {
+        for (let a in args[arg]) {
           array.push(args[arg][a]);
         }
       } else {
@@ -109,21 +109,21 @@ module.exports = class Array {
 
     value = value || function(value) { return value; };
 
-    var _array = [];
-    var negative = expression.startsWith('!');
+    let _array = [];
+    let negative = expression.startsWith('!');
 
     if (negative) {
-      var pattern = new RegExp(expression.substring(1));
+      let pattern = new RegExp(expression.substring(1));
 
-      for (var index in array) {
+      for (let index in array) {
         if (!pattern.test((array[index].__filterValue || value)(array[index]))) {
           _array.push(array[index]);
         }
       }
     } else {
-      var pattern = new RegExp(expression);
+      let pattern = new RegExp(expression);
 
-      for (var index in array) {
+      for (let index in array) {
         if (pattern.test((array[index].__filterValue || value)(array[index]))) {
           _array.push(array[index]);
         }
@@ -135,9 +135,9 @@ module.exports = class Array {
   static filterFunc(array, func = null) {
     if (!func) return array;
 
-    var _array = [];
+    let _array = [];
 
-    for (var index in array) {
+    for (let index in array) {
       if (func(array[index], index)) {
         _array.push(array[index]);
       }

@@ -17,8 +17,8 @@ module.exports = class Sys {
   static initializeErrors() {
     const errors = SYS.lookup('error');
 
-    for (var i in errors) {
-      var parse = errors[i].parseSys();
+    for (let i in errors) {
+      let parse = errors[i].parseSys();
 
       this._errors[parse.name] = {
         path: errors[i],
@@ -36,20 +36,20 @@ module.exports = class Sys {
     * Read info files from mods directory and save it
     */
   static initializeInfos() {
-    var dirs = this.config('base:root');
+    let dirs = this.config('base:root');
     dirs.push('lib');
-    var files = this.lookup('info', dirs);
+    let files = this.lookup('info', dirs);
 
-    for (var index in files) {
+    for (let index in files) {
       this._infos[index] = new (require(files[index].resolve()))();
       this._infos[index]._base = files[index].parse().dir;
     }
   }
 
   static initializeLibs() {
-    var libs = SYS.info('libs');
+    let libs = SYS.info('libs');
 
-    for (var lib in libs) {
+    for (let lib in libs) {
       TOOLS.Route.addRoute('lib.' + libs[lib].name, {
         path: libs[lib].paths[SYS.config('base:mode')] || libs[lib].paths.def,
         description: libs[lib].description || null,
@@ -65,10 +65,10 @@ module.exports = class Sys {
     this._mods = [];
 
     // get all mod files in mods directory
-    var files = this.lookup('mod');
+    let files = this.lookup('mod');
 
-    for (var index in files) {
-      var mod = require(files[index].resolve()).build();
+    for (let index in files) {
+      let mod = require(files[index].resolve()).build();
 
       if (TOOLS.is(mod, this._Mod)) {
         this._mods.push({
@@ -87,18 +87,18 @@ module.exports = class Sys {
   }
 
   static config(name) {
-    var parts = name.split(':');
-    var keys = [];
+    let parts = name.split(':');
+    let keys = [];
 
     if (parts.length == 2) {
       keys = parts[1].split('.');
     }
 
-    var config = require(SYS.base() + '/settings/' + parts[0] + '.json');
+    let config = require(SYS.base() + '/settings/' + parts[0] + '.json');
 
     config = new TOOLS.Settings(config);
 
-    for (var key in keys) {
+    for (let key in keys) {
       config = config.g(keys[key]);
     }
 
@@ -106,15 +106,15 @@ module.exports = class Sys {
   }
 
   static settings(name) {
-    var config = require(SYS.base() + '/settings/' + name + '.json');
+    let config = require(SYS.base() + '/settings/' + name + '.json');
     return new TOOLS.Settings(config);
   }
 
   static lookup(type, dirs = null) {
-    var dirs = dirs || this.config('base:root');
+    let dirs = dirs || this.config('base:root');
 
-    var result = [];
-    for (var dir in dirs) {
+    let result = [];
+    for (let dir in dirs) {
       result = TOOLS.Array.merge(result, TOOLS.Path.glob(dirs[dir], '**/*.' + type + '.js'));
     }
     return result;
@@ -122,14 +122,14 @@ module.exports = class Sys {
 
   static plugins(annotations, dirs = null) {
     if (!TOOLS.isArray(annotations)) annotations = [annotations];
-    var dirs = dirs || this.config('base:root');
+    let dirs = dirs || this.config('base:root');
 
-    var result = [];
-    for (var dir in dirs) {
-      var paths = TOOLS.Path.glob(dirs[dir], '**/plugins/**/*.js');
+    let result = [];
+    for (let dir in dirs) {
+      let paths = TOOLS.Path.glob(dirs[dir], '**/plugins/**/*.js');
 
-      for (var path in paths) {
-        var annot = new TOOLS.Annotation(paths[path]);
+      for (let path in paths) {
+        let annot = new TOOLS.Annotation(paths[path]);
 
         if (annot.hasDefinition(annotations)) {
           result.push({
@@ -147,7 +147,7 @@ module.exports = class Sys {
     */
   static inc(path, type = '.js', flush = false) {
     path = TOOLS.path(path, 1);
-    var file = path.resolve(type);
+    let file = path.resolve(type);
 
     if (flush) {
       delete require.cache[require.resolve(file)];
@@ -160,16 +160,16 @@ module.exports = class Sys {
   }
 
   static error(deep, type, message) {
-    var args = TOOLS.args(arguments, 2);
+    let args = TOOLS.args(arguments, 2);
 
-    var error = new (SYS.getError(type))();
+    let error = new (SYS.getError(type))();
     error.deep(deep);
     error.create.apply(error, args);
     return error;
   }
 
   static throw(type, message) {
-    var args = TOOLS.args(arguments);
+    let args = TOOLS.args(arguments);
 
     args.unshift(1);
     throw SYS.error.apply(SYS, args);
@@ -186,7 +186,7 @@ module.exports = class Sys {
     * @return Mod - the mod type
     */
   static mod(name) {
-    for (var mod in this._mods) {
+    for (let mod in this._mods) {
       if (this._mods[mod].name == name) {
         return this._mods[mod].mod;
       }
@@ -226,10 +226,10 @@ module.exports = class Sys {
   }
 
   static info(name) {
-    var infos = [];
-    var args = TOOLS.args(arguments, 1);
+    let infos = [];
+    let args = TOOLS.args(arguments, 1);
 
-    for (var i in this._infos) {
+    for (let i in this._infos) {
       if (TOOLS.isFunction(this._infos[i][name])) {
         infos = TOOLS.Array.merge(infos, this._infos[i][name].apply(this._infos[i], args));
       }

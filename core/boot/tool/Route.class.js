@@ -5,14 +5,14 @@ module.exports = class Route {
   static initialize() {
     this.routes = [];
 
-    var plugins = SYS.plugins('SysRoute');
-    var register = {};
-    var pluginsRegister = [];
+    let plugins = SYS.plugins('SysRoute');
+    let register = {};
+    let pluginsRegister = [];
 
-    for (var p in plugins) {
-      var routes = plugins[p].annotation.getDefinitions('SysRoute');
+    for (let p in plugins) {
+      let routes = plugins[p].annotation.getDefinitions('SysRoute');
 
-      for (var r in routes) {
+      for (let r in routes) {
         if (routes[r].register) {
           register[routes[r].register] = routes[r];
           pluginsRegister.push(routes[r].register);
@@ -28,16 +28,16 @@ module.exports = class Route {
       }
     }
 
-    var plugins = SYS.plugins(pluginsRegister);
-    for (var p in plugins) {
-      var annots = plugins[p].annotation.getDefinitions(pluginsRegister);
+    let plugins = SYS.plugins(pluginsRegister);
+    for (let p in plugins) {
+      let annots = plugins[p].annotation.getDefinitions(pluginsRegister);
 
-      for (var a in annots) {
-        var regis = register[annots[a]._name()];
-        var value = regis.value;
-        var description = annots[a].description || regis.description;
+      for (let a in annots) {
+        let regis = register[annots[a]._name()];
+        let value = regis.value;
+        let description = annots[a].description || regis.description;
 
-        for (var k in regis.keys) {
+        for (let k in regis.keys) {
           value = value.replace('<' + regis.keys[k] + '>', annots[a][regis.keys[k]]);
           description = description.replace('<' + regis.keys[k] + '>', annots[a][regis.keys[k]]);
         }
@@ -65,7 +65,7 @@ module.exports = class Route {
 
   static setRoute(data) {
     if (data.route === undefined) throw err('RequiredFieldError', this, 'setRoute', 'data.route');
-    var route = data.route.toLowerCase();
+    let route = data.route.toLowerCase();
 
     if (this.routes[route] === undefined) {
       throw err('RouteNotExistError', route);

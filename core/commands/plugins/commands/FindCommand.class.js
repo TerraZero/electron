@@ -19,11 +19,11 @@ module.exports = class FindCommand extends CommandBase {
     * )
     */
   annotations(expression = null) {
-    var annotations = TOOLS.Annotation.listAnnotations();
+    let annotations = TOOLS.Annotation.listAnnotations();
 
     annotations = TOOLS.Array.filter(annotations, expression);
 
-    for (var i in annotations) {
+    for (let i in annotations) {
       this.out(annotations[i].resolve());
     }
   }
@@ -36,10 +36,10 @@ module.exports = class FindCommand extends CommandBase {
     * )
     */
   mods(expression = null) {
-    var mods = SYS.lookup('mod');
+    let mods = SYS.lookup('mod');
 
     mods = TOOLS.Array.filter(mods, expression);
-    for (var i in mods) {
+    for (let i in mods) {
       this.out(mods[i].resolve());
     }
   }
@@ -52,10 +52,10 @@ module.exports = class FindCommand extends CommandBase {
     * )
     */
   routines(expression = null) {
-    var routines = SYS.lookup('routine');
+    let routines = SYS.lookup('routine');
 
     routines = TOOLS.Array.filter(routines, expression);
-    for (var i in routines) {
+    for (let i in routines) {
       this.out(routines[i].resolve());
     }
   }
@@ -69,10 +69,10 @@ module.exports = class FindCommand extends CommandBase {
     * )
     */
   classes(expression = null) {
-    var classes = SYS.lookup('class');
+    let classes = SYS.lookup('class');
 
     classes = TOOLS.Array.filter(classes, expression);
-    for (var i in classes) {
+    for (let i in classes) {
       this.out(classes[i].resolve());
     }
   }
@@ -85,13 +85,13 @@ module.exports = class FindCommand extends CommandBase {
     * )
     */
   commands(expression = null) {
-    var commands = Command.getCommands();
+    let commands = Command.getCommands();
 
     commands = TOOLS.Array.filter(commands, expression, function(command) {
       return command.path.resolve();
     });
 
-    for (var i in commands) {
+    for (let i in commands) {
       this.out(commands[i].path.resolve());
     }
   }
@@ -104,13 +104,13 @@ module.exports = class FindCommand extends CommandBase {
     * )
     */
   base(expression = null) {
-    var bases = inc(TOOLS.Array.filter(SYS.lookup('routine'), '.*BaseRoutine\.routine\.js$')[0]).bases();
+    let bases = inc(TOOLS.Array.filter(SYS.lookup('routine'), '.*BaseRoutine\.routine\.js$')[0]).bases();
 
     bases = TOOLS.Array.filter(bases, expression, function(base) {
       return base.path.resolve();
     });
 
-    for (var i in bases) {
+    for (let i in bases) {
       this.out(bases[i].path.resolve());
     }
   }
@@ -125,13 +125,13 @@ module.exports = class FindCommand extends CommandBase {
     */
   plugins(annotation, expression = null) {
     if (!annotation) annotation = this.input('string', 'Annotation');
-    var plugins = SYS.plugins(annotation)[annotation];
+    let plugins = SYS.plugins(annotation)[annotation];
 
     plugins = TOOLS.Array.filter(plugins, expression, function(plugin) {
       return plugin.path.resolve();
     });
 
-    for (var i in plugins) {
+    for (let i in plugins) {
       this.out(plugins[i].path.resolve());
     }
   }
@@ -144,13 +144,13 @@ module.exports = class FindCommand extends CommandBase {
     * )
     */
   ids(expression = null) {
-    var ids = TOOLS.Route.routes;
+    let ids = TOOLS.Route.routes;
 
     ids = TOOLS.Array.filter(ids, expression, function(id) {
       return id.path().resolve();
     });
 
-    for (var i in ids) {
+    for (let i in ids) {
       this.out(ids[i].path().resolve());
     }
   }

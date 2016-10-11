@@ -23,7 +23,7 @@ module.exports = class SysError {
     if (typeof field === 'string') {
       const define = this.define();
 
-      for (var index in define) {
+      for (let index in define) {
         if (define[index] === field) return this._args[index];
       }
       return null;
@@ -40,7 +40,7 @@ module.exports = class SysError {
 
       const define = this.define();
 
-      for (var index in define) {
+      for (let index in define) {
         if (define[index] === field) return this._args[index];
       }
       return null;
@@ -79,14 +79,14 @@ module.exports = class SysError {
     const relevant = this.relevant();
     const base = SYS.base();
 
-    for (var i in relevant) {
-      var print = [];
-      var type = relevant[i].getTypeName();
-      var file = relevant[i].getFileName();
-      var line = relevant[i].getLineNumber();
-      var func = relevant[i].getFunctionName() || relevant[i].getMethodName();
-      //   var that = stack[i].getThis();
-      var isNode = !file.startsWith(base);
+    for (let i in relevant) {
+      let print = [];
+      let type = relevant[i].getTypeName();
+      let file = relevant[i].getFileName();
+      let line = relevant[i].getLineNumber();
+      let func = relevant[i].getFunctionName() || relevant[i].getMethodName();
+      //   let that = stack[i].getThis();
+      let isNode = !file.startsWith(base);
 
       if (!isNode) {
         file = file.substring(SYS.base().length + 1);
@@ -126,13 +126,13 @@ module.exports = class SysError {
     const relevant = this.relevant();
     const base = SYS.base();
 
-    for (var i in relevant) {
-      var print = [];
-      var type = relevant[i].getTypeName();
-      var file = relevant[i].getFileName();
-      var line = relevant[i].getLineNumber();
-      var func = relevant[i].getFunctionName() || relevant[i].getMethodName();
-      var isNode = !file.startsWith(base);
+    for (let i in relevant) {
+      let print = [];
+      let type = relevant[i].getTypeName();
+      let file = relevant[i].getFileName();
+      let line = relevant[i].getLineNumber();
+      let func = relevant[i].getFunctionName() || relevant[i].getMethodName();
+      let isNode = !file.startsWith(base);
 
       if (isNode) continue;
 
@@ -154,8 +154,8 @@ module.exports = class SysError {
 
   createStackSmall() {
     const base = SYS.base();
-    var relevant = this.relevant()[0];
-    var file = relevant.getFileName();
+    let relevant = this.relevant()[0];
+    let file = relevant.getFileName();
 
     if (file.startsWith(base)) {
       file = file.substring(base.length + 1);
@@ -183,11 +183,11 @@ module.exports = class SysError {
 
     const ignore = this.stackIgnore();
     const relevant = [];
-    var state = 0;
+    let state = 0;
 
-    for (var i in stack) {
-      var file = stack[i].getFileName();
-      var func = stack[i].getFunctionName() || stack[i].getMethodName();
+    for (let i in stack) {
+      let file = stack[i].getFileName();
+      let func = stack[i].getFunctionName() || stack[i].getMethodName();
 
       if (state < ignore.length) {
         if ((file + ':' + func).endsWith(ignore[state])) { state++; continue; }
@@ -210,7 +210,7 @@ module.exports = class SysError {
   replacing() {
     const define = this.define();
 
-    for (var index in define) {
+    for (let index in define) {
       this.stack = this.stack.split('<' + define[index] + '>').join(this.getArg(define[index]));
     }
   }

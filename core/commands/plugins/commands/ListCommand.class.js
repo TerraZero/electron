@@ -22,18 +22,18 @@ module.exports = class ListCommand extends Command {
     * )
     */
   routes(expression = null) {
-    var printAll = this.arg('a', false);
-    var printMore = printAll || this.arg('m', false);
-    var printDescription = printAll || this.arg('d', false);
+    let printAll = this.arg('a', false);
+    let printMore = printAll || this.arg('m', false);
+    let printDescription = printAll || this.arg('d', false);
 
-    var routes = TOOLS.Array.filter(TOOLS.Route.routes, expression, function(route) {
+    let routes = TOOLS.Array.filter(TOOLS.Route.routes, expression, function(route) {
       return route.route();
     });
 
-    var rows = [];
+    let rows = [];
 
-    for (var i in routes) {
-      var route = [routes[i].route()];
+    for (let i in routes) {
+      let route = [routes[i].route()];
 
       if (printMore && routes[i].register()) {
         route.push('-> {DynRoute} ' + routes[i].register().value);
@@ -42,7 +42,7 @@ module.exports = class ListCommand extends Command {
           route.push('-> {Loader} ' + routes[i].register().loader);
         }
       }
-      var row = [
+      let row = [
         routes[i].name(),
         route,
       ];
@@ -52,7 +52,7 @@ module.exports = class ListCommand extends Command {
       }
       rows.push(row);
     }
-    var head = ['TYPE', 'ROUTE'];
+    let head = ['TYPE', 'ROUTE'];
 
     if (printDescription) head.push('DESCRIPTION');
 

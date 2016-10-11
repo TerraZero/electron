@@ -33,9 +33,9 @@ module.exports = class EventHandler {
   trigger(name) {
     if (!this._listeners[name]) return this.host();
 
-    var e = new Event(name, TOOLS.args(arguments, 1), this);
+    let e = new Event(name, TOOLS.args(arguments, 1), this);
 
-    for (var i in this._listeners[name]) {
+    for (let i in this._listeners[name]) {
       e.apply(this._listeners[name][i]);
     }
     return this.host();

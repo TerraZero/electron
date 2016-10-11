@@ -30,17 +30,17 @@ module.exports = class HelpCommand extends CommandBase {
   }
 
   commandHelp(name) {
-    var data = Command.getCommand(name);
+    let data = Command.getCommand(name);
 
     if (data) {
-      var rows = [];
+      let rows = [];
 
       rows.push(['Command', data.command.name()]);
       rows.push(['Alias', data.info.alias.join(', ')]);
       rows.push(['File', data.info.path.resolve()]);
 
       if (data.info.annotation.getDefinitions('Command')[0].description.length) {
-        for (var i in data.info.annotation.getDefinitions('Command')[0].description) {
+        for (let i in data.info.annotation.getDefinitions('Command')[0].description) {
           if (i == 0) {
             rows.push(['Description', data.info.annotation.getDefinitions('Command')[0].description[i]]);
           } else {
@@ -56,23 +56,23 @@ module.exports = class HelpCommand extends CommandBase {
   }
 
   commandMethodHelp(name, method) {
-    var data = Command.getCommand(name);
+    let data = Command.getCommand(name);
 
     if (data) {
-      var rows = [];
+      let rows = [];
 
       rows.push(['Command', data.command.name()]);
 
-      var founds = Command.getFunction(data.info.annotation, method);
+      let founds = Command.getFunction(data.info.annotation, method);
 
-      for (var i in founds) {
+      for (let i in founds) {
         rows.push([]);
         rows.push(['Function', founds[i].target]);
         if (founds[i].alias.length) {
           rows.push(['Alias', founds[i].alias.join(', ')]);
         }
         if (founds[i].description.length) {
-          for (var d in founds[i].description) {
+          for (let d in founds[i].description) {
             if (d == 0) {
               rows.push(['Description', founds[i].description[d]]);
             } else {
@@ -81,8 +81,8 @@ module.exports = class HelpCommand extends CommandBase {
           }
         }
 
-        var first = true;
-        for (var param in founds[i].params) {
+        let first = true;
+        for (let param in founds[i].params) {
           if (first) {
             first = false;
             rows.push(['Params', '(' + (founds[i].params[param].value === undefined ? '' : 'optional:') + founds[i].params[param].type + ') ' + param + ': ' + (founds[i].params[param].value == null ? 'null' : founds[i].params[param].value)])
@@ -92,7 +92,7 @@ module.exports = class HelpCommand extends CommandBase {
         }
 
         rows.push(['Options:', '']);
-        for (var option in founds[i].options) {
+        for (let option in founds[i].options) {
           if (founds[i].options[option].type == 'boolean') {
             rows.push(['  -' + option, '(' + founds[i].options[option].type + ') ' + founds[i].options[option].description]);
           } else {

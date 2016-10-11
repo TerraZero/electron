@@ -27,7 +27,7 @@ module.exports = class GenericDatatype {
       case 'string' :
         return value;
       case 'int' :
-        var int = Number(value);
+        let int = Number(value);
 
         if (GenericDatatype.valid('int', int)) {
           return int;

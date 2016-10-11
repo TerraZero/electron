@@ -16,14 +16,14 @@ module.exports = class Gettable {
   gettingInfo(key = null, fallback = null) {
     if (key === null) return this;
 
-    var result = {
+    let result = {
       path: [],
       object: this,
     };
-    var keys = key.split('.');
-    var object = this;
+    let keys = key.split('.');
+    let object = this;
 
-    for (var i in keys) {
+    for (let i in keys) {
       if (TOOLS.isArray(object) && TOOLS.isInt(keys[i])) {
         object = object[parseInt(keys[i])];
       } else if (TOOLS.isFunction(object[keys[i]])) {

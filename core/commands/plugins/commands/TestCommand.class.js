@@ -16,10 +16,10 @@ module.exports = class TestCommand extends Command {
     const Node = use('entity.node');
     const User = use('entity.user');
 
-    var n = new Node({user: 'TerraZero', title: 'Node Title'});
-    var u = new User({firstname: 'Terra', lastname: 'Zero'});
+    let n = new Node({user: 'TerraZero', title: 'Node Title'});
+    let u = new User({firstname: 'Terra', lastname: 'Zero'});
 
-    var ud = u.display('full');
+    let ud = u.display('full');
     console.log(ud);
   }
 
@@ -27,8 +27,8 @@ module.exports = class TestCommand extends Command {
     * @Command
     */
   builder() {
-    var User = use('entity.user');
-    var u = new User();
+    let User = use('entity.user');
+    let u = new User();
     u.on('test').on('cool');
   }
 
@@ -43,15 +43,15 @@ module.exports = class TestCommand extends Command {
     * @Command
     */
   datatype() {
-    var name = this.input('int', 'Name');
+    let name = this.input('int', 'Name');
   }
 
    /**
     * @Command
     */
   glob() {
-    var paths = TOOLS.Path.glob('core', '**/plugins/**/*.class.js');
-    for (var path in paths) {
+    let paths = TOOLS.Path.glob('core', '**/plugins/**/*.class.js');
+    for (let path in paths) {
       this.out(paths[path].resolve());
     }
   }
@@ -60,13 +60,13 @@ module.exports = class TestCommand extends Command {
     * @Command
     */
   file() {
-    var file = new TOOLS.File(':boot');
+    let file = new TOOLS.File(':boot');
     console.log(file.file(''));
     this.print(file.list());
   }
 
   print(files, deep = '--') {
-    for (var i in files) {
+    for (let i in files) {
       console.log(deep + ' ' + files[i].path().parse().base);
       if (files[i].isDir()) {
         this.print(files[i].list(), deep + '--');
@@ -79,7 +79,7 @@ module.exports = class TestCommand extends Command {
     */
   errorCommand() {
     try {
-      var e = SYS.getError('BootError');
+      let e = SYS.getError('BootError');
       e = new e();
       throw e;
     } catch (e1) {
