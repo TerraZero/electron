@@ -12,27 +12,37 @@ const Stream = use('stream');
   */
 module.exports = class StreamProgress extends Stream {
 
-  constructor(context) {
-    super(context);
-    this._steps = null;
+  getNext() {
+    const pipe = super.getNext();
+    if (!pipe.isSilent()) {
+      log('Task: ' + pipe.task());
+    }
+    return pipe;
   }
 
-  steps() {
-    return this._steps;
+  createPipe(func, context = null, first = false, data = null) {
+    return {
+      func: func,
+      context: context,
+      data: data,
+      isSilent: function() {
+        return this.data.silent;
+      },
+      task: function() {
+        return this.data.task;
+      },
+    };
   }
 
-  step() {
-    return this._steps - this.pipes().length;
-  }
+  invokeStream(invoke, context, args) {
+    const that = this;
 
-  execute() {
-    this._steps = this.pipes().length;
-    return super.execute.apply(this, TOOLS.args(arguments));
-  }
-
-  executeArgs(args) {
-    this._steps = this.pipes().length;
-    return super.executeArgs(args);
+    invoke.func.pipe(function streamPipe(stream) {
+      that.next.apply(that, TOOLS.args(arguments, 1));
+    }).data({silent: true});
+    invoke.func.execute.apply(invoke.func, args);
+    // set reply to undefined for await response from pipe
+    return undefined;
   }
 
 }

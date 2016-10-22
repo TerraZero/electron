@@ -17,56 +17,94 @@ module.exports = class Stream {
   constructor(context) {
     this._context = context;
     this._pipe = [];
-    this._args = {};
+    this._current = 0;
   }
 
-  pipe(func, context = null, first = false, args = null) {
+  pipe(func, context = null, first = false, data = null) {
     if (TOOLS.isString(context)) context = use(context);
 
     if (first) {
-      this._pipe.unshift({func: func, context: context, args: args});
+      this._pipe.unshift(this.createPipe(func, context, first, data));
     } else {
-      this._pipe.push({func: func, context: context, args: args});
+      this._pipe.push(this.createPipe(func, context, first, data));
     }
     return this;
   }
 
+  createPipe(func, context = null, first = false, data = null) {
+    return {func: func, context: context, data: data};
+  }
+
   next() {
     let args = TOOLS.args(arguments);
-    let current = this._pipe.shift();
+    while (!this.isFinished()) {
+      const current = this.getNext();
+      const context = Stream.getContext(this, current);
+      let reply = null;
 
-    // stream is closed
-    if (current === undefined) return this.close();
+      if (TOOLS.isFunction(current.func)) {
+        reply = this.invokeFunction(current, context, args);
+      }
 
-    const context = Stream.getContext(this, current);
+      if (TOOLS.isString(current.func)) {
+        reply = this.invokeString(current, context, args);
+      }
 
-    if (TOOLS.isFunction(current.func)) {
-      args.unshift(this);
-      current.func.apply(context, args);
-      return this;
-    }
+      if (TOOLS.is(current.func, Stream)) {
+        reply = this.invokeStream(current, context, args);
+      }
 
-    if (TOOLS.isString(current.func)) {
-      if (TOOLS.isFunction(context[current.func])) {
-        args.unshift(this);
-        context[current.func].apply(context, args);
+      args = this.replyToArgs(reply);
+      if (args === undefined) {
         return this;
-      } else {
-        throw err('StreamError', 'String "' + current + '" was found in stream pipe, but is not a function in context "' + context.constructor.name + '"');
       }
     }
+    this.close();
+    return this;
+  }
 
-    if (TOOLS.is(current.func, Stream)) {
-      const that = this;
+  getNext() {
+    // increase counter to prevent recursion
+    return this._pipe[this._current++];
+  }
 
-      current.func.pipe(function streamPipe(stream) {
-        that.next.apply(that, TOOLS.args(arguments, 1));
-      });
-      current.func.execute.apply(current.func, args);
-      return this;
+  getCurrent() {
+    return this._pipe[this._current];
+  }
+
+  invokeStream(invoke, context, args) {
+    const that = this;
+
+    invoke.func.pipe(function streamPipe(stream) {
+      that.next.apply(that, TOOLS.args(arguments, 1));
+    });
+    invoke.func.execute.apply(invoke.func, args);
+    // set reply to undefined for await response from pipe
+    return undefined;
+  }
+
+  invokeString(invoke, context, args) {
+    if (TOOLS.isFunction(context[invoke.func])) {
+      args.unshift(this);
+      return context[invoke.func].apply(context, args);
+    } else {
+      throw err('StreamError', 'String "' + invoke + '" was found in stream pipe, but is not a function in context "' + context.constructor.name + '"');
     }
+  }
 
-    throw err('StreamError', 'The type of pipe is neither string, function nor Stream! Left ' + this.pipes().length + ' pipe\'s in stream!');
+  invokeFunction(invoke, context, args) {
+    args.unshift(this);
+    return invoke.func.apply(context, args);
+  }
+
+  replyToArgs(reply) {
+    if (reply === undefined) {
+      return undefined;
+    } else if (TOOLS.isArray(reply)) {
+      return reply;
+    } else {
+      return [reply];
+    }
   }
 
   error(error) {
@@ -95,16 +133,25 @@ module.exports = class Stream {
     return this._context;
   }
 
-  args() {
-    return this._args;
+  isFinished() {
+    return this._current >= this._pipe.length;
   }
 
-  arg(name, fallback = null) {
-    return this._args[name] || fallback;
+  reset() {
+    this._current = 0;
+    return this;
   }
 
-  setArg(name, value) {
-    this._args[name] = value;
+  data(index, data = null) {
+    let pipe = null;
+    if (TOOLS.isInt(index)) {
+      pipe = this._pipe[index];
+    } else {
+      pipe = this._pipe[this._pipe.length - 1];
+      data = index;
+    }
+    pipe.data = data;
+    return this;
   }
 
 }
